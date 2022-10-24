@@ -1,4 +1,4 @@
-# Worldle for Everyone
+# Wordle for the World
 
 ## Important links:
 
