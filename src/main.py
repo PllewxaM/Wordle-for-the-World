@@ -1,13 +1,2 @@
-# from turtle import Screen
-# import pygame
-# import sys
-# import random
-# from words import *
+from english_words import english_words_set
 
-# pygame.init()
-
-# # Constants
-
-# WIDTH, HEIGHT = 633, 900
-
-# SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
