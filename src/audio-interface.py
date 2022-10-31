@@ -49,7 +49,7 @@ while 1:
             if "guess" in command or "gas" in command or "guest" in command:
                 if "one" in command or "won" in command or "1" in command:
                     say("read first guess", languages[current_language])
-                elif "two" in command or "to" in command or "2" in command:
+                elif "two" in command or "to" in command or "2" in command or "too" in command:
                     say("read second guess", languages[current_language])
                 elif "three" in command or "3" in command:
                     say("read third guess", languages[current_language])
