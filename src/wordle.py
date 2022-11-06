@@ -43,16 +43,16 @@ FILLED_OUTLINE = "#878a8c"
 
 WIDTH, HEIGHT = 700, 750
 
-SCREEN = pygame.display.set_mode((WIDTH, HEIGHT), pygame.RESIZABLE)
+SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 SCREEN.fill(WHITE)
 pygame.display.set_caption("World-le")
 pygame.display.set_icon(pygame.image.load("assets/Icon.png"))
 pygame.display.update()
 
-
 CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
 
 FONT = pygame.font.Font("assets/FreeSansBold.otf", 50)
+FONT_SM = pygame.font.Font("assets/FreeSansBold.otf", 30)
 LETTER_X_SPACING = 65
 LETTER_Y_SPACING = 10
 LETTER_SIZE = 60
@@ -125,7 +125,7 @@ def draw():
             SCREEN.blit(piece_text, (col * 100 + 10, row * 100 + 15))
 
 
-# draw keyboard
+# draw and handle keyboard
 class Indicator:
     def __init__(self, x, y, letter):
         # Initializes variables such as color, size, position, and letter.
@@ -143,8 +143,22 @@ class Indicator:
         SCREEN.blit(self.text_surface, self.text_rect)
         pygame.display.update()
 
+class BigIndicator:
+    def __init__(self, x, y, letter):
+        # Initializes variables such as color, size, position, and letter.
+        self.x = x
+        self.y = y
+        self.text = letter
+        self.rect = (self.x, self.y, 102, 70)
+        self.bg_color = OUTLINE
 
-# ?
+    def drawBig(self):
+        pygame.draw.rect(SCREEN, self.bg_color, self.rect)
+        self.text_surface = FONT_SM.render(self.text, True, "white")
+        self.text_rect = self.text_surface.get_rect(center=(self.x+50, self.y+35))
+        SCREEN.blit(self.text_surface, self.text_rect)
+        pygame.display.update()
+
 indicator_x, indicator_y = 45, 450
 
 for i in range(3):
@@ -158,7 +172,39 @@ for i in range(3):
         indicator_x = 80
     elif i == 1:
         indicator_x = 130
+new_indicator = BigIndicator(20, 620, "DEL")
+new_indicator.drawBig()
+new_indicator = BigIndicator(555, 620, "ENTER")
+new_indicator.drawBig()
 
+q_area = pygame.Rect(45, 450, 57, 70)
+w_area = pygame.Rect(105, 450, 57, 70)
+e_area = pygame.Rect(165, 450, 57, 70)
+r_area = pygame.Rect(225, 450, 57, 70)
+t_area = pygame.Rect(285, 450, 57, 70)
+y_area = pygame.Rect(345, 450, 57, 70)
+u_area = pygame.Rect(405, 450, 57, 70)
+i_area = pygame.Rect(465, 450, 57, 70)
+o_area = pygame.Rect(525, 450, 57, 70)
+p_area = pygame.Rect(585, 450, 57, 70)
+a_area = pygame.Rect(80, 535, 57, 70)
+s_area = pygame.Rect(140, 535, 57, 70)
+d_area = pygame.Rect(200, 535, 57, 70)
+f_area = pygame.Rect(260, 535, 57, 70)
+g_area = pygame.Rect(320, 535, 57, 70)
+h_area = pygame.Rect(380, 535, 57, 70)
+j_area = pygame.Rect(440, 535, 57, 70)
+k_area = pygame.Rect(500, 535, 57, 70)
+l_area = pygame.Rect(560, 535, 57, 70)
+z_area = pygame.Rect(130, 620, 57, 70)
+x_area = pygame.Rect(190, 620, 57, 70)
+c_area = pygame.Rect(250, 620, 57, 70)
+v_area = pygame.Rect(310, 620, 57, 70)
+b_area = pygame.Rect(370, 620, 57, 70)
+n_area = pygame.Rect(430, 620, 57, 70)
+m_area = pygame.Rect(490, 620, 57, 70)
+enter_area = pygame.Rect(555, 620, 102, 70)
+de_area = pygame.Rect(20, 620, 102, 70)
 
 class Letter:
     def __init__(self, text, bg_position):
@@ -330,6 +376,118 @@ while not audio_interface_enabled:
                 if key_pressed in "QWERTYUIOPASDFGHJKLZXCVBNM" and key_pressed != "":
                     if len(current_guess_string) < 5:
                         create_new_letter()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                if q_area.collidepoint(event.pos):
+                    key_pressed = "Q"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if w_area.collidepoint(event.pos):
+                    key_pressed = "W"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if e_area.collidepoint(event.pos):
+                    key_pressed = "E"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if r_area.collidepoint(event.pos):
+                    key_pressed = "R"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if t_area.collidepoint(event.pos):
+                    key_pressed = "T"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if y_area.collidepoint(event.pos):
+                    key_pressed = "Y"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if u_area.collidepoint(event.pos):
+                    key_pressed = "U"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if i_area.collidepoint(event.pos):
+                    key_pressed = "I"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if o_area.collidepoint(event.pos):
+                    key_pressed = "O"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if p_area.collidepoint(event.pos):
+                    key_pressed = "P"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if a_area.collidepoint(event.pos):
+                    key_pressed = "A"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if s_area.collidepoint(event.pos):
+                    key_pressed = "S"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if d_area.collidepoint(event.pos):
+                    key_pressed = "D"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if f_area.collidepoint(event.pos):
+                    key_pressed = "F"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if g_area.collidepoint(event.pos):
+                    key_pressed = "G"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if h_area.collidepoint(event.pos):
+                    key_pressed = "H"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if j_area.collidepoint(event.pos):
+                    key_pressed = "J"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if k_area.collidepoint(event.pos):
+                    key_pressed = "K"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if l_area.collidepoint(event.pos):
+                    key_pressed = "L"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if z_area.collidepoint(event.pos):
+                    key_pressed = "Z"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if x_area.collidepoint(event.pos):
+                    key_pressed = "X"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if c_area.collidepoint(event.pos):
+                    key_pressed = "C"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if v_area.collidepoint(event.pos):
+                    key_pressed = "V"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if b_area.collidepoint(event.pos):
+                    key_pressed = "B"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if n_area.collidepoint(event.pos):
+                    key_pressed = "N"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if m_area.collidepoint(event.pos):
+                    key_pressed = "M"
+                    if len(current_guess_string) < 5:
+                        create_new_letter()
+                if enter_area.collidepoint(event.pos):
+                    if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
+                        check_guess(current_guess)
+                if de_area.collidepoint(event.pos):
+                    if len(current_guess_string) > 0:
+                        delete_letter()
 
     pygame.display.flip()
 
