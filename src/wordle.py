@@ -165,14 +165,30 @@ def check_guess(guess_to_check):
     if guesses_count == 6 and game_result == "":
         game_result = "L"
 
-def play_again():
+def lose_play_again():
     # Puts the play again text on the screen.
-    pygame.draw.rect(SCREEN, "white", (10, 600, 500, 600))
+    pygame.draw.rect(SCREEN, "red", (10, 10, 680, 730))
     play_again_font = pygame.font.Font("assets/FreeSansBold.otf", 40)
-    play_again_text = play_again_font.render("Press ENTER to Play Again!", True, "black")
-    play_again_rect = play_again_text.get_rect(center=(WIDTH/2, 700))
-    word_was_text = play_again_font.render(f"The word was {CORRECT_WORD}!", True, "black")
-    word_was_rect = word_was_text.get_rect(center=(WIDTH/2, 650))
+    play_again_text = play_again_font.render("Press ENTER to Play Again!", True, "white")
+    play_again_rect = play_again_text.get_rect(center=(WIDTH/2, 320))
+    word_was_text = play_again_font.render(f"Sorry, the word was {CORRECT_WORD}!", True, "white")
+    word_was_rect = word_was_text.get_rect(center=(WIDTH/2, 250))
+    SCREEN.blit(word_was_text, word_was_rect)
+    SCREEN.blit(play_again_text, play_again_rect)
+    pygame.display.update()
+
+def correct_play_again():
+    # Puts the play again text on the screen.
+    pygame.draw.rect(SCREEN, GREEN, (10, 10, 680, 730))
+    play_again_font = pygame.font.Font("assets/FreeSansBold.otf", 40)
+    con_text = play_again_font.render(f"Congratulations!", True, "white")
+    con_rect = con_text.get_rect(center=(WIDTH/2, 250))
+    word_was_text = play_again_font.render(f"The word was {CORRECT_WORD}!", True, "white")
+    word_was_rect = word_was_text.get_rect(center=(WIDTH/2, 320))
+    play_again_text = play_again_font.render("Press ENTER to Play Again!", True, "white")
+    play_again_rect = play_again_text.get_rect(center=(WIDTH/2, 390))
+    
+    SCREEN.blit(con_text, con_rect)
     SCREEN.blit(word_was_text, word_was_rect)
     SCREEN.blit(play_again_text, play_again_rect)
     pygame.display.update()
@@ -215,6 +231,10 @@ def delete_letter():
 
 while True:
     draw()
+    if game_result == "L":
+        lose_play_again()
+    if game_result == "W":
+        correct_play_again()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
