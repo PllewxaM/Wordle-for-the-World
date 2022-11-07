@@ -49,7 +49,18 @@ pygame.display.set_caption("World-le")
 pygame.display.set_icon(pygame.image.load("assets/Icon.png"))
 pygame.display.update()
 
-CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+lang = "en"
+
+if lang == "en":
+    CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+elif lang == "sp":
+    CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+elif lang == "ger":
+    CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+elif lang == "fr":
+    CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+elif lang == "kid":
+    CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
 
 FONT = pygame.font.Font("assets/FreeSansBold.otf", 50)
 FONT_SM = pygame.font.Font("assets/FreeSansBold.otf", 30)
@@ -65,7 +76,7 @@ BOARD = [[" ", " ", " ", " ", " "],
          [" ", " ", " ", " ", " "]]
 
 ALPHABET = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"]
-indicators = []
+keys = []
 
 guesses_count = 0
 guesses = [[]] * 6
@@ -126,7 +137,7 @@ def draw():
 
 
 # draw and handle keyboard
-class Indicator:
+class KeyButton:
     def __init__(self, x, y, letter):
         # Initializes variables such as color, size, position, and letter.
         self.x = x
@@ -136,14 +147,14 @@ class Indicator:
         self.bg_color = OUTLINE
 
     def draw(self):
-        # Puts the indicator and its text on the screen at the desired position.
+        # Puts the key and its text on the screen at the desired position.
         pygame.draw.rect(SCREEN, self.bg_color, self.rect)
         self.text_surface = FONT.render(self.text, True, "white")
         self.text_rect = self.text_surface.get_rect(center=(self.x+27, self.y+30))
         SCREEN.blit(self.text_surface, self.text_rect)
         pygame.display.update()
 
-class BigIndicator:
+class BigKeyButton:
     def __init__(self, x, y, letter):
         # Initializes variables such as color, size, position, and letter.
         self.x = x
@@ -159,23 +170,23 @@ class BigIndicator:
         SCREEN.blit(self.text_surface, self.text_rect)
         pygame.display.update()
 
-indicator_x, indicator_y = 45, 450
+key_x, key_y = 45, 450
 
 for i in range(3):
     for letter in ALPHABET[i]:
-        new_indicator = Indicator(indicator_x, indicator_y, letter)
-        indicators.append(new_indicator)
-        new_indicator.draw()
-        indicator_x += 60
-    indicator_y += 85
+        new_key = KeyButton(key_x, key_y, letter)
+        keys.append(new_key)
+        new_key.draw()
+        key_x += 60
+    key_y += 85
     if i == 0:
-        indicator_x = 80
+        key_x = 80
     elif i == 1:
-        indicator_x = 130
-new_indicator = BigIndicator(20, 620, "DEL")
-new_indicator.drawBig()
-new_indicator = BigIndicator(555, 620, "ENTER")
-new_indicator.drawBig()
+        key_x = 130
+new_key = BigKeyButton(20, 620, "DEL")
+new_key.drawBig()
+new_key = BigKeyButton(555, 620, "ENTER")
+new_key.drawBig()
 
 q_area = pygame.Rect(45, 450, 57, 70)
 w_area = pygame.Rect(105, 450, 57, 70)
@@ -245,28 +256,28 @@ def check_guess(guess_to_check):
         if lowercase_letter in CORRECT_WORD:
             if lowercase_letter == CORRECT_WORD[i]:
                 guess_to_check[i].bg_color = GREEN
-                for indicator in indicators:
-                    if indicator.text == lowercase_letter.upper():
-                        indicator.bg_color = GREEN
-                        indicator.draw()
+                for key in keys:
+                    if key.text == lowercase_letter.upper():
+                        key.bg_color = GREEN
+                        key.draw()
                 guess_to_check[i].text_color = "white"
                 if not game_decided:
                     game_result = "W"
             else:
                 guess_to_check[i].bg_color = YELLOW
-                for indicator in indicators:
-                    if indicator.text == lowercase_letter.upper():
-                        indicator.bg_color = YELLOW
-                        indicator.draw()
+                for key in keys:
+                    if key.text == lowercase_letter.upper():
+                        key.bg_color = YELLOW
+                        key.draw()
                 guess_to_check[i].text_color = "white"
                 game_result = ""
                 game_decided = True
         else:
             guess_to_check[i].bg_color = GREY
-            for indicator in indicators:
-                if indicator.text == lowercase_letter.upper():
-                    indicator.bg_color = GREY
-                    indicator.draw()
+            for key in keys:
+                if key.text == lowercase_letter.upper():
+                    key.bg_color = GREY
+                    key.draw()
             guess_to_check[i].text_color = "white"
             game_result = ""
             game_decided = True
@@ -314,18 +325,27 @@ def correct_play_again():
 
 def reset():
     # Resets all global variables to their default states.
-    global guesses_count, CORRECT_WORD, guesses, current_guess, current_guess_string, game_result
+    global guesses_count, CORRECT_WORD, guesses, current_guess, current_guess_string, game_result, lang
     SCREEN.fill("white")
     guesses_count = 0
-    CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+    if lang == "en":
+        CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+    elif lang == "sp":
+        CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+    elif lang == "ger":
+        CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+    elif lang == "fr":
+        CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+    elif lang == "kid":
+        CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
     guesses = [[]] * 6
     current_guess = []
     current_guess_string = ""
     game_result = ""
     pygame.display.update()
-    for indicator in indicators:
-        indicator.bg_color = OUTLINE
-        indicator.draw()
+    for key in keys:
+        key.bg_color = OUTLINE
+        key.draw()
 
 
 def create_new_letter():
