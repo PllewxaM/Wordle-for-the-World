@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from pygame import mixer
+# from pygame import mixer
 import sys
 import random
 import words
@@ -13,20 +13,26 @@ import time
 
 # Game initializers
 pygame.init()
-mixer.init()
-mixer.music.load('sound_effects/background_music.ogg')
-mixer.music.set_volume(0.2)
+
+# DOES NOT WORK WITH WINDOWS CAN UNCOMMENT FOR OTHER OS
+# mixer.init()
+# mixer.music.load('sound_effects/background_music.ogg')
+# mixer.music.set_volume(0.2)
+
 rendered = 0
+started = 0
 
 # Audio Interface Initializers
-audio_interface_enabled = 1
+activate = 0
+audio_interface_enabled = 0
 
 # Text-to-speech languages: English, Spanish, French
 languages = ['en', 'es', 'fr']
 current_language = 0
 
 # Long sections of text used for instructing hands-free user
-startup = "Welcome to wordle for the world, if you need help, say, tutorial"
+startup = "Welcome to wordle for the world, to activate the hands free version of the program, press the space bar twice"
+activated = "Audio interface activated, if you need help or a refresher on audio commands, say, tutorial."
 tutorial = "Hello and welcome to wordle for the world. Im here to help you learn the commands to " \
            "play the game in hands free mode."
 
@@ -47,7 +53,7 @@ pygame.display.set_caption("World-le")
 pygame.display.set_icon(pygame.image.load("assets/Icon.png"))
 pygame.display.update()
 
-lang = "en"
+lang = "en" # change this to get from user/ui
 
 if lang == "en":
     CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
@@ -96,8 +102,7 @@ game_result = ""
 def say(response, language):
     obj = gTTS(text=response, lang=language, slow=False)
     obj.save("audio.mp3")
-    os.system("mpg123 audio.mp3")
-
+    os.system("mpg123.exe audio.mp3")
 
 # Uses SpeechRecognition to translate a user response to text. Returns text
 def listen():
@@ -114,13 +119,11 @@ def listen():
     cur_text = r.recognize_google(audio)
     return cur_text
 
-
 def say_by_char(response, language):
     chars = [*response]
     for c in chars:
         say(c, language)
         time.sleep(0.025)
-
 
 def say_and_confirm_by_char(guess, correct, language):
     chars = [*guess]
@@ -136,7 +139,6 @@ def say_and_confirm_by_char(guess, correct, language):
         else:
             playsound('sound_effects/incorrect_char_trimmed.wav')
         correct_index = correct_index + 1
-
 
 # Ask people to say the alphabet after the word stash. Find out
 # the most common mishearings and fix them. Called when a word is returned to
@@ -157,6 +159,7 @@ def fix_char(fuzzy_char):
         return fuzzy_char
     # add more as needed
 
+    # Ideas: aye, bee, tee, gee, ache, eye, jay, kay, elle, el, pea, pee, are, tee, double you, ex, axe, why
 
 def add_semi(char):
     global semicorrect_guesses
@@ -184,7 +187,7 @@ def read_guess(guess_number):
 
 
 def handsfree():
-    global current_guess_string
+    global current_guess_string, activate, audio_interface_enabled
 
     waiting_for_command = 1
     while waiting_for_command:
@@ -234,11 +237,17 @@ def handsfree():
                     say("read semi correct guesses by character", languages[current_language])
                 elif "wrong" in command:
                     say("read incorrect guesses by character", languages[current_language])
+                
                 else:
                     say("invalid command", languages[current_language])
             elif "submit" in command:
                 say("you said: submit", languages[current_language])
                 submit()
+                waiting_for_command = 0
+            elif "disable" in command:
+                say("Disabling audio, press space bar twice to reenable.", languages[current_language])
+                activate = 0
+                audio_interface_enabled = 0
                 waiting_for_command = 0
             else:
                 say("invalid command", languages[current_language])
@@ -247,7 +256,7 @@ def handsfree():
             print("exception: " + repr(e))
 
 
-# draw squares
+# draw board squares
 def draw():
     for col in range(0, 5):
         for row in range(0, 6):
@@ -255,8 +264,9 @@ def draw():
             piece_text = FONT.render(BOARD[row][col], True, GREY)
             SCREEN.blit(piece_text, (col * 100 + 10, row * 100 + 15))
 
+#draw key
 
-# draw and handle keyboard
+# draw and handle keyboard buttons
 class KeyButton:
     def __init__(self, x, y, letter):
         # Initializes variables such as color, size, position, and letter.
@@ -274,7 +284,7 @@ class KeyButton:
         SCREEN.blit(self.text_surface, self.text_rect)
         pygame.display.update()
 
-
+# draw and handle keyboard larger buttons
 class BigKeyButton:
     def __init__(self, x, y, letter):
         # Initializes variables such as color, size, position, and letter.
@@ -292,8 +302,10 @@ class BigKeyButton:
         pygame.display.update()
 
 
+# starting key board location
 key_x, key_y = 45, 450
 
+# draw letters in top of keyboard buttons
 for i in range(3):
     for letter in ALPHABET[i]:
         new_key = KeyButton(key_x, key_y, letter)
@@ -310,6 +322,7 @@ new_key.draw_big()
 new_key = BigKeyButton(555, 620, "ENTER")
 new_key.draw_big()
 
+# make keyboard areas - so click on screen activates letter
 q_area = pygame.Rect(45, 450, 57, 70)
 w_area = pygame.Rect(105, 450, 57, 70)
 e_area = pygame.Rect(165, 450, 57, 70)
@@ -339,7 +352,7 @@ m_area = pygame.Rect(490, 620, 57, 70)
 enter_area = pygame.Rect(555, 620, 102, 70)
 de_area = pygame.Rect(20, 620, 102, 70)
 
-
+# draws the board letters
 class Letter:
     def __init__(self, text, bg_position):
         # Initializes all the variables, inclinkuding text, color, position, size, etc.
@@ -369,7 +382,7 @@ class Letter:
         pygame.draw.rect(SCREEN, OUTLINE, self.bg_rect, 3)
         pygame.display.update()
 
-
+# check what parts of the user's guess is correct
 def check_guess(guess_to_check):
     # Goes through each letter and checks if it should be green, yellow, or grey.
     global current_guess, current_guess_string, guesses_count, current_letter_bg_x, game_result
@@ -419,7 +432,7 @@ def check_guess(guess_to_check):
     if guesses_count == 6 and game_result == "":
         game_result = "L"
 
-
+# display loosing screen and call reset
 def lose_play_again():
     # Puts the play again text on the screen.
     pygame.draw.rect(SCREEN, "red", (10, 10, 680, 730))
@@ -432,7 +445,7 @@ def lose_play_again():
     SCREEN.blit(play_again_text, play_again_rect)
     pygame.display.update()
 
-
+# display winning screen and call reset
 def correct_play_again():
     # Puts the play again text on the screen.
     pygame.draw.rect(SCREEN, GREEN, (10, 10, 680, 730))
@@ -449,10 +462,10 @@ def correct_play_again():
     SCREEN.blit(play_again_text, play_again_rect)
     pygame.display.update()
 
-
+# reset global variables
 def reset():
     # Resets all global variables to their default states.
-    global guesses_count, CORRECT_WORD, guesses, current_guess, current_guess_string, game_result, lang
+    global guesses_count, CORRECT_WORD, guesses, current_guess, current_guess_string, game_result, lang, semicorrect_guesses, correct_guesses, incorrect_guesses
     SCREEN.fill("white")
     guesses_count = 0
     if lang == "en":
@@ -469,12 +482,15 @@ def reset():
     current_guess = []
     current_guess_string = ""
     game_result = ""
+    incorrect_guesses = []
+    correct_guesses = []
+    semicorrect_guesses = []
     pygame.display.update()
     for key in keys:
         key.bg_color = OUTLINE
         key.draw()
 
-
+# for traditional version of the game
 def create_new_letter():
     # Creates a new letter and adds it to the guess.
     global current_guess_string, current_letter_bg_x
@@ -487,7 +503,7 @@ def create_new_letter():
         for letter in guess:
             letter.draw()
 
-
+# delete for traditional version of game
 def delete_letter():
     # Deletes the last letter from the guess.
     global current_guess_string, current_letter_bg_x
@@ -497,8 +513,7 @@ def delete_letter():
     current_guess.pop()
     current_letter_bg_x -= LETTER_X_SPACING
 
-
-# Takes stash command as an input and places new letter on the screen
+# Takes stash command as an input and places new letter on the screen - create_new_letter equiv - hands free version
 def stash(command):
     global key_pressed
     command_split = command.split(' ')
@@ -513,7 +528,7 @@ def stash(command):
         else:
             say("your stash is full! submit or delete to guess more letters.", languages[current_language])
 
-
+# delete for hands free version
 def delete():
     global current_guess_string
     if len(current_guess_string) > 0:
@@ -523,7 +538,7 @@ def delete():
     else:
         say("You dont have any letters to delete!", languages[current_language])
 
-
+# submit for hands free version
 def submit():
     global current_guess_string, current_guess
     if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
@@ -532,187 +547,199 @@ def submit():
     else:
         say("your guess must be a real five letter word, try again!", languages[current_language])
 
-
-while not audio_interface_enabled:
-    draw()
-    if game_result == "L":
-        lose_play_again()
-    if game_result == "W":
-        correct_play_again()
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RETURN:
-                if game_result != "":
-                    reset()
-                else:
-                    if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
-                        check_guess(current_guess)
-            elif event.key == pygame.K_BACKSPACE:
-                if len(current_guess_string) > 0:
-                    delete_letter()
-            else:
-                key_pressed = event.unicode.upper()
-                if key_pressed in "QWERTYUIOPASDFGHJKLZXCVBNM" and key_pressed != "":
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            if event.button == 1:
-                if q_area.collidepoint(event.pos):
-                    key_pressed = "Q"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if w_area.collidepoint(event.pos):
-                    key_pressed = "W"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if e_area.collidepoint(event.pos):
-                    key_pressed = "E"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if r_area.collidepoint(event.pos):
-                    key_pressed = "R"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if t_area.collidepoint(event.pos):
-                    key_pressed = "T"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if y_area.collidepoint(event.pos):
-                    key_pressed = "Y"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if u_area.collidepoint(event.pos):
-                    key_pressed = "U"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if i_area.collidepoint(event.pos):
-                    key_pressed = "I"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if o_area.collidepoint(event.pos):
-                    key_pressed = "O"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if p_area.collidepoint(event.pos):
-                    key_pressed = "P"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if a_area.collidepoint(event.pos):
-                    key_pressed = "A"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if s_area.collidepoint(event.pos):
-                    key_pressed = "S"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if d_area.collidepoint(event.pos):
-                    key_pressed = "D"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if f_area.collidepoint(event.pos):
-                    key_pressed = "F"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if g_area.collidepoint(event.pos):
-                    key_pressed = "G"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if h_area.collidepoint(event.pos):
-                    key_pressed = "H"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if j_area.collidepoint(event.pos):
-                    key_pressed = "J"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if k_area.collidepoint(event.pos):
-                    key_pressed = "K"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if l_area.collidepoint(event.pos):
-                    key_pressed = "L"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if z_area.collidepoint(event.pos):
-                    key_pressed = "Z"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if x_area.collidepoint(event.pos):
-                    key_pressed = "X"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if c_area.collidepoint(event.pos):
-                    key_pressed = "C"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if v_area.collidepoint(event.pos):
-                    key_pressed = "V"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if b_area.collidepoint(event.pos):
-                    key_pressed = "B"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if n_area.collidepoint(event.pos):
-                    key_pressed = "N"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if m_area.collidepoint(event.pos):
-                    key_pressed = "M"
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
-                if enter_area.collidepoint(event.pos):
-                    if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
-                        check_guess(current_guess)
-                if de_area.collidepoint(event.pos):
+while True:
+    # how program should run when audio interface is not enabled
+    while not audio_interface_enabled:
+        draw()
+        if game_result == "L":
+            lose_play_again()
+        if game_result == "W":
+            correct_play_again()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    if game_result != "":
+                        reset()
+                    else:
+                        if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
+                            check_guess(current_guess)
+                elif event.key == pygame.K_BACKSPACE:
                     if len(current_guess_string) > 0:
                         delete_letter()
+                # have to press spacebar twice to activate audio interface
+                elif not activate and event.key == pygame.K_SPACE:
+                    activate = 1
+                elif activate and event.key == pygame.K_SPACE:
+                    audio_interface_enabled = 1
 
-    pygame.display.flip()
-
-while audio_interface_enabled:
-    draw()
-    if game_result == "L":
-        mixer.music.pause()
-        playsound('sound_effects/no_more_guesses_trimmed.wav')
-        say("You have run out of guesses. say play again to start over with a new word!", languages[current_language])
-        lose_play_again()
-    if game_result == "W":
-        say("correct", languages[current_language])
-        playsound('sound_effects/correct_word_trimmed.mp3')
-        say("the word was: " + CORRECT_WORD + ". say play agian to get a new word.", languages[current_language])
-        correct_play_again()
-    if rendered:
-        handsfree()
-    else:
-        mixer.music.play()
-        pygame.display.flip()
-        say(startup, languages[current_language])
-        time.sleep(0.1)
-        mixer.music.set_volume(0.025)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_RETURN:
-                if game_result != "":
-                    reset()
                 else:
-                    if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
-                        check_guess(current_guess)
-            elif event.key == pygame.K_BACKSPACE:
-                if len(current_guess_string) > 0:
-                    delete_letter()
-            else:
-                key_pressed = event.unicode.upper()
-                if key_pressed in "QWERTYUIOPASDFGHJKLZXCVBNM" and key_pressed != "":
-                    if len(current_guess_string) < 5:
-                        create_new_letter()
+                    key_pressed = event.unicode.upper()
+                    if key_pressed in "QWERTYUIOPASDFGHJKLZXCVBNM" and key_pressed != "":
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    if q_area.collidepoint(event.pos):
+                        key_pressed = "Q"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if w_area.collidepoint(event.pos):
+                        key_pressed = "W"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if e_area.collidepoint(event.pos):
+                        key_pressed = "E"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if r_area.collidepoint(event.pos):
+                        key_pressed = "R"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if t_area.collidepoint(event.pos):
+                        key_pressed = "T"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if y_area.collidepoint(event.pos):
+                        key_pressed = "Y"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if u_area.collidepoint(event.pos):
+                        key_pressed = "U"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if i_area.collidepoint(event.pos):
+                        key_pressed = "I"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if o_area.collidepoint(event.pos):
+                        key_pressed = "O"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if p_area.collidepoint(event.pos):
+                        key_pressed = "P"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if a_area.collidepoint(event.pos):
+                        key_pressed = "A"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if s_area.collidepoint(event.pos):
+                        key_pressed = "S"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if d_area.collidepoint(event.pos):
+                        key_pressed = "D"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if f_area.collidepoint(event.pos):
+                        key_pressed = "F"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if g_area.collidepoint(event.pos):
+                        key_pressed = "G"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if h_area.collidepoint(event.pos):
+                        key_pressed = "H"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if j_area.collidepoint(event.pos):
+                        key_pressed = "J"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if k_area.collidepoint(event.pos):
+                        key_pressed = "K"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if l_area.collidepoint(event.pos):
+                        key_pressed = "L"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if z_area.collidepoint(event.pos):
+                        key_pressed = "Z"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if x_area.collidepoint(event.pos):
+                        key_pressed = "X"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if c_area.collidepoint(event.pos):
+                        key_pressed = "C"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if v_area.collidepoint(event.pos):
+                        key_pressed = "V"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if b_area.collidepoint(event.pos):
+                        key_pressed = "B"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if n_area.collidepoint(event.pos):
+                        key_pressed = "N"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if m_area.collidepoint(event.pos):
+                        key_pressed = "M"
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+                    if enter_area.collidepoint(event.pos):
+                        if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
+                            check_guess(current_guess)
+                    if de_area.collidepoint(event.pos):
+                        if len(current_guess_string) > 0:
+                            delete_letter()
 
-    pygame.display.flip()
+        pygame.display.flip()
 
-    rendered = 1
+        if not started:
+            say(startup, languages[current_language])
+            started = 1
+
+    # how program should run when audio interface is enabled
+    while audio_interface_enabled:
+        draw()
+        if game_result == "L":
+            # mixer.music.pause()
+            playsound('sound_effects/no_more_guesses_trimmed.wav')
+            say("You have run out of guesses. say play again to start over with a new word!", languages[current_language])
+            lose_play_again()
+        if game_result == "W":
+            say("correct", languages[current_language])
+            playsound('sound_effects/correct_word_trimmed.mp3')
+            say("the word was: " + CORRECT_WORD + ". say play agian to get a new word.", languages[current_language])
+            correct_play_again()
+        if rendered:
+            handsfree()
+        else:
+            # mixer.music.play()
+            pygame.display.flip()
+            say(activated, languages[current_language])
+            time.sleep(0.1)
+            # mixer.music.set_volume(0.025)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    if game_result != "":
+                        reset()
+                    else:
+                        if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
+                            check_guess(current_guess)
+                elif event.key == pygame.K_BACKSPACE:
+                    if len(current_guess_string) > 0:
+                        delete_letter()
+                else:
+                    key_pressed = event.unicode.upper()
+                    if key_pressed in "QWERTYUIOPASDFGHJKLZXCVBNM" and key_pressed != "":
+                        if len(current_guess_string) < 5:
+                            create_new_letter()
+
+        pygame.display.flip()
+
+        rendered = 1
