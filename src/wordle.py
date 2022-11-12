@@ -7,61 +7,54 @@ import sys
 import random
 import words
 from words import *
+import words2
+from words2 import *
 from gtts import gTTS
 import speech_recognition as sr
 import os
 from playsound import playsound
 import time
 
-################### INITIALIZERS AND GLOBAL VARIABLES ###########################
+############################ INITIALIZERS AND GLOBAL VARIABLES ############################
 
 pygame.init()
 startgame = 0
 
-## AUDIO INTERFACE
+# AUDIO INTERFACE
 rendered = 0
 started = 0
 activate = 0
 audio_interface_enabled = 0
 
-## MUSIC
+# MUSIC
 # DOES NOT WORK WITH WINDOWS CAN UNCOMMENT FOR OTHER OS
 # mixer.init()
 # mixer.music.load('sound_effects/background_music.ogg')
 # mixer.music.set_volume(0.2)
 
-## LANGUAGE
-#### Text-to-speech languages: English, Spanish, French
+# LANGUAGE
+## Text-to-speech languages: English, Spanish, French
 languages = ['en', 'es', 'fr']
 current_language = 0
 
-#### Long sections of text used for instructing hands-free user
+## Long sections of text used for instructing hands-free user
 startup = "Welcome to wordle for the world, to activate the hands free version of the program, press the space bar twice"
-activated = "Audio interface activated, if you need help or a refresher on audio commands, say, tutorial."
+activated = "Audio interface activated, if you need help or a refresher on audio commands, say, tutorial. To disable audio mode say disable."
 tutorial = "Hello and welcome to wordle for the world. Im here to help you learn the commands to " \
            "play the game in hands free mode."
 
-#### select which file to get the word from based on user selection    
+##+ select which file to get the word from based on user selection    
 lang = "en" # change this to get from user/ui
 
-if lang == "en":
-    CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
-elif lang == "sp":
-    CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
-elif lang == "ger":
-    CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
-elif lang == "fr":
-    CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
-elif lang == "kid":
-    CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
 
-## COLORS
-# RED = 
-# REDORANGE =
-# ORANGE = 
-# ORANGEYELLOW = 
+# COLORS
+RED = "#d90000"
+REDORANGE = "#ff6100"
+ORANGE = "#ff8600"
+ORANGEYELLOW = "#ffc700"
 YELLOW = "#c9b458"
-# YELLOWGREEN
+YELLOWGREEN = "#a8d800"
 GREEN = "#6aaa64"
 # GREENBLUE =
 # BLUE =
@@ -73,27 +66,31 @@ GREEN = "#6aaa64"
 GREY = "#787c7e"
 WHITE = "#ffffff"
 BLACK = "#000000"
-OUTLINE = "#d3d6da"
-FILLED_OUTLINE = "#878a8c"
+LT_GREY = "#abadaf"
 
-## FONT
+## CHANGE THESE TO GET FROM USER
+CORRECT_COLOR = GREEN
+SEMI_COLOR = YELLOW
+WRONG_COLOR = RED
+
+# FONT
 FONT = pygame.font.Font("assets/FreeSansBold.otf", 50)
 FONT_SM = pygame.font.Font("assets/FreeSansBold.otf", 30)
 
-## SCREEN
-WIDTH, HEIGHT = 700, 750
+# SCREEN
+WIDTH, HEIGHT = 750, 750
+WINDOW_SIZE = (750, 750)
 
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("World-le")
 pygame.display.set_icon(pygame.image.load("assets/Icon.png"))
 pygame.display.update()
-# surface = create_example_window('Example - Simple', (600, 400))
 
-## KEYBOARD
+# KEYBOARD
 ALPHABET = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"]
 keys = []
 
-#### make keyboard areas - so click on screen activates letter
+## make keyboard areas - so click on screen activates letter
 q_area = pygame.Rect(45, 450, 57, 70)
 w_area = pygame.Rect(105, 450, 57, 70)
 e_area = pygame.Rect(165, 450, 57, 70)
@@ -123,7 +120,7 @@ m_area = pygame.Rect(490, 620, 57, 70)
 enter_area = pygame.Rect(555, 620, 102, 70)
 de_area = pygame.Rect(20, 620, 102, 70)
 
-## GAME BOARD
+# GAME BOARD
 LETTER_X_SPACING = 65
 LETTER_Y_SPACING = 10
 LETTER_SIZE = 60
@@ -136,10 +133,11 @@ BOARD = [[" ", " ", " ", " ", " "],
          [" ", " ", " ", " ", " "]]
 
 
-## WORD/LETTER CONTROL
+# WORD/LETTER CONTROL
 guesses_count = 0
 guesses = [[]] * 6
-guesses_str = []    # when each guess is to be checked, the text version will be placed here
+## when guess checked, full version placed here
+guesses_str = []    
 
 correct_guesses = []
 incorrect_guesses = []
@@ -154,7 +152,7 @@ game_result = ""
 
 ####################################FUNCTIONS####################################
 
-## GAME BOARD
+# GAME BOARD
 
 def draw():
     for col in range(0, 5):
@@ -163,12 +161,12 @@ def draw():
             piece_text = FONT.render(BOARD[row][col], True, GREY)
             SCREEN.blit(piece_text, (col * 100 + 10, row * 100 + 15))
 
-### draws letters on the board as user enters them
+## draws letters on the board as user enters them
 class Letter:
     def __init__(self, text, bg_position):
         # Initializes all the variables, inclinkuding text, color, position, size, etc.
-        self.bg_color = "white"
-        self.text_color = "black"
+        self.bg_color = WHITE
+        self.text_color = BLACK
         self.bg_position = bg_position
         self.bg_x = bg_position[0]
         self.bg_y = bg_position[1]
@@ -181,23 +179,22 @@ class Letter:
     def draw(self):
         # Puts the letter and text on the screen at the desired positions.
         pygame.draw.rect(SCREEN, self.bg_color, self.bg_rect)
-        if self.bg_color == "white":
-            pygame.draw.rect(SCREEN, FILLED_OUTLINE, self.bg_rect, 3)
+        if self.bg_color == WHITE:
+            pygame.draw.rect(SCREEN, GREY, self.bg_rect, 3)
         self.text_surface = FONT.render(self.text, True, self.text_color)
         SCREEN.blit(self.text_surface, self.text_rect)
         pygame.display.update()
 
     def delete(self):
         # Fills the letter's spot with the default square, emptying it.
-        pygame.draw.rect(SCREEN, "white", self.bg_rect)
-        pygame.draw.rect(SCREEN, OUTLINE, self.bg_rect, 3)
+        pygame.draw.rect(SCREEN, WHITE, self.bg_rect)
         pygame.display.update()
 
 
 
-## KEYBOARD
+# KEYBOARD
 
-### draw and handle keyboard buttons
+## draw and handle keyboard buttons
 class KeyButton:
     def __init__(self, x, y, letter):
         # Initializes variables such as color, size, position, and letter.
@@ -205,17 +202,17 @@ class KeyButton:
         self.y = y
         self.text = letter
         self.rect = (self.x, self.y, 57, 70)
-        self.bg_color = OUTLINE
+        self.bg_color = LT_GREY
 
     def draw(self):
         # Puts the key and its text on the screen at the desired position.
         pygame.draw.rect(SCREEN, self.bg_color, self.rect)
-        self.text_surface = FONT.render(self.text, True, "white")
+        self.text_surface = FONT.render(self.text, True, WHITE)
         self.text_rect = self.text_surface.get_rect(center=(self.x+27, self.y+30))
         SCREEN.blit(self.text_surface, self.text_rect)
         pygame.display.update()
 
-### draw and handle keyboard larger buttons
+## draw and handle keyboard larger buttons
 class BigKeyButton:
     def __init__(self, x, y, letter):
         # Initializes variables such as color, size, position, and letter.
@@ -223,18 +220,18 @@ class BigKeyButton:
         self.y = y
         self.text = letter
         self.rect = (self.x, self.y, 102, 70)
-        self.bg_color = OUTLINE
+        self.bg_color = LT_GREY
 
-    def draw_big(self):
+    def draw(self):
         pygame.draw.rect(SCREEN, self.bg_color, self.rect)
-        self.text_surface = FONT_SM.render(self.text, True, "white")
+        self.text_surface = FONT_SM.render(self.text, True, WHITE)
         self.text_rect = self.text_surface.get_rect(center=(self.x+50, self.y+35))
         SCREEN.blit(self.text_surface, self.text_rect)
         pygame.display.update()
 
 
 
-## GENERAL GAME CONTROLS
+# GENERAL GAME CONTROLS
 
 def add_semi(char):
     global semicorrect_guesses
@@ -251,9 +248,9 @@ def add_correct(char):
     if char not in correct_guesses:
         correct_guesses.append(char)
 
-#### check what parts of the user's guess is correct
+## check what parts of the user's guess is correct
 def check_guess(guess_to_check):
-    # Goes through each letter and checks if it should be green, yellow, or grey.
+    ## Goes through each letter and checks if it should be green, yellow, or grey.
     global current_guess, current_guess_string, guesses_count, current_letter_bg_x, game_result
     game_decided = False
     guesses_str.append(current_guess_string)
@@ -261,23 +258,23 @@ def check_guess(guess_to_check):
         lowercase_letter = guess_to_check[i].text.lower()
         if lowercase_letter in CORRECT_WORD:
             if lowercase_letter == CORRECT_WORD[i]:
-                guess_to_check[i].bg_color = GREEN
+                guess_to_check[i].bg_color = CORRECT_COLOR
                 add_correct(lowercase_letter)
                 for key in keys:
                     if key.text == lowercase_letter.upper():
-                        key.bg_color = GREEN
+                        key.bg_color = CORRECT_COLOR
                         key.draw()
-                guess_to_check[i].text_color = "white"
+                guess_to_check[i].text_color = WHITE
                 if not game_decided:
                     game_result = "W"
             else:
-                guess_to_check[i].bg_color = YELLOW
+                guess_to_check[i].bg_color = SEMI_COLOR
                 add_semi(lowercase_letter)
                 for key in keys:
                     if key.text == lowercase_letter.upper():
-                        key.bg_color = YELLOW
+                        key.bg_color = SEMI_COLOR
                         key.draw()
-                guess_to_check[i].text_color = "white"
+                guess_to_check[i].text_color = WHITE
                 game_result = ""
                 game_decided = True
         else:
@@ -285,9 +282,9 @@ def check_guess(guess_to_check):
             add_incorrect(lowercase_letter)
             for key in keys:
                 if key.text == lowercase_letter.upper():
-                    key.bg_color = GREY
+                    key.bg_color = WRONG_COLOR
                     key.draw()
-            guess_to_check[i].text_color = "white"
+            guess_to_check[i].text_color = WHITE
             game_result = ""
             game_decided = True
         guess_to_check[i].draw()
@@ -301,10 +298,10 @@ def check_guess(guess_to_check):
     if guesses_count == 6 and game_result == "":
         game_result = "L"
 
-#### display loosing screen and call reset
+## display loosing screen and call reset
 def lose_play_again():
-    # Puts the play again text on the screen.
-    pygame.draw.rect(SCREEN, "red", (10, 10, 680, 730))
+    ## Puts the play again text on the screen.
+    pygame.draw.rect(SCREEN, "red", (10, 10, WIDTH - 20, HEIGHT - 20))
     play_again_font = pygame.font.Font("assets/FreeSansBold.otf", 40)
     play_again_text = play_again_font.render("Press ENTER to Play Again!", True, "white")
     play_again_rect = play_again_text.get_rect(center=(WIDTH/2, 320))
@@ -314,10 +311,10 @@ def lose_play_again():
     SCREEN.blit(play_again_text, play_again_rect)
     pygame.display.update()
 
-#### display winning screen and call reset
+## display winning screen and call reset
 def correct_play_again():
-    # Puts the play again text on the screen.
-    pygame.draw.rect(SCREEN, GREEN, (10, 10, 680, 730))
+    ## Puts the play again text on the screen.
+    pygame.draw.rect(SCREEN, CORRECT_COLOR, (10, 10, WIDTH - 20, HEIGHT - 20))
     play_again_font = pygame.font.Font("assets/FreeSansBold.otf", 40)
     con_text = play_again_font.render(f"Congratulations!", True, "white")
     con_rect = con_text.get_rect(center=(WIDTH/2, 250))
@@ -333,14 +330,14 @@ def correct_play_again():
 
 # reset global variables
 def reset():
-    # Resets all global variables to their default states.
+    ## Resets all global variables to their default states.
     global guesses_count, CORRECT_WORD, guesses, current_guess, current_guess_string, game_result, lang, semicorrect_guesses, correct_guesses, incorrect_guesses
     SCREEN.fill("white")
     guesses_count = 0
     if lang == "en":
         CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
     elif lang == "sp":
-        CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+        CORRECT_WORD = words2.WORDS2[random.randint(0, len(words2.WORDS2) - 1)]
     elif lang == "ger":
         CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
     elif lang == "fr":
@@ -356,20 +353,20 @@ def reset():
     semicorrect_guesses = []
     pygame.display.update()
     for key in keys:
-        key.bg_color = OUTLINE
+        key.bg_color = LT_GREY
         key.draw()
 
 
 
-## ADUIO CONTROL
+# ADUIO CONTROL
 
-#### Uses gTTS to say the string 'response' in language 'language'
+## Uses gTTS to say the string 'response' in language 'language'
 def say(response, language):
     obj = gTTS(text=response, lang=language, slow=False)
     obj.save("audio.mp3")
     os.system("mpg123.exe audio.mp3")
 
-#### Uses SpeechRecognition to translate a user response to text. Returns text
+## Uses SpeechRecognition to translate a user response to text. Returns text
 def listen():
     r = sr.Recognizer()
     mic = sr.Microphone()
@@ -384,12 +381,14 @@ def listen():
     cur_text = r.recognize_google(audio)
     return cur_text
 
+##
 def say_by_char(response, language):
     chars = [*response]
     for c in chars:
         say(c, language)
         time.sleep(0.025)
 
+##
 def say_and_confirm_by_char(guess, correct, language):
     chars = [*guess]
     correct = [*correct]
@@ -405,9 +404,8 @@ def say_and_confirm_by_char(guess, correct, language):
             playsound('sound_effects/incorrect_char_trimmed.wav')
         correct_index = correct_index + 1
 
-#### Control for common misinterpretations oh hearing a letter. Called when word 
-#### is returned to 'stash' function instead of a character. 
-#### Returns a character if possible, if none found, returns original word.
+## Control for common letter misinterpretations. Called if word returned to 'stash' instead of a char 
+## Returns a character if possible, if none found, returns original word.
 def fix_char(fuzzy_char):
     if fuzzy_char == "aye":
         return 'a'
@@ -458,12 +456,14 @@ def fix_char(fuzzy_char):
     else:
         return fuzzy_char
 
+##
 def read_guess(guess_number):
     if guess_number > guesses_count:
         say("You dont have a guess number " + str(guess_number) + " yet.", languages[current_language])
     else:
         say_and_confirm_by_char(guesses_str[guess_number - 1], CORRECT_WORD.upper(), languages[current_language])
 
+##
 def handsfree():
     global current_guess_string, activate, audio_interface_enabled
 
@@ -533,7 +533,7 @@ def handsfree():
         except Exception as e:
             print("exception: " + repr(e))
 
-#### Takes stash command as an input and places new letter on the screen - create_new_letter equiv - hands free version
+## Takes stash command as an input and places new letter on the screen - create_new_letter equiv - hands free version
 def stash(command):
     global key_pressed
     command_split = command.split(' ')
@@ -548,7 +548,7 @@ def stash(command):
         else:
             say("your stash is full! submit or delete to guess more letters.", languages[current_language])
 
-#### delete for hands free version
+## delete for hands free version
 def delete():
     global current_guess_string
     if len(current_guess_string) > 0:
@@ -558,7 +558,7 @@ def delete():
     else:
         say("You dont have any letters to delete!", languages[current_language])
 
-#### submit for hands free version
+## submit for hands free version
 def submit():
     global current_guess_string, current_guess
     if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
@@ -569,9 +569,9 @@ def submit():
 
 
 
-## TRADIIONAL PLAY CONTROL
+# TRADIIONAL PLAY CONTROL
 
-#### for traditional version of the game
+## for traditional version of the game
 def create_new_letter():
     # Creates a new letter and adds it to the guess.
     global current_guess_string, current_letter_bg_x
@@ -584,7 +584,7 @@ def create_new_letter():
         for letter in guess:
             letter.draw()
 
-#### delete for traditional version of game
+## delete for traditional version of game
 def delete_letter():
     # Deletes the last letter from the guess.
     global current_guess_string, current_letter_bg_x
@@ -596,22 +596,18 @@ def delete_letter():
 
 
 
-def set_difficulty(selected: Tuple, value: Any) -> None:
-    """
-    Set the difficulty of the game.
-    """
-    print(f'Set difficulty to {selected[0]} ({value})')
-
 def start_the_game() -> None:
     global startgame
     startgame = 1
     
     SCREEN.fill(WHITE)
+    print(CORRECT_WORD)
+    print(lang)
 
-    #### starting key board location
+    ## starting key board location
     key_x, key_y = 45, 450
 
-    #### draw letters On top of keyboard buttons
+    ## draw letters On top of keyboard buttons
     for i in range(3):
         for letter in ALPHABET[i]:
             new_key = KeyButton(key_x, key_y, letter)
@@ -624,9 +620,11 @@ def start_the_game() -> None:
         elif i == 1:
             key_x = 130
     new_key = BigKeyButton(20, 620, "DEL")
-    new_key.draw_big()
+    keys.append(new_key)
+    new_key.draw()
     new_key = BigKeyButton(555, 620, "ENTER")
-    new_key.draw_big()
+    keys.append(new_key)
+    new_key.draw()
 
     while True: 
         global audio_interface_enabled, started, game_result, activate, current_guess_string, key_pressed, q_area, w_area, e_area, r_area, t_area, y_area, u_area, i_area, o_area, p_area, a_area, s_area, d_area, f_area, g_area, h_area, j_area, k_area, l_area, z_area, x_area, c_area, v_area, b_area, n_area, m_area, enter_area, de_area, rendered, activated
@@ -827,16 +825,54 @@ def start_the_game() -> None:
 
             rendered = 1
 
-menu = pygame_menu.Menu(
-    height=300,
-    theme=pygame_menu.themes.THEME_BLUE,
-    title='Welcome',
-    width=400
+
+
+def set_language(selected: Tuple[Any, int], value: str) -> None:
+    global lang, CORRECT_WORD
+
+    lang = value
+
+    if lang == "sp":
+        CORRECT_WORD = words2.WORDS2[random.randint(0, len(words2.WORDS2) - 1)]
+    elif lang == "ger":
+        CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+    elif lang == "fr":
+        CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+    elif lang == "kid":
+        CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+
+    
+    print(f'Set language to {selected[0]} ({value})')
+
+mytheme = pygame_menu.themes.THEME_GREEN.copy()
+mytheme.background_color = "#BAF0FF"
+mytheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
+mytheme.title_offset = (20,10)
+mytheme.title_font_color = BLACK
+mytheme.widget_font_color = BLACK
+
+about_theme = mytheme
+about_theme.menubar_close_button = True
+
+about_menu = pygame_menu.Menu(
+    height=WINDOW_SIZE[1],
+    theme=mytheme,
+    title='About',
+    width=WINDOW_SIZE[0]
 )
 
-menu.add.selector('Difficulty: ', [('Hard', 1), ('Easy', 2)], onchange=set_difficulty)
+menu = pygame_menu.Menu(
+    height=WINDOW_SIZE[1],
+    theme=mytheme,
+    title='WORLD-LE',
+    width=WINDOW_SIZE[0]
+)
+
 menu.add.button('Play', start_the_game)
+menu.add.selector('Language: ', [("English", "en"), ("Spanish", "sp"), ("German", "ger"), ("French", "fr"), ("Kid Friendly", "kid")], onchange=set_language, default=0)
+menu.add.button('About', about_menu)
 menu.add.button('Quit', pygame_menu.events.EXIT)
+about_menu.add.button('Quit', pygame_menu.events.EXIT)
 
 if not startgame :
     menu.mainloop(SCREEN)
