@@ -78,8 +78,8 @@ FONT = pygame.font.Font("assets/FreeSansBold.otf", 50)
 FONT_SM = pygame.font.Font("assets/FreeSansBold.otf", 30)
 
 # SCREEN
-WIDTH, HEIGHT = 750, 750
-WINDOW_SIZE = (750, 750)
+WIDTH, HEIGHT = 750, 775
+WINDOW_SIZE = (750, 775)
 
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("World-le")
@@ -92,7 +92,7 @@ keys = []
 
 # GAME BOARD
 LETTER_X_SPACING = 65
-LETTER_Y_SPACING = 10
+LETTER_Y_SPACING = 70
 LETTER_SIZE = 60
 
 BOARD = [[" ", " ", " ", " ", " "],
@@ -116,7 +116,8 @@ remaining_guesses = []
 
 current_guess = []
 current_guess_string = ""
-current_letter_bg_x = 175
+# change this to adjust x coordinate of letter position
+current_letter_bg_x = 180
 
 game_result = ""
 
@@ -127,43 +128,45 @@ game_result = ""
 def draw():
     for col in range(0, 5):
         for row in range(0, 6):
-            pygame.draw.rect(SCREEN, BLACK, [col * 65 + 175, row * 70 + 10, 60, 60], 1, 1)
+            # change + values to adjust board positioning
+            pygame.draw.rect(SCREEN, BLACK, [col * 65 + 180, row * 70 + 70, 60, 60], 1, 1)
             piece_text = FONT.render(BOARD[row][col], True, GREY)
             SCREEN.blit(piece_text, (col * 100 + 10, row * 100 + 15))
 
 def draw_color_key():
-    pygame.draw.rect(SCREEN, BLACK, [550, 50, 175, 300], 1, 5)
+    pygame.draw.rect(SCREEN, BLACK, [550, 100, 175, 275], 1, 5)
     color_font = pygame.font.Font("assets/Genome-Thin.otf", 25)
     color_text = color_font.render("Color Key", True, BLACK)
-    color_rect = color_text.get_rect(center=(637, 75))
+    color_rect = color_text.get_rect(center=(637, 125))
     SCREEN.blit(color_text, color_rect)
     
     font = pygame.font.Font("assets/Genome-Thin.otf", 20)
-    pygame.draw.rect(SCREEN, CORRECT_COLOR, [565, 125, 30, 30], 100, 100)
+    pygame.draw.rect(SCREEN, CORRECT_COLOR, [565, 175, 30, 30], 100, 100)
     correct_text = font.render("CORRECT", True, BLACK)
-    correct_rect = correct_text.get_rect(center=(650, 140))
+    correct_rect = correct_text.get_rect(center=(650, 190))
     SCREEN.blit(correct_text, correct_rect)
     
-    pygame.draw.rect(SCREEN, SEMI_COLOR,[565, 200, 30, 30], 100, 100)
+    pygame.draw.rect(SCREEN, SEMI_COLOR,[565, 250, 30, 30], 100, 100)
     semi_text = font.render("SEMI", True, BLACK)
-    semi_rect = semi_text.get_rect(center=(627, 210))
+    semi_rect = semi_text.get_rect(center=(627, 260))
     SCREEN.blit(semi_text, semi_rect)
     semi_text = font.render("CORRECT", True, BLACK)
-    semi_rect = semi_text.get_rect(center=(650, 230))
+    semi_rect = semi_text.get_rect(center=(650, 280))
     SCREEN.blit(semi_text, semi_rect)
     
-    pygame.draw.rect(SCREEN, WRONG_COLOR, [565, 275, 30, 30], 100, 100)
+    pygame.draw.rect(SCREEN, WRONG_COLOR, [565, 325, 30, 30], 100, 100)
     wrong_text = font.render("WRONG", True, BLACK)
-    wrong_rect = wrong_text.get_rect(center=(640, 290))
+    wrong_rect = wrong_text.get_rect(center=(640, 340))
     SCREEN.blit(wrong_text, wrong_rect)
     
     pygame.display.update()
 
 def draw_nav_bar():
-    x = 1 # placeholder
+    pygame.draw.rect(SCREEN, LT_GREY, [0, 0, WIDTH, 50], 100)
 
 ## draws letters on the board as user enters them
 class Letter:
+    # DO NOT CHANGE ANY OF THIS TO ADJUST BOARD POSITIONING
     def __init__(self, text, bg_position):
         # Initializes all the variables, inclinkuding text, color, position, size, etc.
         self.bg_color = WHITE
@@ -201,37 +204,41 @@ class KeyButton:
         self.x = x
         self.y = y
         self.text = letter
-        self.rect = (self.x, self.y, 57, 70)
+        self.width = 57
+        self.height = 70
+        self.rect = (self.x, self.y, self.width, self.height)
         self.bg_color = LT_GREY
 
     def draw(self):
         # Puts the key and its text on the screen at the desired position.
         pygame.draw.rect(SCREEN, self.bg_color, self.rect, 100, 4)
         self.text_surface = FONT.render(self.text, True, WHITE)
-        self.text_rect = self.text_surface.get_rect(center=(self.x+27, self.y+30))
+        self.text_rect = self.text_surface.get_rect(center=(self.x + (self.width/2), self.y + (self.height/2)))
         SCREEN.blit(self.text_surface, self.text_rect)
         pygame.display.update()
 
 ## draw and handle keyboard larger buttons
 class BigKeyButton:
-    def __init__(self, x, y, letter):
+    def __init__(self, x, y, letter, width, height):
         # Initializes variables such as color, size, position, and letter.
         self.x = x
         self.y = y
         self.text = letter
-        self.rect = (self.x, self.y, 102, 70)
+        self.width = width
+        self.height = height
+        self.rect = (self.x, self.y, self.width, self.height)
         self.bg_color = LT_GREY
 
     def draw(self):
-        pygame.draw.rect(SCREEN, self.bg_color, self.rect)
+        pygame.draw.rect(SCREEN, self.bg_color, self.rect, 100, 4)
         self.text_surface = FONT_SM.render(self.text, True, WHITE)
-        self.text_rect = self.text_surface.get_rect(center=(self.x+50, self.y+35))
+        self.text_rect = self.text_surface.get_rect(center=(self.x + (self.width/2), self.y + (self.height/2)))
         SCREEN.blit(self.text_surface, self.text_rect)
         pygame.display.update()
 
 def draw_keyboard() :
     ## starting key board location
-    key_x, key_y = 45, 450
+    key_x, key_y = 45, 500
 
     ## draw letters On top of keyboard buttons
     for i in range(3):
@@ -245,10 +252,10 @@ def draw_keyboard() :
             key_x = 80
         elif i == 1:
             key_x = 130
-    new_key = BigKeyButton(20, 620, "DEL")
+    new_key = BigKeyButton(20, 670, "DEL", 102, 70)
     keys.append(new_key)
     new_key.draw()
-    new_key = BigKeyButton(555, 620, "ENTER")
+    new_key = BigKeyButton(555, 670, "ENTER", 125, 70)
     keys.append(new_key)
     new_key.draw()
 
@@ -315,7 +322,7 @@ def check_guess(guess_to_check):
     guesses_count += 1
     current_guess = []
     current_guess_string = ""
-    current_letter_bg_x = 175
+    current_letter_bg_x = 180
 
     if guesses_count == 6 and game_result == "":
         game_result = "L"
@@ -323,6 +330,7 @@ def check_guess(guess_to_check):
 ## display loosing screen and call reset
 def lose_play_again():
     ## Puts the play again text on the screen.
+    SCREEN.fill(WHITE)
     pygame.draw.rect(SCREEN, RED, (10, 10, WIDTH - 20, HEIGHT - 20))
     play_again_font = pygame.font.Font("assets/FreeSansBold.otf", 40)
     play_again_text = play_again_font.render("Press ENTER to Play Again!", True, WHITE)
@@ -336,6 +344,7 @@ def lose_play_again():
 ## display winning screen and call reset
 def correct_play_again():
     ## Puts the play again text on the screen.
+    SCREEN.fill(WHITE)
     pygame.draw.rect(SCREEN, CORRECT_COLOR, (10, 10, WIDTH - 20, HEIGHT - 20))
     play_again_font = pygame.font.Font("assets/FreeSansBold.otf", 40)
     con_text = play_again_font.render(f"Congratulations!", True, WHITE)
@@ -605,6 +614,7 @@ def create_new_letter():
     # Creates a new letter and adds it to the guess.
     global current_guess_string, current_letter_bg_x
     current_guess_string += key_pressed
+    # do not change this to adjust board positioning
     new_letter = Letter(key_pressed, (current_letter_bg_x, guesses_count * 70 + LETTER_Y_SPACING))
     current_letter_bg_x += LETTER_X_SPACING
     guesses[guesses_count].append(new_letter)
@@ -638,34 +648,34 @@ def start_the_game() -> None:
     draw_nav_bar()
 
     ## make keyboard areas - so click on screen activates letter
-    q_area = pygame.Rect(45, 450, 57, 70)
-    w_area = pygame.Rect(105, 450, 57, 70)
-    e_area = pygame.Rect(165, 450, 57, 70)
-    r_area = pygame.Rect(225, 450, 57, 70)
-    t_area = pygame.Rect(285, 450, 57, 70)
-    y_area = pygame.Rect(345, 450, 57, 70)
-    u_area = pygame.Rect(405, 450, 57, 70)
-    i_area = pygame.Rect(465, 450, 57, 70)
-    o_area = pygame.Rect(525, 450, 57, 70)
-    p_area = pygame.Rect(585, 450, 57, 70)
-    a_area = pygame.Rect(80, 535, 57, 70)
-    s_area = pygame.Rect(140, 535, 57, 70)
-    d_area = pygame.Rect(200, 535, 57, 70)
-    f_area = pygame.Rect(260, 535, 57, 70)
-    g_area = pygame.Rect(320, 535, 57, 70)
-    h_area = pygame.Rect(380, 535, 57, 70)
-    j_area = pygame.Rect(440, 535, 57, 70)
-    k_area = pygame.Rect(500, 535, 57, 70)
-    l_area = pygame.Rect(560, 535, 57, 70)
-    z_area = pygame.Rect(130, 620, 57, 70)
-    x_area = pygame.Rect(190, 620, 57, 70)
-    c_area = pygame.Rect(250, 620, 57, 70)
-    v_area = pygame.Rect(310, 620, 57, 70)
-    b_area = pygame.Rect(370, 620, 57, 70)
-    n_area = pygame.Rect(430, 620, 57, 70)
-    m_area = pygame.Rect(490, 620, 57, 70)
-    enter_area = pygame.Rect(555, 620, 102, 70)
-    de_area = pygame.Rect(20, 620, 102, 70)
+    q_area = pygame.Rect(45, 500, 57, 70)
+    w_area = pygame.Rect(105, 500, 57, 70)
+    e_area = pygame.Rect(165, 500, 57, 70)
+    r_area = pygame.Rect(225, 500, 57, 70)
+    t_area = pygame.Rect(285, 500, 57, 70)
+    y_area = pygame.Rect(345, 500, 57, 70)
+    u_area = pygame.Rect(405, 500, 57, 70)
+    i_area = pygame.Rect(465, 500, 57, 70)
+    o_area = pygame.Rect(525, 500, 57, 70)
+    p_area = pygame.Rect(585, 500, 57, 70)
+    a_area = pygame.Rect(80, 585, 57, 70)
+    s_area = pygame.Rect(140, 585, 57, 70)
+    d_area = pygame.Rect(200, 585, 57, 70)
+    f_area = pygame.Rect(260, 585, 57, 70)
+    g_area = pygame.Rect(320, 585, 57, 70)
+    h_area = pygame.Rect(380, 585, 57, 70)
+    j_area = pygame.Rect(440, 585, 57, 70)
+    k_area = pygame.Rect(500, 585, 57, 70)
+    l_area = pygame.Rect(560, 585, 57, 70)
+    z_area = pygame.Rect(130, 670, 57, 70)
+    x_area = pygame.Rect(190, 670, 57, 70)
+    c_area = pygame.Rect(250, 670, 57, 70)
+    v_area = pygame.Rect(310, 670, 57, 70)
+    b_area = pygame.Rect(370, 670, 57, 70)
+    n_area = pygame.Rect(430, 670, 57, 70)
+    m_area = pygame.Rect(490, 670, 57, 70)
+    enter_area = pygame.Rect(555, 670, 102, 70)
+    de_area = pygame.Rect(20, 670, 102, 70)
 
     while True: 
         # how program should run when audio interface is not enabled
@@ -685,6 +695,7 @@ def start_the_game() -> None:
                         if game_result != "":
                             reset()
                         else:
+                            # THIS NEEDS TO BE ADJUSTED FOR DIFFERENT LANGUAGAGES
                             if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
                                 check_guess(current_guess)
                     elif event.key == pygame.K_BACKSPACE:
@@ -816,9 +827,9 @@ def start_the_game() -> None:
 
             pygame.display.flip()
 
-            if not started:
-                say(startup, languages[current_language])
-                started = 1
+            # if not started:
+            #     say(startup, languages[current_language])
+            #     started = 1
 
         # how program should run when audio interface is enabled
         while audio_interface_enabled:
@@ -850,6 +861,7 @@ def start_the_game() -> None:
                         if game_result != "":
                             reset()
                         else:
+                            # THIS NEEDS TO BE ADJUSTED FOR DIFFERENT LANGUAGES!!!!!
                             if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
                                 check_guess(current_guess)
                     elif event.key == pygame.K_BACKSPACE:
