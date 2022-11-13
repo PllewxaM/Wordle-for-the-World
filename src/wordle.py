@@ -56,30 +56,31 @@ ORANGEYELLOW = "#ffc700"
 YELLOW = "#c9b458"
 YELLOWGREEN = "#a8d800"
 GREEN = "#6aaa64"
-# GREENBLUE =
-# BLUE =
-# BLUEPURPLE =
-# PURPLE =
-# PURPLEPINK =
-# PINK =
-# REDPINK =
+GREENBLUE = "#00D9C5"
+BLUE = "#0085FF"
+BLUEPURPLE = "#623CED"
+PURPLE = "#9150F3"
+PURPLEPINK = "#B912F4"
+PINK = "#FB00FF"
+REDPINK = "#FF0081"
 GREY = "#787c7e"
+LT_GREY = "#abadaf"
 WHITE = "#ffffff"
 BLACK = "#000000"
-LT_GREY = "#abadaf"
+
 
 ## CHANGE THESE TO GET FROM USER
-CORRECT_COLOR = GREEN
-SEMI_COLOR = YELLOW
-WRONG_COLOR = RED
+CORRECT_COLOR = YELLOWGREEN
+SEMI_COLOR = PINK
+WRONG_COLOR = BLUEPURPLE
 
 # FONT
 FONT = pygame.font.Font("assets/FreeSansBold.otf", 50)
 FONT_SM = pygame.font.Font("assets/FreeSansBold.otf", 30)
 
 # SCREEN
-WIDTH, HEIGHT = 750, 775
-WINDOW_SIZE = (750, 775)
+WIDTH, HEIGHT = 850, 750
+WINDOW_SIZE = (850, 750)
 
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("World-le")
@@ -117,7 +118,7 @@ remaining_guesses = []
 current_guess = []
 current_guess_string = ""
 # change this to adjust x coordinate of letter position
-current_letter_bg_x = 180
+current_letter_bg_x = WIDTH/3.25
 
 game_result = ""
 
@@ -129,40 +130,54 @@ def draw():
     for col in range(0, 5):
         for row in range(0, 6):
             # change + values to adjust board positioning
-            pygame.draw.rect(SCREEN, BLACK, [col * 65 + 180, row * 70 + 70, 60, 60], 1, 1)
+            pygame.draw.rect(SCREEN, BLACK, [col * LETTER_X_SPACING + WIDTH/3.25, row * LETTER_Y_SPACING + 70, 60, 60], 1, 1)
+            
+            # I'm convinced these two lines of code are unnecessary
             piece_text = FONT.render(BOARD[row][col], True, GREY)
-            SCREEN.blit(piece_text, (col * 100 + 10, row * 100 + 15))
+            SCREEN.blit(piece_text, (col * LETTER_X_SPACING + WIDTH/3.25, row * LETTER_X_SPACING + 70))
 
 def draw_color_key():
-    pygame.draw.rect(SCREEN, BLACK, [550, 100, 175, 275], 1, 5)
-    color_font = pygame.font.Font("assets/Genome-Thin.otf", 25)
+    key_width, key_height = 155, 225
+    pygame.draw.rect(SCREEN, BLACK, [WIDTH - 170, 70, key_width, key_height], 1, 5)
+    color_font = pygame.font.Font("assets/GFSDidotBold.otf", 20)
     color_text = color_font.render("Color Key", True, BLACK)
-    color_rect = color_text.get_rect(center=(637, 125))
+    color_rect = color_text.get_rect(center=(WIDTH - 185/2, 95))
     SCREEN.blit(color_text, color_rect)
     
-    font = pygame.font.Font("assets/Genome-Thin.otf", 20)
-    pygame.draw.rect(SCREEN, CORRECT_COLOR, [565, 175, 30, 30], 100, 100)
+    font = pygame.font.Font("assets/GFSDidotBold.otf", 15)
+    color_x = WIDTH - 155
+    color_y = 130
+    size = 30
+    shape = 100
+    text_x = WIDTH - 70
+
+    pygame.draw.rect(SCREEN, CORRECT_COLOR, [color_x, color_y, size, size], shape, shape)
     correct_text = font.render("CORRECT", True, BLACK)
-    correct_rect = correct_text.get_rect(center=(650, 190))
+    correct_rect = correct_text.get_rect(center=(text_x, color_y + 15))
     SCREEN.blit(correct_text, correct_rect)
     
-    pygame.draw.rect(SCREEN, SEMI_COLOR,[565, 250, 30, 30], 100, 100)
+    pygame.draw.rect(SCREEN, SEMI_COLOR,[color_x, color_y + 50, size, size], shape, shape)
     semi_text = font.render("SEMI", True, BLACK)
-    semi_rect = semi_text.get_rect(center=(627, 260))
+    semi_rect = semi_text.get_rect(center=(text_x, color_y + 55))
     SCREEN.blit(semi_text, semi_rect)
     semi_text = font.render("CORRECT", True, BLACK)
-    semi_rect = semi_text.get_rect(center=(650, 280))
+    semi_rect = semi_text.get_rect(center=(text_x, color_y + 75))
     SCREEN.blit(semi_text, semi_rect)
     
-    pygame.draw.rect(SCREEN, WRONG_COLOR, [565, 325, 30, 30], 100, 100)
+    pygame.draw.rect(SCREEN, WRONG_COLOR, [color_x, color_y + 105, size, size], shape, shape)
     wrong_text = font.render("WRONG", True, BLACK)
-    wrong_rect = wrong_text.get_rect(center=(640, 340))
+    wrong_rect = wrong_text.get_rect(center=(text_x, color_y + 120))
     SCREEN.blit(wrong_text, wrong_rect)
     
     pygame.display.update()
 
 def draw_nav_bar():
     pygame.draw.rect(SCREEN, LT_GREY, [0, 0, WIDTH, 50], 100)
+    pygame.draw.rect(SCREEN, BLACK, [10, 10, 30, 30], 100)
+    header_font = pygame.font.Font("assets/GFSDidotBold.otf", 30)
+    header_text = header_font.render("WORLDLE", True, WHITE)
+    header_rect = header_text.get_rect(center=(WIDTH/2, 25))
+    SCREEN.blit(header_text, header_rect)
 
 ## draws letters on the board as user enters them
 class Letter:
@@ -238,7 +253,7 @@ class BigKeyButton:
 
 def draw_keyboard() :
     ## starting key board location
-    key_x, key_y = 45, 500
+    key_x, key_y = 125, 500
 
     ## draw letters On top of keyboard buttons
     for i in range(3):
@@ -247,15 +262,15 @@ def draw_keyboard() :
             keys.append(new_key)
             new_key.draw()
             key_x += 60
-        key_y += 85
+        key_y += 80
         if i == 0:
-            key_x = 80
+            key_x = 160
         elif i == 1:
-            key_x = 130
-    new_key = BigKeyButton(20, 670, "DEL", 102, 70)
+            key_x = 210
+    new_key = BigKeyButton(100, 660, "DEL", 102, 70)
     keys.append(new_key)
     new_key.draw()
-    new_key = BigKeyButton(555, 670, "ENTER", 125, 70)
+    new_key = BigKeyButton(635, 660, "ENTER", 125, 70)
     keys.append(new_key)
     new_key.draw()
 
@@ -322,7 +337,7 @@ def check_guess(guess_to_check):
     guesses_count += 1
     current_guess = []
     current_guess_string = ""
-    current_letter_bg_x = 180
+    current_letter_bg_x = WIDTH/3.25
 
     if guesses_count == 6 and game_result == "":
         game_result = "L"
@@ -648,38 +663,40 @@ def start_the_game() -> None:
     draw_nav_bar()
 
     ## make keyboard areas - so click on screen activates letter
-    q_area = pygame.Rect(45, 500, 57, 70)
-    w_area = pygame.Rect(105, 500, 57, 70)
-    e_area = pygame.Rect(165, 500, 57, 70)
-    r_area = pygame.Rect(225, 500, 57, 70)
-    t_area = pygame.Rect(285, 500, 57, 70)
-    y_area = pygame.Rect(345, 500, 57, 70)
-    u_area = pygame.Rect(405, 500, 57, 70)
-    i_area = pygame.Rect(465, 500, 57, 70)
-    o_area = pygame.Rect(525, 500, 57, 70)
-    p_area = pygame.Rect(585, 500, 57, 70)
-    a_area = pygame.Rect(80, 585, 57, 70)
-    s_area = pygame.Rect(140, 585, 57, 70)
-    d_area = pygame.Rect(200, 585, 57, 70)
-    f_area = pygame.Rect(260, 585, 57, 70)
-    g_area = pygame.Rect(320, 585, 57, 70)
-    h_area = pygame.Rect(380, 585, 57, 70)
-    j_area = pygame.Rect(440, 585, 57, 70)
-    k_area = pygame.Rect(500, 585, 57, 70)
-    l_area = pygame.Rect(560, 585, 57, 70)
-    z_area = pygame.Rect(130, 670, 57, 70)
-    x_area = pygame.Rect(190, 670, 57, 70)
-    c_area = pygame.Rect(250, 670, 57, 70)
-    v_area = pygame.Rect(310, 670, 57, 70)
-    b_area = pygame.Rect(370, 670, 57, 70)
-    n_area = pygame.Rect(430, 670, 57, 70)
-    m_area = pygame.Rect(490, 670, 57, 70)
-    enter_area = pygame.Rect(555, 670, 102, 70)
-    de_area = pygame.Rect(20, 670, 102, 70)
+    q_area = pygame.Rect(125, 500, 57, 70)
+    w_area = pygame.Rect(185, 500, 57, 70)
+    e_area = pygame.Rect(245, 500, 57, 70)
+    r_area = pygame.Rect(305, 500, 57, 70)
+    t_area = pygame.Rect(365, 500, 57, 70)
+    y_area = pygame.Rect(425, 500, 57, 70)
+    u_area = pygame.Rect(485, 500, 57, 70)
+    i_area = pygame.Rect(545, 500, 57, 70)
+    o_area = pygame.Rect(605, 500, 57, 70)
+    p_area = pygame.Rect(665, 500, 57, 70)
+    a_area = pygame.Rect(160, 585, 57, 70)
+    s_area = pygame.Rect(220, 585, 57, 70)
+    d_area = pygame.Rect(280, 585, 57, 70)
+    f_area = pygame.Rect(340, 585, 57, 70)
+    g_area = pygame.Rect(400, 585, 57, 70)
+    h_area = pygame.Rect(460, 585, 57, 70)
+    j_area = pygame.Rect(520, 585, 57, 70)
+    k_area = pygame.Rect(580, 585, 57, 70)
+    l_area = pygame.Rect(640, 585, 57, 70)
+    z_area = pygame.Rect(210, 670, 57, 70)
+    x_area = pygame.Rect(270, 670, 57, 70)
+    c_area = pygame.Rect(330, 670, 57, 70)
+    v_area = pygame.Rect(390, 670, 57, 70)
+    b_area = pygame.Rect(450, 670, 57, 70)
+    n_area = pygame.Rect(510, 670, 57, 70)
+    m_area = pygame.Rect(570, 670, 57, 70)
+    enter_area = pygame.Rect(635, 670, 125, 70)
+    de_area = pygame.Rect(100, 670, 102, 70)
+
+    menu_area = pygame.Rect(10, 10, 30, 30)
 
     while True: 
         # how program should run when audio interface is not enabled
-        while not audio_interface_enabled:
+        while not audio_interface_enabled and startgame:
             draw()
 
             if game_result == "L":
@@ -824,6 +841,9 @@ def start_the_game() -> None:
                         if de_area.collidepoint(event.pos):
                             if len(current_guess_string) > 0:
                                 delete_letter()
+                        if menu_area.collidepoint(event.pos):
+                            startgame = 0
+                            menu()
 
             pygame.display.flip()
 
@@ -832,7 +852,7 @@ def start_the_game() -> None:
             #     started = 1
 
         # how program should run when audio interface is enabled
-        while audio_interface_enabled:
+        while audio_interface_enabled and startgame:
             draw()
             if game_result == "L":
                 # mixer.music.pause()
@@ -896,35 +916,38 @@ def set_language(selected: Tuple[Any, int], value: str) -> None:
     
     print(f'Set language to {selected[0]} ({value})')
 
-mytheme = pygame_menu.themes.THEME_GREEN.copy()
-mytheme.background_color = "#BAF0FF"
-mytheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
-mytheme.title_offset = (20,10)
-mytheme.title_font_color = BLACK
-mytheme.widget_font_color = BLACK
+def menu():
+    mytheme = pygame_menu.themes.THEME_GREEN.copy()
+    mytheme.background_color = "#BAF0FF"
+    mytheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
+    mytheme.title_offset = (20,10)
+    mytheme.title_font_color = BLACK
+    mytheme.widget_font_color = BLACK
 
-about_theme = mytheme
-about_theme.menubar_close_button = True
+    about_theme = mytheme
+    about_theme.menubar_close_button = True
 
-about_menu = pygame_menu.Menu(
-    height=WINDOW_SIZE[1],
-    theme=mytheme,
-    title='About',
-    width=WINDOW_SIZE[0]
-)
+    about_menu = pygame_menu.Menu(
+        height=WINDOW_SIZE[1],
+        theme=mytheme,
+        title='About',
+        width=WINDOW_SIZE[0]
+    )
 
-menu = pygame_menu.Menu(
-    height=WINDOW_SIZE[1],
-    theme=mytheme,
-    title='WORLD-LE',
-    width=WINDOW_SIZE[0]
-)
+    menu = pygame_menu.Menu(
+        height=WINDOW_SIZE[1],
+        theme=mytheme,
+        title='WORLD-LE',
+        width=WINDOW_SIZE[0]
+    )
 
-menu.add.button('Play', start_the_game)
-menu.add.selector('Language: ', [("English", "en"), ("Spanish", "sp"), ("German", "ger"), ("French", "fr"), ("Kid Friendly", "kid")], onchange=set_language, default=0)
-menu.add.button('About', about_menu)
-menu.add.button('Quit', pygame_menu.events.EXIT)
-about_menu.add.button('Quit', pygame_menu.events.EXIT)
+    menu.add.button('Play', start_the_game)
+    menu.add.selector('Language: ', [("English", "en"), ("Spanish", "sp"), ("German", "ger"), ("French", "fr"), ("Kid Friendly", "kid")], onchange=set_language, default=0)
+    menu.add.button('About', about_menu)
+    menu.add.button('Quit', pygame_menu.events.EXIT)
+    about_menu.add.button('Quit', pygame_menu.events.EXIT)
 
-if not startgame :
-    menu.mainloop(SCREEN)
+    if not startgame :
+        menu.mainloop(SCREEN)
+
+menu()
