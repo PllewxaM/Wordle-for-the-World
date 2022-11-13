@@ -25,16 +25,13 @@ rendered = 0
 started = 0
 activate = 0
 audio_interface_enabled = 0
+threshold_initialized = 0
 
 # MUSIC
 # DOES NOT WORK WITH WINDOWS CAN UNCOMMENT FOR OTHER OS
-
-# Audio Interface Initializers
-audio_interface_enabled = 1
-threshold_initialized = 0
-mixer.init()
-mixer.music.load('sound_effects/background_music.ogg')
-mixer.music.set_volume(0.1)
+# mixer.init()
+# mixer.music.load('sound_effects/background_music.ogg')
+# mixer.music.set_volume(0.1)
 
 # LANGUAGE
 ## Text-to-speech languages: English, Spanish, French
@@ -42,7 +39,7 @@ languages = ['en', 'es', 'fr']
 current_language = 0
 
 # Long sections of text used for instructing hands-free user
-startup = "Welcome to wordle for the world, if you need help, say, tutorial"
+startup = "Welcome to wordle for the world, to activate the hands free version of the program, press the space bar twice"
 activated = "Audio interface activated, if you need help or a refresher on audio commands, say, tutorial. To disable audio mode say disable."
 wordle_tutorial = "Insert wordle tutorial here"
 handsfree_tutorial = "Insert handsfree tutorial here"
@@ -140,10 +137,6 @@ def draw():
         for row in range(0, 6):
             # change + values to adjust board positioning
             pygame.draw.rect(SCREEN, BLACK, [col * LETTER_X_SPACING + WIDTH/3.25, row * LETTER_Y_SPACING + 70, 60, 60], 1, 1)
-
-            # I'm convinced these two lines of code are unnecessary
-            piece_text = FONT.render(BOARD[row][col], True, GREY)
-            SCREEN.blit(piece_text, (col * LETTER_X_SPACING + WIDTH/3.25, row * LETTER_X_SPACING + 70))
 
 def draw_color_key():
     key_width, key_height = 155, 225
@@ -522,10 +515,9 @@ def fix_char(fuzzy_char):
     elif fuzzy_char == "why":
         return 'w'
     else:
-        return fuzzy_char
-    # add more as needed
+        return fuzzy_char    # add more as needed
 
-
+##
 def word_to_int(word):
     if word == 'one' or word == 'won':
         return 1
@@ -540,32 +532,14 @@ def word_to_int(word):
     else:
         return word
 
-
-def add_semi(char):
-    global semicorrect_guesses
-    if char not in semicorrect_guesses:
-        semicorrect_guesses.append(char)
-
 ##
-def add_incorrect(char):
-    global incorrect_guesses
-    if char not in incorrect_guesses:
-        incorrect_guesses.append(char)
-
-
-def add_correct(char):
-    global correct_guesses
-    if char not in correct_guesses:
-        correct_guesses.append(char)
-
-
 def clear_stash():
     delete_count = len(current_guess_string)
     while delete_count > 0:
         delete_letter()
         delete_count -= 1
 
-
+##
 def replace(response):
     global current_guess_string
     char_to_replace = ''
@@ -620,7 +594,7 @@ def replace(response):
     else:
         say("You must replace one letter in your stashed guess at a time.", languages[current_language])
 
-
+##
 def read_guess(guess_number):
     if guess_number > guesses_count:
         say("You dont have a guess number " + str(guess_number) + " yet.", languages[current_language])
@@ -1067,9 +1041,6 @@ def set_language(selected: Tuple[Any, int], value: str) -> None:
         CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
     elif lang == "kid":
         CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
-
-
-    print(f'Set language to {selected[0]} ({value})')
 
 def menu():
     mytheme = pygame_menu.themes.THEME_GREEN.copy()
