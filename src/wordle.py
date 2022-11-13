@@ -13,13 +13,14 @@ import time
 
 # Game initializers
 pygame.init()
-mixer.init()
-mixer.music.load('sound_effects/background_music.ogg')
-mixer.music.set_volume(0.2)
 rendered = 0
 
 # Audio Interface Initializers
 audio_interface_enabled = 1
+threshold_initialized = 0
+mixer.init()
+mixer.music.load('sound_effects/background_music.ogg')
+mixer.music.set_volume(0.1)
 
 # Text-to-speech languages: English, Spanish, French
 languages = ['en', 'es', 'fr']
@@ -27,8 +28,13 @@ current_language = 0
 
 # Long sections of text used for instructing hands-free user
 startup = "Welcome to wordle for the world, if you need help, say, tutorial"
-tutorial = "Hello and welcome to wordle for the world. Im here to help you learn the commands to " \
-           "play the game in hands free mode."
+wordle_tutorial = "Insert wordle tutorial here"
+handsfree_tutorial = "Insert handsfree tutorial here"
+stash_tutorial = "Insert stash tutorial/example here"
+clear_tutorial = "The command clear will delete all the letters in your current guess stash"
+read_tutorial = "Insert read tutorial/example here"
+replace_tutorial = "Insert replace tutorial/example here"
+submit_tutorial = "Insert submit tutorial/example here"
 
 # COLORS
 GREEN = "#6aaa64"
@@ -101,13 +107,19 @@ def say(response, language):
 
 # Uses SpeechRecognition to translate a user response to text. Returns text
 def listen():
+    global threshold_initialized
+
     r = sr.Recognizer()
+    r.energy_threshold = 750
+    # r.dynamic_energy_threshold = True
     mic = sr.Microphone()
     # Adjust based on current environment, start at 300 and adjust
     # until good results found, good values between 50 and 4000
-    r.energy_threshold = 700
 
     with mic as source:
+        # if not threshold_initialized:
+        #     r.adjust_for_ambient_noise(source, 2)
+        #     threshold_initialized = 1
         audio = r.listen(source)
         # audio = r.adjust_for_ambient_noise(source)
 
@@ -153,9 +165,30 @@ def fix_char(fuzzy_char):
         return 't'
     elif fuzzy_char == "you":
         return 'u'
+    elif fuzzy_char == "too":
+        return '2'
+    elif fuzzy_char == "four":
+        return '4'
+    elif fuzzy_char == "for":
+        return '4'
     else:
         return fuzzy_char
     # add more as needed
+
+
+def word_to_int(word):
+    if word == 'one' or word == 'won':
+        return 1
+    elif word == 'two' or word == 'to' or word == 'too':
+        return 2
+    elif word == 'three':
+        return 3
+    elif word == 'four' or word == 'for':
+        return 4
+    elif word == 'five':
+        return 5
+    else:
+        return word
 
 
 def add_semi(char):
@@ -176,6 +209,68 @@ def add_correct(char):
         correct_guesses.append(char)
 
 
+def clear_stash():
+    delete_count = len(current_guess_string)
+    while delete_count > 0:
+        delete_letter()
+        delete_count -= 1
+
+
+def replace(response):
+    global current_guess_string
+    char_to_replace = ''
+    replacement = ''
+
+    # find char_to_replace and replacement in response
+    response = response.split(' ')
+    index = 0
+    found = 0
+    while not found:
+        if response[index] == "replace":
+            char_to_replace = response[index + 1]
+            replacement = response[index + 3]
+            found = 1
+        else:
+            index += 1
+
+    # check if char_to_replace is an index or a char
+    guess_split = [*current_guess_string]
+    replacement = fix_char(replacement)
+    char_to_replace = fix_char(char_to_replace)
+
+    index_list = ['1', '2', '3', '4', '5', 'one', 'two', 'to', 'too', 'three', 'four', 'for', 'five']
+    if char_to_replace in index_list:
+        # replace letter at index char_to_replace, with replacement
+        guess_split[int(word_to_int(char_to_replace)) - 1] = replacement
+        clear_stash()
+        new_guess_string = ''.join(guess_split)
+        stash("stash " + new_guess_string)
+        return
+
+    elif not current_guess_string.count(char_to_replace.upper()) == 1:
+        say("there are more than one of the letter to replace in your stash. "
+            "Please specify which one by using stash index feature.", languages[current_language])
+        return
+
+    elif len(char_to_replace) == 1:
+        # find index in current_guess_string that holds char_to_replace
+        index_to_replace = 0
+        found = 0
+        while not found:
+            if current_guess_string[index_to_replace] == char_to_replace.upper():
+                found = 1
+            else:
+                index_to_replace += 1
+
+        guess_split[index_to_replace] = replacement.upper()  # Do replacement
+        clear_stash()
+        new_guess_string = ''.join(guess_split)
+        stash("stash " + new_guess_string)
+
+    else:
+        say("You must replace one letter in your stashed guess at a time.", languages[current_language])
+
+
 def read_guess(guess_number):
     if guess_number > guesses_count:
         say("You dont have a guess number " + str(guess_number) + " yet.", languages[current_language])
@@ -189,12 +284,22 @@ def handsfree():
     waiting_for_command = 1
     while waiting_for_command:
         try:
-            time.sleep(0.25)
+            time.sleep(0.15)
             command = listen()
+            command = command.lower()
             print(command)
 
             if "tutorial" in command:  # Starts tutorial
-                say(tutorial, languages[current_language])
+                say("say word for wordle tutorial, say free for handsfree tutorial", languages[current_language])
+                response = listen()
+                if "word" in response:
+                    say(wordle_tutorial, languages[current_language])
+                elif "free" in response:
+                    say(handsfree_tutorial, languages[current_language])
+                waiting_for_command = 0
+            elif "replace" in command:
+                say("you said: " + command, languages[current_language])
+                replace(command)
                 waiting_for_command = 0
             elif "stash" in command or "dash" in command:  # Places character(s) into current guess
                 say("you said: " + command, languages[current_language])
@@ -203,6 +308,14 @@ def handsfree():
             elif "delete" in command:  # Deletes all characters from stash
                 say("You said: delete", languages[current_language])
                 delete()
+                waiting_for_command = 0
+            elif "submit" in command:
+                say("you said: submit", languages[current_language])
+                submit()
+                waiting_for_command = 0
+            elif "clear" in command:
+                say("you said: " + command, languages[current_language])
+                clear_stash()
                 waiting_for_command = 0
             elif "read" in command:
                 if "guess" in command or "gas" in command or "guest" in command:
@@ -227,19 +340,19 @@ def handsfree():
                         read_guess(5)
                         waiting_for_command = 0
                     else:
-                        say("you said: read current guess", languages[current_language])
+                        say("read current guess", languages[current_language])
                         say_by_char(current_guess_string, languages[current_language])
                         waiting_for_command = 0
                 elif "semi" in command:
-                    say("read semi correct guesses by character", languages[current_language])
+                    say("read semi correct guesses", languages[current_language])
+                    say_by_char(semicorrect_guesses, languages[current_language])
+                    waiting_for_command = 0
                 elif "wrong" in command:
-                    say("read incorrect guesses by character", languages[current_language])
+                    say("read incorrect guesses", languages[current_language])
+                    say_by_char(incorrect_guesses, languages[current_language])
+                    waiting_for_command = 0
                 else:
                     say("invalid command", languages[current_language])
-            elif "submit" in command:
-                say("you said: submit", languages[current_language])
-                submit()
-                waiting_for_command = 0
             else:
                 say("invalid command", languages[current_language])
 
@@ -498,15 +611,42 @@ def delete_letter():
     current_letter_bg_x -= LETTER_X_SPACING
 
 
+# Identifies whether you are stashing a word or a character, calls the appropriate
+# function or tells the user the input is invalid.
+def stash(response):
+    print("stash called")
+    response_split = response.split(' ')
+
+    found = 0
+    index = 0
+    while not found:
+        try:
+            if response_split[index] == "stash":
+                guess = response_split[index + 1]
+                found = 1
+            else:
+                index += 1
+        except Exception as e:
+            say("Remember to say a letter or five letter word after stash command.", languages[current_language])
+            print(e)
+            return
+
+    if len(guess) == 1:
+        print("single letter")
+        stash_char(guess)
+    elif len(guess) == 5:
+        print("Five letter word")
+        for each_letter in guess:
+            print(each_letter)
+            stash_char(each_letter)
+    else:
+        say("You can only stash individual letters, or five letter words. Try again!", languages[current_language])
+
+
 # Takes stash command as an input and places new letter on the screen
-def stash(command):
+def stash_char(char_to_stash):
     global key_pressed
-    command_split = command.split(' ')
-    letter_to_stash = fix_char(command_split[1])
-    # if len(letter_to_stash) > 1:
-    #     say("please try again.", languages[current_language])
-    #     return
-    key_pressed = letter_to_stash.upper()
+    key_pressed = char_to_stash.upper()
     if key_pressed in "QWERTYUIOPASDFGHJKLZXCVBNM":
         if len(current_guess_string) < 5:
             create_new_letter()
@@ -530,7 +670,7 @@ def submit():
         say_and_confirm_by_char(current_guess_string, CORRECT_WORD.upper(), languages[current_language])
         check_guess(current_guess)
     else:
-        say("your guess must be a real five letter word, try again!", languages[current_language])
+        say("your stash must contain a real five letter word, try again!", languages[current_language])
 
 
 while not audio_interface_enabled:
@@ -675,24 +815,29 @@ while not audio_interface_enabled:
 
 while audio_interface_enabled:
     draw()
+    # Game loss event
     if game_result == "L":
         mixer.music.pause()
         playsound('sound_effects/no_more_guesses_trimmed.wav')
         say("You have run out of guesses. say play again to start over with a new word!", languages[current_language])
         lose_play_again()
+    # Game win event
     if game_result == "W":
         say("correct", languages[current_language])
         playsound('sound_effects/correct_word_trimmed.mp3')
         say("the word was: " + CORRECT_WORD + ". say play agian to get a new word.", languages[current_language])
         correct_play_again()
+    # Allows fully drawn buffer to be shown to the user during startup
     if rendered:
         handsfree()
     else:
-        mixer.music.play()
-        pygame.display.flip()
+        mixer.music.play(-1)
+        pygame.display.flip()  # Buffer flip
         say(startup, languages[current_language])
         time.sleep(0.1)
         mixer.music.set_volume(0.025)
+
+    # Handle pygame events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -701,7 +846,7 @@ while audio_interface_enabled:
             if event.key == pygame.K_RETURN:
                 if game_result != "":
                     reset()
-                else:
+                else:   # Check current guess
                     if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
                         check_guess(current_guess)
             elif event.key == pygame.K_BACKSPACE:
