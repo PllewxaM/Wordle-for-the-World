@@ -90,36 +90,6 @@ pygame.display.update()
 ALPHABET = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"]
 keys = []
 
-## make keyboard areas - so click on screen activates letter
-q_area = pygame.Rect(45, 450, 57, 70)
-w_area = pygame.Rect(105, 450, 57, 70)
-e_area = pygame.Rect(165, 450, 57, 70)
-r_area = pygame.Rect(225, 450, 57, 70)
-t_area = pygame.Rect(285, 450, 57, 70)
-y_area = pygame.Rect(345, 450, 57, 70)
-u_area = pygame.Rect(405, 450, 57, 70)
-i_area = pygame.Rect(465, 450, 57, 70)
-o_area = pygame.Rect(525, 450, 57, 70)
-p_area = pygame.Rect(585, 450, 57, 70)
-a_area = pygame.Rect(80, 535, 57, 70)
-s_area = pygame.Rect(140, 535, 57, 70)
-d_area = pygame.Rect(200, 535, 57, 70)
-f_area = pygame.Rect(260, 535, 57, 70)
-g_area = pygame.Rect(320, 535, 57, 70)
-h_area = pygame.Rect(380, 535, 57, 70)
-j_area = pygame.Rect(440, 535, 57, 70)
-k_area = pygame.Rect(500, 535, 57, 70)
-l_area = pygame.Rect(560, 535, 57, 70)
-z_area = pygame.Rect(130, 620, 57, 70)
-x_area = pygame.Rect(190, 620, 57, 70)
-c_area = pygame.Rect(250, 620, 57, 70)
-v_area = pygame.Rect(310, 620, 57, 70)
-b_area = pygame.Rect(370, 620, 57, 70)
-n_area = pygame.Rect(430, 620, 57, 70)
-m_area = pygame.Rect(490, 620, 57, 70)
-enter_area = pygame.Rect(555, 620, 102, 70)
-de_area = pygame.Rect(20, 620, 102, 70)
-
 # GAME BOARD
 LETTER_X_SPACING = 65
 LETTER_Y_SPACING = 10
@@ -150,7 +120,7 @@ current_letter_bg_x = 175
 
 game_result = ""
 
-####################################FUNCTIONS####################################
+####################################  FUNCTIONS  ####################################
 
 # GAME BOARD
 
@@ -160,6 +130,37 @@ def draw():
             pygame.draw.rect(SCREEN, BLACK, [col * 65 + 175, row * 70 + 10, 60, 60], 1, 1)
             piece_text = FONT.render(BOARD[row][col], True, GREY)
             SCREEN.blit(piece_text, (col * 100 + 10, row * 100 + 15))
+
+def draw_color_key():
+    pygame.draw.rect(SCREEN, BLACK, [550, 50, 175, 300], 1, 5)
+    color_font = pygame.font.Font("assets/Genome-Thin.otf", 25)
+    color_text = color_font.render("Color Key", True, BLACK)
+    color_rect = color_text.get_rect(center=(637, 75))
+    SCREEN.blit(color_text, color_rect)
+    
+    font = pygame.font.Font("assets/Genome-Thin.otf", 20)
+    pygame.draw.rect(SCREEN, CORRECT_COLOR, [565, 125, 30, 30], 100, 100)
+    correct_text = font.render("CORRECT", True, BLACK)
+    correct_rect = correct_text.get_rect(center=(650, 140))
+    SCREEN.blit(correct_text, correct_rect)
+    
+    pygame.draw.rect(SCREEN, SEMI_COLOR,[565, 200, 30, 30], 100, 100)
+    semi_text = font.render("SEMI", True, BLACK)
+    semi_rect = semi_text.get_rect(center=(627, 210))
+    SCREEN.blit(semi_text, semi_rect)
+    semi_text = font.render("CORRECT", True, BLACK)
+    semi_rect = semi_text.get_rect(center=(650, 230))
+    SCREEN.blit(semi_text, semi_rect)
+    
+    pygame.draw.rect(SCREEN, WRONG_COLOR, [565, 275, 30, 30], 100, 100)
+    wrong_text = font.render("WRONG", True, BLACK)
+    wrong_rect = wrong_text.get_rect(center=(640, 290))
+    SCREEN.blit(wrong_text, wrong_rect)
+    
+    pygame.display.update()
+
+def draw_nav_bar():
+    x = 1 # placeholder
 
 ## draws letters on the board as user enters them
 class Letter:
@@ -191,7 +192,6 @@ class Letter:
         pygame.display.update()
 
 
-
 # KEYBOARD
 
 ## draw and handle keyboard buttons
@@ -206,7 +206,7 @@ class KeyButton:
 
     def draw(self):
         # Puts the key and its text on the screen at the desired position.
-        pygame.draw.rect(SCREEN, self.bg_color, self.rect)
+        pygame.draw.rect(SCREEN, self.bg_color, self.rect, 100, 4)
         self.text_surface = FONT.render(self.text, True, WHITE)
         self.text_rect = self.text_surface.get_rect(center=(self.x+27, self.y+30))
         SCREEN.blit(self.text_surface, self.text_rect)
@@ -229,6 +229,28 @@ class BigKeyButton:
         SCREEN.blit(self.text_surface, self.text_rect)
         pygame.display.update()
 
+def draw_keyboard() :
+    ## starting key board location
+    key_x, key_y = 45, 450
+
+    ## draw letters On top of keyboard buttons
+    for i in range(3):
+        for letter in ALPHABET[i]:
+            new_key = KeyButton(key_x, key_y, letter)
+            keys.append(new_key)
+            new_key.draw()
+            key_x += 60
+        key_y += 85
+        if i == 0:
+            key_x = 80
+        elif i == 1:
+            key_x = 130
+    new_key = BigKeyButton(20, 620, "DEL")
+    keys.append(new_key)
+    new_key.draw()
+    new_key = BigKeyButton(555, 620, "ENTER")
+    keys.append(new_key)
+    new_key.draw()
 
 
 # GENERAL GAME CONTROLS
@@ -301,11 +323,11 @@ def check_guess(guess_to_check):
 ## display loosing screen and call reset
 def lose_play_again():
     ## Puts the play again text on the screen.
-    pygame.draw.rect(SCREEN, "red", (10, 10, WIDTH - 20, HEIGHT - 20))
+    pygame.draw.rect(SCREEN, RED, (10, 10, WIDTH - 20, HEIGHT - 20))
     play_again_font = pygame.font.Font("assets/FreeSansBold.otf", 40)
-    play_again_text = play_again_font.render("Press ENTER to Play Again!", True, "white")
+    play_again_text = play_again_font.render("Press ENTER to Play Again!", True, WHITE)
     play_again_rect = play_again_text.get_rect(center=(WIDTH/2, 320))
-    word_was_text = play_again_font.render(f"Sorry, the word was {CORRECT_WORD}!", True, "white")
+    word_was_text = play_again_font.render(f"Sorry, the word was {CORRECT_WORD}!", True, WHITE)
     word_was_rect = word_was_text.get_rect(center=(WIDTH/2, 250))
     SCREEN.blit(word_was_text, word_was_rect)
     SCREEN.blit(play_again_text, play_again_rect)
@@ -316,11 +338,11 @@ def correct_play_again():
     ## Puts the play again text on the screen.
     pygame.draw.rect(SCREEN, CORRECT_COLOR, (10, 10, WIDTH - 20, HEIGHT - 20))
     play_again_font = pygame.font.Font("assets/FreeSansBold.otf", 40)
-    con_text = play_again_font.render(f"Congratulations!", True, "white")
+    con_text = play_again_font.render(f"Congratulations!", True, WHITE)
     con_rect = con_text.get_rect(center=(WIDTH/2, 250))
-    word_was_text = play_again_font.render(f"The word was {CORRECT_WORD}!", True, "white")
+    word_was_text = play_again_font.render(f"The word was {CORRECT_WORD}!", True, WHITE)
     word_was_rect = word_was_text.get_rect(center=(WIDTH/2, 320))
-    play_again_text = play_again_font.render("Press ENTER to Play Again!", True, "white")
+    play_again_text = play_again_font.render("Press ENTER to Play Again!", True, WHITE)
     play_again_rect = play_again_text.get_rect(center=(WIDTH/2, 390))
     
     SCREEN.blit(con_text, con_rect)
@@ -332,8 +354,17 @@ def correct_play_again():
 def reset():
     ## Resets all global variables to their default states.
     global guesses_count, CORRECT_WORD, guesses, current_guess, current_guess_string, game_result, lang, semicorrect_guesses, correct_guesses, incorrect_guesses
-    SCREEN.fill("white")
+    SCREEN.fill(WHITE)
+
     guesses_count = 0
+    guesses = [[]] * 6
+    current_guess = []
+    current_guess_string = ""
+    game_result = ""
+    incorrect_guesses = []
+    correct_guesses = []
+    semicorrect_guesses = []
+    
     if lang == "en":
         CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
     elif lang == "sp":
@@ -344,17 +375,15 @@ def reset():
         CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
     elif lang == "kid":
         CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
-    guesses = [[]] * 6
-    current_guess = []
-    current_guess_string = ""
-    game_result = ""
-    incorrect_guesses = []
-    correct_guesses = []
-    semicorrect_guesses = []
-    pygame.display.update()
+
     for key in keys:
         key.bg_color = LT_GREY
         key.draw()
+
+    draw_color_key()
+    draw_nav_bar()
+
+    pygame.display.update()
 
 
 
@@ -597,41 +626,52 @@ def delete_letter():
 
 
 def start_the_game() -> None:
-    global startgame
+    global startgame, audio_interface_enabled, started, game_result, activate, current_guess_string, key_pressed, rendered, activated
     startgame = 1
     
     SCREEN.fill(WHITE)
     print(CORRECT_WORD)
     print(lang)
 
-    ## starting key board location
-    key_x, key_y = 45, 450
+    draw_keyboard()
+    draw_color_key()
+    draw_nav_bar()
 
-    ## draw letters On top of keyboard buttons
-    for i in range(3):
-        for letter in ALPHABET[i]:
-            new_key = KeyButton(key_x, key_y, letter)
-            keys.append(new_key)
-            new_key.draw()
-            key_x += 60
-        key_y += 85
-        if i == 0:
-            key_x = 80
-        elif i == 1:
-            key_x = 130
-    new_key = BigKeyButton(20, 620, "DEL")
-    keys.append(new_key)
-    new_key.draw()
-    new_key = BigKeyButton(555, 620, "ENTER")
-    keys.append(new_key)
-    new_key.draw()
+    ## make keyboard areas - so click on screen activates letter
+    q_area = pygame.Rect(45, 450, 57, 70)
+    w_area = pygame.Rect(105, 450, 57, 70)
+    e_area = pygame.Rect(165, 450, 57, 70)
+    r_area = pygame.Rect(225, 450, 57, 70)
+    t_area = pygame.Rect(285, 450, 57, 70)
+    y_area = pygame.Rect(345, 450, 57, 70)
+    u_area = pygame.Rect(405, 450, 57, 70)
+    i_area = pygame.Rect(465, 450, 57, 70)
+    o_area = pygame.Rect(525, 450, 57, 70)
+    p_area = pygame.Rect(585, 450, 57, 70)
+    a_area = pygame.Rect(80, 535, 57, 70)
+    s_area = pygame.Rect(140, 535, 57, 70)
+    d_area = pygame.Rect(200, 535, 57, 70)
+    f_area = pygame.Rect(260, 535, 57, 70)
+    g_area = pygame.Rect(320, 535, 57, 70)
+    h_area = pygame.Rect(380, 535, 57, 70)
+    j_area = pygame.Rect(440, 535, 57, 70)
+    k_area = pygame.Rect(500, 535, 57, 70)
+    l_area = pygame.Rect(560, 535, 57, 70)
+    z_area = pygame.Rect(130, 620, 57, 70)
+    x_area = pygame.Rect(190, 620, 57, 70)
+    c_area = pygame.Rect(250, 620, 57, 70)
+    v_area = pygame.Rect(310, 620, 57, 70)
+    b_area = pygame.Rect(370, 620, 57, 70)
+    n_area = pygame.Rect(430, 620, 57, 70)
+    m_area = pygame.Rect(490, 620, 57, 70)
+    enter_area = pygame.Rect(555, 620, 102, 70)
+    de_area = pygame.Rect(20, 620, 102, 70)
 
     while True: 
-        global audio_interface_enabled, started, game_result, activate, current_guess_string, key_pressed, q_area, w_area, e_area, r_area, t_area, y_area, u_area, i_area, o_area, p_area, a_area, s_area, d_area, f_area, g_area, h_area, j_area, k_area, l_area, z_area, x_area, c_area, v_area, b_area, n_area, m_area, enter_area, de_area, rendered, activated
-
         # how program should run when audio interface is not enabled
         while not audio_interface_enabled:
             draw()
+
             if game_result == "L":
                 lose_play_again()
             if game_result == "W":
