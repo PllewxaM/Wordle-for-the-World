@@ -1,7 +1,6 @@
 import pygame_menu
 from typing import Tuple, Any
 import pygame
-from pygame.locals import *
 from pygame import mixer
 import sys
 import random
@@ -19,7 +18,7 @@ import time
 # INITIALIZERS AND GLOBAL VARIABLES #
 
 pygame.init()
-startgame = 0
+start_game = 0
 
 # AUDIO INTERFACE
 rendered = 0
@@ -102,6 +101,7 @@ pygame.display.update()
 # KEYBOARD
 ALPHABET = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"]
 keys = []
+key_pressed = ''
 
 # GAME BOARD
 LETTER_X_SPACING = 65
@@ -124,7 +124,7 @@ guesses_str = []
 
 correct_guesses = []
 incorrect_guesses = []
-semicorrect_guesses = []
+semi_correct_guesses = []
 remaining_guesses = []
 
 current_guess = []
@@ -143,7 +143,8 @@ def draw():
     for col in range(0, 5):
         for row in range(0, 6):
             # change + values to adjust board positioning
-            pygame.draw.rect(SCREEN, BLACK, [col * LETTER_X_SPACING + WIDTH/3.25, row * LETTER_Y_SPACING + 70, 60, 60], 1, 1)
+            pygame.draw.rect(SCREEN, BLACK, [col * LETTER_X_SPACING + WIDTH/3.25,
+                                             row * LETTER_Y_SPACING + 70, 60, 60], 1, 1)
 
 
 def draw_color_key():
@@ -164,7 +165,7 @@ def draw_color_key():
     correct_rect = correct_text.get_rect(center=(text_x, color_y + 15))
     SCREEN.blit(correct_text, correct_rect)
 
-    pygame.draw.rect(SCREEN, SEMI_COLOR,[color_x, color_y + 50, size, size], shape, shape)
+    pygame.draw.rect(SCREEN, SEMI_COLOR, [color_x, color_y + 50, size, size], shape, shape)
     semi_text = FONT_XSM.render("SEMI", True, BLACK)
     semi_rect = semi_text.get_rect(center=(text_x, color_y + 55))
     SCREEN.blit(semi_text, semi_rect)
@@ -192,7 +193,7 @@ def draw_nav_bar():
 class Letter:
     # DO NOT CHANGE ANY OF THIS TO ADJUST BOARD POSITIONING
     def __init__(self, text, bg_position):
-        # Initializes all the variables, inclinkuding text, color, position, size, etc.
+        # Initializes all the variables, including text, color, position, size, etc.
         self.bg_color = WHITE
         self.text_color = BLACK
         self.bg_position = bg_position
@@ -239,7 +240,7 @@ class KeyButton:
         self.text_surface = FONT.render(self.text, True, WHITE)
         self.text_rect = self.text_surface.get_rect(center=(self.x + (self.width/2), self.y + (self.height/2)))
         SCREEN.blit(self.text_surface, self.text_rect)
-        pygame.display.update()
+        # pygame.display.update()
 
 
 # draw and handle keyboard larger buttons
@@ -259,10 +260,10 @@ class BigKeyButton:
         self.text_surface = FONT_MED.render(self.text, True, WHITE)
         self.text_rect = self.text_surface.get_rect(center=(self.x + (self.width/2), self.y + (self.height/2)))
         SCREEN.blit(self.text_surface, self.text_rect)
-        pygame.display.update()
+        # pygame.display.update()
 
 
-def draw_keyboard() :
+def draw_keyboard():
     # starting keyboard location
     key_x, key_y = 125, 500
 
@@ -289,9 +290,9 @@ def draw_keyboard() :
 # GENERAL GAME CONTROLS
 
 def add_semi(char):
-    global semicorrect_guesses
-    if char not in semicorrect_guesses:
-        semicorrect_guesses.append(char)
+    global semi_correct_guesses
+    if char not in semi_correct_guesses:
+        semi_correct_guesses.append(char)
 
 
 def add_incorrect(char):
@@ -394,7 +395,8 @@ def correct_play_again():
 # reset global variables
 def reset():
     # Resets all global variables to their default states.
-    global guesses_count, CORRECT_WORD, guesses, current_guess, current_guess_string, game_result, lang, semicorrect_guesses, correct_guesses, incorrect_guesses
+    global guesses_count, CORRECT_WORD, guesses, current_guess, current_guess_string, game_result, lang, \
+        semi_correct_guesses, correct_guesses, incorrect_guesses
     SCREEN.fill(WHITE)
 
     guesses_count = 0
@@ -404,7 +406,7 @@ def reset():
     game_result = ""
     incorrect_guesses = []
     correct_guesses = []
-    semicorrect_guesses = []
+    semi_correct_guesses = []
 
     if lang == "en":
         CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
@@ -423,6 +425,9 @@ def reset():
 
     draw_color_key()
     draw_nav_bar()
+
+    # Comment out below for windows (For now!! must fix)
+    mixer.music.play(-1)
 
     pygame.display.update()
 
@@ -533,7 +538,7 @@ def fix_char(fuzzy_char):
     elif fuzzy_char == "why":
         return 'w'
     else:
-        return fuzzy_char    # add more as needed
+        return fuzzy_char    # add more if found
 
 
 def word_to_int(word):
@@ -626,7 +631,7 @@ def handsfree():
     waiting_for_command = 1
     while waiting_for_command:
         try:
-            time.sleep(0.15)
+            time.sleep(0.05)
             command = listen()
             command = command.lower()
             print(command)
@@ -664,6 +669,8 @@ def handsfree():
                 activate = 0
                 audio_interface_enabled = 0
                 waiting_for_command = 0
+            elif "play again" in command:
+                reset()
             elif "read" in command:
                 if "guess" in command or "gas" in command or "guest" in command:
                     if "one" in command or "won" in command or "1" in command:
@@ -692,7 +699,7 @@ def handsfree():
                         waiting_for_command = 0
                 elif "semi" in command:
                     say("read semi correct guesses", languages[current_language])
-                    say_by_char(semicorrect_guesses, languages[current_language])
+                    say_by_char(semi_correct_guesses, languages[current_language])
                     waiting_for_command = 0
                 elif "wrong" in command:
                     say("read incorrect guesses", languages[current_language])
@@ -713,6 +720,7 @@ def stash(response):
     print("stash called")
     response_split = response.split(' ')
 
+    guess = ""
     found = 0
     index = 0
     while not found:
@@ -731,6 +739,9 @@ def stash(response):
         print("single letter")
         stash_char(guess)
     elif len(guess) == 5:
+        if len(current_guess_string) != 0:
+            say("your stash is full! submit or delete to guess more letters.", languages[current_language])
+            return
         print("Five letter word")
         for each_letter in guess:
             print(each_letter)
@@ -800,8 +811,9 @@ def delete_letter():
 
 
 def start_the_game() -> None:
-    global startgame, audio_interface_enabled, started, game_result, activate, current_guess_string, key_pressed, rendered, activated
-    startgame = 1
+    global start_game, audio_interface_enabled, started, game_result, activate, current_guess_string, \
+        key_pressed, rendered, activated
+    start_game = 1
 
     SCREEN.fill(WHITE)
     print(CORRECT_WORD)
@@ -845,7 +857,7 @@ def start_the_game() -> None:
 
     while True:
         # how program should run when audio interface is not enabled
-        while not audio_interface_enabled and startgame:
+        while not audio_interface_enabled and start_game:
             draw()
             # Comment out below for windows (For now! must fix)
             mixer.music.set_volume(0.1)
@@ -862,13 +874,13 @@ def start_the_game() -> None:
                         if game_result != "":
                             reset()
                         else:
-                            # THIS NEEDS TO BE ADJUSTED FOR DIFFERENT LANGUAGAGES
+                            # THIS NEEDS TO BE ADJUSTED FOR DIFFERENT LANGUAGES
                             if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
                                 check_guess(current_guess)
                     elif event.key == pygame.K_BACKSPACE:
                         if len(current_guess_string) > 0:
                             delete_letter()
-                    # have to press spacebar twice to activate audio interface
+                    # have to press space bar twice to activate audio interface
                     elif not activate and event.key == pygame.K_SPACE:
                         activate = 1
                     elif activate and event.key == pygame.K_SPACE:
@@ -992,7 +1004,7 @@ def start_the_game() -> None:
                             if len(current_guess_string) > 0:
                                 delete_letter()
                         if menu_area.collidepoint(event.pos):
-                            startgame = 0
+                            start_game = 0
                             menu()
 
             pygame.display.flip()
@@ -1002,19 +1014,19 @@ def start_the_game() -> None:
             #     started = 1
 
         # how program should run when audio interface is enabled
-        while audio_interface_enabled and startgame:
+        while audio_interface_enabled and start_game:
             draw()
             if game_result == "L":
                 # Comment out below for windows
                 mixer.music.pause()
                 playsound('sound_effects/no_more_guesses_trimmed.wav')
-                say("You have run out of guesses. say play again to start over with "
+                say("You have run out of guesses. The word was " + CORRECT_WORD + " say play again to start over with "
                     "a new word!", languages[current_language])
                 lose_play_again()
             if game_result == "W":
                 say("correct", languages[current_language])
                 playsound('sound_effects/correct_word_trimmed.mp3')
-                say("the word was: " + CORRECT_WORD + ". say play agian to get "
+                say("the word was: " + CORRECT_WORD + ". say play again to get "
                                                       "a new word.", languages[current_language])
                 correct_play_again()
             if rendered:
@@ -1120,7 +1132,7 @@ def menu():
         height=WINDOW_SIZE[1] - 100,
         theme=mytheme,
         title='WORLD-LE',
-        width=WINDOW_SIZE[0]- 100
+        width=WINDOW_SIZE[0] - 100
     )
 
     menu.add.button('Play', start_the_game)
@@ -1132,7 +1144,7 @@ def menu():
     
     about_menu.add.button('Quit', pygame_menu.events.EXIT)
 
-    if not startgame :
+    if not start_game:
         menu.mainloop(SCREEN, background)
 
 
