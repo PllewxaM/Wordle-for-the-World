@@ -29,9 +29,9 @@ threshold_initialized = 0
 
 # MUSIC
 # DOES NOT WORK WITH WINDOWS CAN UNCOMMENT FOR OTHER OS
-mixer.init()
-mixer.music.load('sound_effects/background_music.ogg')
-mixer.music.set_volume(0.1)
+# mixer.init()
+# mixer.music.load('sound_effects/background_music.ogg')
+# mixer.music.set_volume(0.1)
 
 # LANGUAGE
 # Text-to-speech languages: English, Spanish, French
@@ -184,10 +184,20 @@ def draw_color_key():
 def draw_nav_bar():
     pygame.draw.rect(SCREEN, LT_GREY, [0, 0, WIDTH, 50], 100)
     pygame.draw.rect(SCREEN, BLACK, [10, 10, 30, 30], 100)
+    pygame.draw.rect(SCREEN, RED, [WIDTH - 40, 10, 30, 30], 100)
     header_text = FONT.render("WORLDLE", True, WHITE)
     header_rect = header_text.get_rect(center=(WIDTH/2, 25))
     SCREEN.blit(header_text, header_rect)
 
+
+def draw_font_screen() :
+    # work in progress
+    print("font activate")
+
+
+def draw_color_screen(value):
+    # work in progress
+    print(value)
 
 # draws letters on the board as user enters them
 class Letter:
@@ -438,7 +448,10 @@ def reset():
 def say(response, language):
     obj = gTTS(text=response, lang=language, slow=False)
     obj.save("audio.mp3")
-    os.system("mpg123 audio.mp3")
+    try :
+        os.system("mpg123 audio.mp3")
+    except:
+        os.system("mpg123.exe audio.mp3")
     # Windows version comment above, uncomment below
     # os.system("mpg123.exe audio.mp3")
 
@@ -854,6 +867,11 @@ def start_the_game() -> None:
     de_area = pygame.Rect(100, 670, 102, 70)
 
     menu_area = pygame.Rect(10, 10, 30, 30)
+    font_sel_area = pygame.Rect(WIDTH - 40, 10, 30, 30)
+
+    correct_color_area = pygame.Rect(WIDTH - 155, 130, 130, 30)
+    semi_color_area = pygame.Rect(WIDTH - 155, 180, 130, 30)
+    worng_color_area = pygame.Rect(WIDTH - 155, 235, 130, 30)
 
     while True:
         # how program should run when audio interface is not enabled
@@ -1006,12 +1024,21 @@ def start_the_game() -> None:
                         if menu_area.collidepoint(event.pos):
                             start_game = 0
                             menu()
+                        if font_sel_area.collidepoint(event.pos):
+                            draw_font_screen()
+                        if correct_color_area.collidepoint(event.pos):
+                            draw_color_screen(1)
+                        if semi_color_area.collidepoint(event.pos):
+                            draw_color_screen(2)
+                        if worng_color_area.collidepoint(event.pos):
+                            draw_color_screen(3)
 
             pygame.display.flip()
 
-            # if not started:
-            #     say(startup, languages[current_language])
-            #     started = 1
+            # comment out for testing because it's annoying :)
+            if not started:
+                say(startup, languages[current_language])
+                started = 1
 
         # how program should run when audio interface is enabled
         while audio_interface_enabled and start_game:
@@ -1084,6 +1111,8 @@ def set_language(selected: Tuple[Any, int], value: str) -> None:
 
 # def set_wrong_color(value):
 
+# def set_font(value):
+
 def background():
     SCREEN.fill(WHITE)
 
@@ -1149,6 +1178,6 @@ def menu():
 
 
 # Comment out below for windows (for now!! must fix)
-mixer.music.play(-1)
+# mixer.music.play(-1)
 
 menu()
