@@ -30,9 +30,9 @@ threshold_initialized = 0
 
 # MUSIC
 # DOES NOT WORK WITH WINDOWS CAN UNCOMMENT FOR OTHER OS
-# mixer.init()
-# mixer.music.load('sound_effects/background_music.ogg')
-# mixer.music.set_volume(0.1)
+mixer.init()
+mixer.music.load('sound_effects/background_music.ogg')
+mixer.music.set_volume(0.1)
 
 # LANGUAGE
 # Text-to-speech languages: English, Spanish, French
@@ -443,7 +443,7 @@ def listen():
     global threshold_initialized
 
     r = sr.Recognizer()
-    r.energy_threshold = 750
+    r.energy_threshold = 600
     # r.dynamic_energy_threshold = True
     mic = sr.Microphone()
     # Adjust based on current environment, start at 300 and adjust
@@ -477,7 +477,7 @@ def say_and_confirm_by_char(guess, correct, language):
         if c == correct[correct_index]:
             playsound('sound_effects/correct_char_trimmed.mp3')
         elif c in correct:
-            playsound('sound_effects/semi_correct_char_trimmed.wav')  # choose a knock & trim
+            playsound('sound_effects/semi_correct_char_trimmed.wav')
         else:
             playsound('sound_effects/incorrect_char_trimmed.wav')
         correct_index = correct_index + 1
@@ -847,7 +847,8 @@ def start_the_game() -> None:
         # how program should run when audio interface is not enabled
         while not audio_interface_enabled and startgame:
             draw()
-
+            # Comment out below for windows (For now! must fix)
+            mixer.music.set_volume(0.1)
             if game_result == "L":
                 lose_play_again()
             if game_result == "W":
@@ -1004,14 +1005,17 @@ def start_the_game() -> None:
         while audio_interface_enabled and startgame:
             draw()
             if game_result == "L":
-                # mixer.music.pause()
+                # Comment out below for windows
+                mixer.music.pause()
                 playsound('sound_effects/no_more_guesses_trimmed.wav')
-                say("You have run out of guesses. say play again to start over with a new word!", languages[current_language])
+                say("You have run out of guesses. say play again to start over with "
+                    "a new word!", languages[current_language])
                 lose_play_again()
             if game_result == "W":
                 say("correct", languages[current_language])
                 playsound('sound_effects/correct_word_trimmed.mp3')
-                say("the word was: " + CORRECT_WORD + ". say play agian to get a new word.", languages[current_language])
+                say("the word was: " + CORRECT_WORD + ". say play agian to get "
+                                                      "a new word.", languages[current_language])
                 correct_play_again()
             if rendered:
                 handsfree()
@@ -1020,7 +1024,7 @@ def start_the_game() -> None:
                 pygame.display.flip()
                 say(activated, languages[current_language])
                 time.sleep(0.1)
-                # mixer.music.set_volume(0.025)
+                mixer.music.set_volume(0.025)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -1120,7 +1124,8 @@ def menu():
     )
 
     menu.add.button('Play', start_the_game)
-    menu.add.selector('Language: ', [("English", "en"), ("Spanish", "sp"), ("German", "ger"), ("French", "fr"), ("Kid Friendly", "kid")], onchange=set_language, default=0)
+    menu.add.selector('Language: ', [("English", "en"), ("Spanish", "sp"), ("German", "ger"),
+                                     ("French", "fr"), ("Kid Friendly", "kid")], onchange=set_language, default=0)
     menu.add.button('Instructions', inst_menu)
     menu.add.button('About', about_menu)
     menu.add.button('Quit', pygame_menu.events.EXIT)
@@ -1130,5 +1135,8 @@ def menu():
     if not startgame :
         menu.mainloop(SCREEN, background)
 
+
+# Comment out below for windows (for now!! must fix)
+mixer.music.play(-1)
 
 menu()
