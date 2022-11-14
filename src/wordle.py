@@ -81,8 +81,10 @@ SEMI_COLOR = PINK
 WRONG_COLOR = BLUEPURPLE
 
 # FONT
-FONT = pygame.font.Font("assets/FreeSansBold.otf", 50)
-FONT_SM = pygame.font.Font("assets/FreeSansBold.otf", 30)
+FONT = pygame.font.Font("assets/FreeSans.otf", 40)
+FONT_MED = pygame.font.Font("assets/FreeSans.otf", 30)
+FONT_SM = pygame.font.Font("assets/FreeSans.otf", 20)
+FONT_XSM = pygame.font.Font("assets/FreeSans.otf", 15)
 
 # SCREEN
 WIDTH, HEIGHT = 850, 750
@@ -128,6 +130,7 @@ current_letter_bg_x = WIDTH/3.25
 
 game_result = ""
 
+
 ####################################  FUNCTIONS  ####################################
 
 # GAME BOARD
@@ -141,12 +144,10 @@ def draw():
 def draw_color_key():
     key_width, key_height = 155, 225
     pygame.draw.rect(SCREEN, BLACK, [WIDTH - 170, 70, key_width, key_height], 1, 5)
-    color_font = pygame.font.Font("assets/GFSDidotBold.otf", 20)
-    color_text = color_font.render("Color Key", True, BLACK)
+    color_text = FONT_SM.render("Color Key", True, BLACK)
     color_rect = color_text.get_rect(center=(WIDTH - 185/2, 95))
     SCREEN.blit(color_text, color_rect)
 
-    font = pygame.font.Font("assets/GFSDidotBold.otf", 15)
     color_x = WIDTH - 155
     color_y = 130
     size = 30
@@ -154,20 +155,20 @@ def draw_color_key():
     text_x = WIDTH - 70
 
     pygame.draw.rect(SCREEN, CORRECT_COLOR, [color_x, color_y, size, size], shape, shape)
-    correct_text = font.render("CORRECT", True, BLACK)
+    correct_text = FONT_XSM.render("CORRECT", True, BLACK)
     correct_rect = correct_text.get_rect(center=(text_x, color_y + 15))
     SCREEN.blit(correct_text, correct_rect)
 
     pygame.draw.rect(SCREEN, SEMI_COLOR,[color_x, color_y + 50, size, size], shape, shape)
-    semi_text = font.render("SEMI", True, BLACK)
+    semi_text = FONT_XSM.render("SEMI", True, BLACK)
     semi_rect = semi_text.get_rect(center=(text_x, color_y + 55))
     SCREEN.blit(semi_text, semi_rect)
-    semi_text = font.render("CORRECT", True, BLACK)
+    semi_text = FONT_XSM.render("CORRECT", True, BLACK)
     semi_rect = semi_text.get_rect(center=(text_x, color_y + 75))
     SCREEN.blit(semi_text, semi_rect)
 
     pygame.draw.rect(SCREEN, WRONG_COLOR, [color_x, color_y + 105, size, size], shape, shape)
-    wrong_text = font.render("WRONG", True, BLACK)
+    wrong_text = FONT_XSM.render("WRONG", True, BLACK)
     wrong_rect = wrong_text.get_rect(center=(text_x, color_y + 120))
     SCREEN.blit(wrong_text, wrong_rect)
 
@@ -176,8 +177,7 @@ def draw_color_key():
 def draw_nav_bar():
     pygame.draw.rect(SCREEN, LT_GREY, [0, 0, WIDTH, 50], 100)
     pygame.draw.rect(SCREEN, BLACK, [10, 10, 30, 30], 100)
-    header_font = pygame.font.Font("assets/GFSDidotBold.otf", 30)
-    header_text = header_font.render("WORLDLE", True, WHITE)
+    header_text = FONT.render("WORLDLE", True, WHITE)
     header_rect = header_text.get_rect(center=(WIDTH/2, 25))
     SCREEN.blit(header_text, header_rect)
 
@@ -248,7 +248,7 @@ class BigKeyButton:
 
     def draw(self):
         pygame.draw.rect(SCREEN, self.bg_color, self.rect, 100, 4)
-        self.text_surface = FONT_SM.render(self.text, True, WHITE)
+        self.text_surface = FONT_MED.render(self.text, True, WHITE)
         self.text_rect = self.text_surface.get_rect(center=(self.x + (self.width/2), self.y + (self.height/2)))
         SCREEN.blit(self.text_surface, self.text_rect)
         pygame.display.update()
@@ -1042,38 +1042,72 @@ def set_language(selected: Tuple[Any, int], value: str) -> None:
     elif lang == "kid":
         CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
 
+
+# def set_correct_color(value):
+
+# def set_semi_color(value):
+
+# def set_wrong_color(value):
+
+def background():
+    SCREEN.fill(WHITE)
+
 def menu():
     mytheme = pygame_menu.themes.THEME_GREEN.copy()
-    mytheme.background_color = "#BAF0FF"
+    mytheme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
+    mytheme.title_font = "assets/FreeSans.otf"
     mytheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
-    mytheme.title_offset = (20,10)
+    mytheme.title_offset = (WIDTH/2 - 155, 80)
     mytheme.title_font_color = BLACK
+    mytheme.title_close_button_background_color = BLACK
+    
+    mytheme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
     mytheme.widget_font_color = BLACK
+    mytheme.widget_font = "assets/FreeSans.otf"
+    mytheme.widget_padding = 10
+    mytheme.widget_margin = (0, 3)
+    
+    about_theme = pygame_menu.themes.THEME_GREEN.copy()
+    about_theme.title_close_button_background_color = BLACK
+    about_theme.title_offset = (20, 10)
+    about_theme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
+    about_theme.title_font = "assets/FreeSans.otf"
+    about_theme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
+    about_theme.title_font_color = BLACK
+    about_theme.title_close_button_background_color = BLACK
 
-    about_theme = mytheme
-    about_theme.menubar_close_button = True
+    inst_theme = about_theme
 
     about_menu = pygame_menu.Menu(
-        height=WINDOW_SIZE[1],
-        theme=mytheme,
+        height=WINDOW_SIZE[1] - 100,
+        theme=about_theme,
         title='About',
-        width=WINDOW_SIZE[0]
+        width=WINDOW_SIZE[0] - 100
+    )
+
+    inst_menu = pygame_menu.Menu(
+        height=WINDOW_SIZE[1] - 100,
+        theme=inst_theme,
+        title='Instructions',
+        width=WINDOW_SIZE[0] - 100
     )
 
     menu = pygame_menu.Menu(
-        height=WINDOW_SIZE[1],
+        height=WINDOW_SIZE[1] - 100,
         theme=mytheme,
         title='WORLD-LE',
-        width=WINDOW_SIZE[0]
+        width=WINDOW_SIZE[0]- 100
     )
 
     menu.add.button('Play', start_the_game)
     menu.add.selector('Language: ', [("English", "en"), ("Spanish", "sp"), ("German", "ger"), ("French", "fr"), ("Kid Friendly", "kid")], onchange=set_language, default=0)
+    menu.add.button('Instructions', inst_menu)
     menu.add.button('About', about_menu)
     menu.add.button('Quit', pygame_menu.events.EXIT)
+    
     about_menu.add.button('Quit', pygame_menu.events.EXIT)
 
     if not startgame :
-        menu.mainloop(SCREEN)
+        menu.mainloop(SCREEN, background)
 
 menu()
