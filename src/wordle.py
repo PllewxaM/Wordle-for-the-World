@@ -433,7 +433,9 @@ def reset():
 def say(response, language):
     obj = gTTS(text=response, lang=language, slow=False)
     obj.save("audio.mp3")
-    os.system("mpg123.exe audio.mp3")
+    os.system("mpg123 audio.mp3")
+    # Windows version comment above, uncomment below
+    # os.system("mpg123.exe audio.mp3")
 
 
 # Uses SpeechRecognition to translate a user response to text. Returns text
