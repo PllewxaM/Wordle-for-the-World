@@ -204,8 +204,10 @@ def draw_font_screen() :
     mini_width = WIDTH * 0.6
     mini_height = HEIGHT * 0.8
 
-    pygame.draw.rect(SCREEN, GREY, ((WIDTH - mini_width)/2, (HEIGHT - mini_height)/2, mini_width, mini_height), 100, 4)
-    pygame.draw.rect(SCREEN, WHITE, ((WIDTH - mini_width)/2 + 3, (HEIGHT - mini_height)/2 + 3, mini_width - 6, mini_height - 6), 300, 4)
+    pygame.draw.rect(SCREEN, GREY, ((WIDTH - mini_width)/2, 
+                    (HEIGHT - mini_height)/2, mini_width, mini_height), 100, 4)
+    pygame.draw.rect(SCREEN, WHITE, ((WIDTH - mini_width)/2 + 3, 
+                    (HEIGHT - mini_height)/2 + 3, mini_width - 6, mini_height - 6), 300, 4)
 
     pygame.display.update()
 
@@ -217,7 +219,6 @@ def draw_font_screen() :
     return("assets/GFSDidotBold.otf")
 
 
-
 def draw_color_screen():
     global menu_trigger
     value = ""
@@ -225,8 +226,10 @@ def draw_color_screen():
     mini_height = HEIGHT * 0.8
 
     # need to add title to the mini menu
-    pygame.draw.rect(SCREEN, GREY, ((WIDTH - mini_width)/2, (HEIGHT - mini_height)/2, mini_width, mini_height), 100, 4)
-    pygame.draw.rect(SCREEN, WHITE, ((WIDTH - mini_width)/2 + 3, (HEIGHT - mini_height)/2 + 3, mini_width - 6, mini_height - 6), 300, 4)
+    pygame.draw.rect(SCREEN, GREY, ((WIDTH - mini_width)/2, (HEIGHT - mini_height)/2, \
+                     mini_width, mini_height), 100, 4)
+    pygame.draw.rect(SCREEN, WHITE, ((WIDTH - mini_width)/2 + 3, (HEIGHT - mini_height)/2 + 3, \
+                     mini_width - 6, mini_height - 6), 300, 4)
     
     # draw the color squares
     c_x, c_y = ((WIDTH - mini_width)/2 + 70), (HEIGHT - mini_height)/2 + 125
