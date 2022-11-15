@@ -26,13 +26,12 @@ started = 0
 activate = 0
 audio_interface_enabled = 0
 threshold_initialized = 0
-menu_trigger = 0
 
 # MUSIC
 # DOES NOT WORK WITH WINDOWS CAN UNCOMMENT FOR OTHER OS
-mixer.init()
-mixer.music.load('sound_effects/background_music.ogg')
-mixer.music.set_volume(0.1)
+# mixer.init()
+# mixer.music.load('sound_effects/background_music.ogg')
+# mixer.music.set_volume(0.1)
 
 # LANGUAGE
 # Text-to-speech languages: English, Spanish, French
@@ -98,7 +97,6 @@ FONT_XSM = pygame.font.Font("assets/FreeSans.otf", 15)
 
 # SCREEN
 WIDTH, HEIGHT = 850, 750
-WINDOW_SIZE = (850, 750)
 
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("World-le")
@@ -136,27 +134,31 @@ remaining_guesses = []
 
 current_guess = []
 current_guess_string = ""
+
 # change this to adjust x coordinate of letter position
 current_letter_bg_x = WIDTH/3.25
+current_letter_bg_y = 70
 
 game_result = ""
 
 
-# FUNCTIONS #
+####### FUNCTIONS #######
 
 # GAME BOARD
 
 def draw():
+    sqr_size = 60
     for col in range(0, 5):
         for row in range(0, 6):
             # change + values to adjust board positioning
-            pygame.draw.rect(SCREEN, BLACK, [col * LETTER_X_SPACING + WIDTH/3.25,
-                                             row * LETTER_Y_SPACING + 70, 60, 60], 1, 1)
+            pygame.draw.rect(SCREEN, BLACK, [col * LETTER_X_SPACING + current_letter_bg_x,
+                                             row * LETTER_Y_SPACING + current_letter_bg_y, sqr_size, sqr_size], 1, 1)
 
 
 def draw_color_key():
     key_width, key_height = 155, 225
-    pygame.draw.rect(SCREEN, BLACK, [WIDTH - 170, 70, key_width, key_height], 1, 5)
+    block_x, block_y = WIDTH - 170, 70
+    pygame.draw.rect(SCREEN, BLACK, [block_x, block_y, key_width, key_height], 1, 5)
     color_text = FONT_SM.render("Color Key", True, BLACK)
     color_rect = color_text.get_rect(center=(WIDTH - 185/2, 95))
     SCREEN.blit(color_text, color_rect)
@@ -198,7 +200,6 @@ def draw_nav_bar():
 
 
 def draw_font_screen() :
-    global menu_trigger
 
     value = ""
     mini_width = WIDTH * 0.6
@@ -213,14 +214,11 @@ def draw_font_screen() :
 
     # while value == "":
     #     x = 1
-
-    # menu_trigger = 0
     
     return("assets/GFSDidotBold.otf")
 
 
 def draw_color_screen():
-    global menu_trigger
     value = ""
     mini_width = WIDTH * 0.6
     mini_height = HEIGHT * 0.8
@@ -296,8 +294,6 @@ def draw_color_screen():
                         if color16.collidepoint(event.pos):
                             value = COLORS[3][3]
     
-    menu_trigger = 0
-
     return(value)
 
 # draws letters on the board as user enters them
@@ -929,7 +925,7 @@ def delete_letter():
 
 def start_the_game() -> None:
     global start_game, audio_interface_enabled, started, game_result, activate, current_guess_string, \
-        key_pressed, rendered, activated, menu_trigger
+        key_pressed, rendered, activated
     start_game = 1
 
     SCREEN.fill(WHITE)
@@ -981,7 +977,7 @@ def start_the_game() -> None:
         while not audio_interface_enabled and start_game:
             draw()
             # Comment out below for windows (For now! must fix)
-            mixer.music.set_volume(0.1)
+            # mixer.music.set_volume(0.1)
             if game_result == "L":
                 lose_play_again()
             if game_result == "W":
@@ -1128,22 +1124,18 @@ def start_the_game() -> None:
                             start_game = 0
                             menu()
                         if font_sel_area.collidepoint(event.pos):
-                            menu_trigger = 1
                             chosen_font = draw_font_screen()
                             set_font(chosen_font)
                             reset()
                         if correct_color_area.collidepoint(event.pos):
-                            menu_trigger = 1
                             chosen_color = draw_color_screen()
                             set_correct_color(chosen_color)
                             reset()
                         if semi_color_area.collidepoint(event.pos):
-                            menu_trigger = 1
                             chosen_color = draw_color_screen()
                             set_semi_color(chosen_color)
                             reset()
                         if worng_color_area.collidepoint(event.pos):
-                            menu_trigger = 1
                             chosen_color = draw_color_screen()
                             set_wrong_color(chosen_color)
                             reset()
@@ -1160,7 +1152,7 @@ def start_the_game() -> None:
             draw()
             if game_result == "L":
                 # Comment out below for windows
-                mixer.music.pause()
+                # mixer.music.pause()
                 playsound('sound_effects/no_more_guesses_trimmed.wav')
                 say("You have run out of guesses. The word was " + CORRECT_WORD + " say play again to start over with "
                     "a new word!", languages[current_language])
@@ -1178,7 +1170,7 @@ def start_the_game() -> None:
                 pygame.display.flip()
                 say(activated, languages[current_language])
                 time.sleep(0.1)
-                mixer.music.set_volume(0.025)
+                # mixer.music.set_volume(0.025)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -1312,57 +1304,60 @@ AUDIO_INSTRUCTIONS = [" ",
                     "- To play again after finishing a game, say “play again.”"]
 
 def menu():
+
+    screen_difference = 100
+    padding = 10
+
     mytheme = pygame_menu.themes.THEME_GREEN.copy()
     mytheme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
     mytheme.title_font = "assets/FreeSans.otf"
     mytheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
-    mytheme.title_offset = (WIDTH/2 - 155, 80)
+    mytheme.title_offset = (WIDTH/2 - 155, padding * 8)
     mytheme.title_font_color = BLACK
     mytheme.title_close_button_background_color = BLACK
     
     mytheme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
     mytheme.widget_font_color = BLACK
     mytheme.widget_font = "assets/FreeSans.otf"
-    mytheme.widget_padding = 10
+    mytheme.widget_padding = padding
     mytheme.widget_margin = (0, 3)
     
     about_theme = pygame_menu.themes.THEME_GREEN.copy()
     about_theme.title_close_button_background_color = BLACK
-    about_theme.title_offset = (20, 10)
+    about_theme.title_offset = (padding * 2, padding)
     about_theme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
     about_theme.title_font = "assets/FreeSans.otf"
     about_theme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
     about_theme.title_font_color = BLACK
     about_theme.title_close_button_background_color = BLACK
     about_theme.widget_font_color = BLACK
-    #about_theme.widget_box_margin = (-10,0)
 
     inst_theme = about_theme
 
     about_menu = pygame_menu.Menu(
-        height=WINDOW_SIZE[1] - 100,
+        height=HEIGHT - screen_difference,
         theme=about_theme,
         title='About',
-        width=WINDOW_SIZE[0] - 100
+        width=WIDTH - screen_difference
     )
 
     for m in ABOUT:
         about_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
-        about_menu.add.vertical_margin(1)
-        about_menu.add.horizontal_margin(10)
+        about_menu.add.vertical_margin(padding)
+        about_menu.add.horizontal_margin(padding)
         about_menu.widget_font_color = BLACK
 
     inst_menu = pygame_menu.Menu(
-        height=WINDOW_SIZE[1] - 100,
+        height=HEIGHT - screen_difference,
         theme=inst_theme,
         title='Instructions',
-        width=WINDOW_SIZE[0] - 100
+        width=WIDTH - screen_difference
     )
 
     for m in INSTRUCTIONS:
         inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-        inst_menu.add.vertical_margin(1)
-        inst_menu.add.horizontal_margin(10)
+        inst_menu.add.vertical_margin(padding)
+        inst_menu.add.horizontal_margin(padding)
         inst_menu.widget_font_color = BLACK
 
     image_path_correct = pygame_menu.baseimage.BaseImage("assets/correct.jpg")
@@ -1370,8 +1365,8 @@ def menu():
 
     for m in INSTRUCTIONS2:
         inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-        inst_menu.add.vertical_margin(1)
-        inst_menu.add.horizontal_margin(10)
+        inst_menu.add.vertical_margin(padding)
+        inst_menu.add.horizontal_margin(padding)
         inst_menu.widget_font_color = BLACK
 
     image_path_semicorrect = pygame_menu.baseimage.BaseImage("assets/semicorrect.jpg")
@@ -1379,21 +1374,21 @@ def menu():
 
     for m in INSTRUCTIONS3:
         inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-        inst_menu.add.vertical_margin(1)
-        inst_menu.add.horizontal_margin(10)
+        inst_menu.add.vertical_margin(padding)
+        inst_menu.add.horizontal_margin(padding)
         inst_menu.widget_font_color = BLACK
 
     for m in AUDIO_INSTRUCTIONS:
         inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-        inst_menu.add.vertical_margin(1)
-        inst_menu.add.horizontal_margin(10)
+        inst_menu.add.vertical_margin(padding)
+        inst_menu.add.horizontal_margin(padding)
         inst_menu.widget_font_color = BLACK
 
     menu = pygame_menu.Menu(
-        height=WINDOW_SIZE[1] - 100,
+        height=HEIGHT - screen_difference,
         theme=mytheme,
         title='WORLD-LE',
-        width=WINDOW_SIZE[0] - 100
+        width=WIDTH - screen_difference
     )
 
     menu.add.button('Play', start_the_game)
@@ -1410,7 +1405,7 @@ def menu():
 
 
 def main():
-    mixer.music.play(-1)
+    # mixer.music.play(-1)
     menu()
 
 
