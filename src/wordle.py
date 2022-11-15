@@ -30,9 +30,9 @@ menu_trigger = 0
 
 # MUSIC
 # DOES NOT WORK WITH WINDOWS CAN UNCOMMENT FOR OTHER OS
-# mixer.init()
-# mixer.music.load('sound_effects/background_music.ogg')
-# mixer.music.set_volume(0.1)
+mixer.init()
+mixer.music.load('sound_effects/background_music.ogg')
+mixer.music.set_volume(0.1)
 
 # LANGUAGE
 # Text-to-speech languages: English, Spanish, French
@@ -678,19 +678,19 @@ def clear_stash():
         delete_count -= 1
 
 
-def replace(response):
+def replace(command):
     global current_guess_string
     char_to_replace = ''
     replacement = ''
 
     # find char_to_replace and replacement in response
-    response = response.split(' ')
+    command = command.split(' ')
     index = 0
     found = 0
     while not found:
-        if response[index] == "replace":
-            char_to_replace = response[index + 1]
-            replacement = response[index + 3]
+        if command[index] == "replace":
+            char_to_replace = command[index + 1]
+            replacement = command[index + 3]
             found = 1
         else:
             index += 1
@@ -748,6 +748,8 @@ def handsfree():
         try:
             time.sleep(0.05)
             command = listen()
+            # Comment above for debugging, allows typing of command; comment below for handsfree use;
+            # command = input("Type a command: ")
             command = command.lower()
             print(command)
 
@@ -840,7 +842,7 @@ def stash(response):
     index = 0
     while not found:
         try:
-            if response_split[index] == "stash":
+            if response_split[index] == "stash" or response_split[index] == "dash":
                 guess = response_split[index + 1]
                 found = 1
             else:
@@ -1222,13 +1224,16 @@ def set_correct_color(value):
     global CORRECT_COLOR
     CORRECT_COLOR = value
 
+
 def set_semi_color(value):
     global SEMI_COLOR
     SEMI_COLOR = value
 
+
 def set_wrong_color(value):
     global WRONG_COLOR
     WRONG_COLOR = value
+
 
 def set_font(value):
     global FONT, FONT_MED, FONT_SM, FONT_XSM
@@ -1236,6 +1241,7 @@ def set_font(value):
     FONT_MED = pygame.font.Font(value, 30)
     FONT_SM = pygame.font.Font(value, 20)
     FONT_XSM = pygame.font.Font(value, 15)
+
 
 def background():
     SCREEN.fill(WHITE)
@@ -1301,7 +1307,10 @@ def menu():
         menu.mainloop(SCREEN, background)
 
 
-# Comment out below for windows (for now!! must fix)
-# mixer.music.play(-1)
+def main():
+    mixer.music.play(-1)
+    menu()
 
-menu()
+
+if __name__ == "__main__":
+    main()
