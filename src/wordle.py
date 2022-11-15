@@ -229,7 +229,7 @@ def draw_color_screen():
     pygame.draw.rect(SCREEN, WHITE, ((WIDTH - mini_width)/2 + 3, (HEIGHT - mini_height)/2 + 3, mini_width - 6, mini_height - 6), 300, 4)
     
     # draw the color squares
-    c_x, c_y = ((WIDTH - mini_width)/2 + 70), (HEIGHT - mini_height)/2 + 100
+    c_x, c_y = ((WIDTH - mini_width)/2 + 70), (HEIGHT - mini_height)/2 + 125
     for i in range(4):
         for color in COLORS[i] :
             pygame.draw.rect(SCREEN, color, (c_x, c_y, 75, 75), 100, 4)
