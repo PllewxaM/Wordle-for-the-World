@@ -26,6 +26,7 @@ started = 0
 activate = 0
 audio_interface_enabled = 0
 threshold_initialized = 0
+menu_trigger = 0
 
 # MUSIC
 # DOES NOT WORK WITH WINDOWS CAN UNCOMMENT FOR OTHER OS
@@ -65,25 +66,32 @@ ORANGEYELLOW = "#ffc700"
 YELLOW = "#c9b458"
 YELLOWGREEN = "#a8d800"
 GREEN = "#6aaa64"
-GREENBLUE = "#00D9C5"
-BLUE = "#0085FF"
-BLUEPURPLE = "#623CED"
-PURPLE = "#9150F3"
-PURPLEPINK = "#B912F4"
-PINK = "#FB00FF"
-REDPINK = "#FF0081"
+GREENBLUE = "#00d9c5"
+BLUE = "#0085ff"
+LT_BLUE = "#91dcfa"
+BLUEPURPLE = "#623ced"
+PURPLE = "#9150f3"
+LT_PURPLE = "#b39dfc"
+PURPLEPINK = "#b912f4"
+PINK = "#fb00ff"
+REDPINK = "#ff0081"
 GREY = "#787c7e"
 LT_GREY = "#abadaf"
 WHITE = "#ffffff"
 BLACK = "#000000"
 
+COLORS = [[RED, REDORANGE, ORANGE, ORANGEYELLOW], 
+        [YELLOW, YELLOWGREEN, GREEN, GREENBLUE], 
+        [BLUE, LT_BLUE, BLUEPURPLE, PURPLE],
+        [LT_PURPLE, PURPLEPINK, PINK, REDPINK]]
 
-# CHANGE THESE TO GET FROM USER
-CORRECT_COLOR = YELLOWGREEN
-SEMI_COLOR = PINK
-WRONG_COLOR = BLUEPURPLE
+# DEFAULTS
+CORRECT_COLOR = GREEN
+SEMI_COLOR = YELLOW
+WRONG_COLOR = GREY
+HOLD_COLOR = 0
 
-# FONT
+# FONT DEFAULTS
 FONT = pygame.font.Font("assets/FreeSans.otf", 40)
 FONT_MED = pygame.font.Font("assets/FreeSans.otf", 30)
 FONT_SM = pygame.font.Font("assets/FreeSans.otf", 20)
@@ -192,12 +200,84 @@ def draw_nav_bar():
 
 def draw_font_screen() :
     # work in progress
-    print("font activate")
+    pass
 
+def draw_color_screen():
+    global menu_trigger, HOLD_COLOR
+    value = ""
+    mini_width = WIDTH * 0.6
+    mini_height = HEIGHT * 0.8
 
-def draw_color_screen(value):
-    # work in progress
-    print(value)
+    pygame.draw.rect(SCREEN, GREY, ((WIDTH - mini_width)/2, (HEIGHT - mini_height)/2, mini_width, mini_height), 100, 4)
+    pygame.draw.rect(SCREEN, WHITE, ((WIDTH - mini_width)/2 + 3, (HEIGHT - mini_height)/2 + 3, mini_width - 6, mini_height - 6), 300, 4)
+    
+    c_x, c_y = ((WIDTH - mini_width)/2 + 70), (HEIGHT - mini_height)/2 + 100
+    for i in range(4):
+        for color in COLORS[i] :
+            pygame.draw.rect(SCREEN, color, (c_x, c_y, 75, 75), 100, 4)
+            c_x += 100
+        c_x = ((WIDTH - mini_width)/2 + 70)
+        c_y += 100
+
+    pygame.display.update()
+
+    color1 = pygame.Rect((WIDTH - mini_width)/2 + 70, (HEIGHT - mini_height)/2 + 100, 75, 75)
+    color2 = pygame.Rect((WIDTH - mini_width)/2 + 170, (HEIGHT - mini_height)/2 + 100, 75, 75)
+    color3 = pygame.Rect((WIDTH - mini_width)/2 + 270, (HEIGHT - mini_height)/2 + 100, 75, 75)
+    color4 = pygame.Rect((WIDTH - mini_width)/2 + 370, (HEIGHT - mini_height)/2 + 100, 75, 75)
+    color5 = pygame.Rect((WIDTH - mini_width)/2 + 70, (HEIGHT - mini_height)/2 + 200, 75, 75)
+    color6 = pygame.Rect((WIDTH - mini_width)/2 + 170, (HEIGHT - mini_height)/2 + 200, 75, 75)
+    color7 = pygame.Rect((WIDTH - mini_width)/2 + 270, (HEIGHT - mini_height)/2 + 200, 75, 75)
+    color8 = pygame.Rect((WIDTH - mini_width)/2 + 370, (HEIGHT - mini_height)/2 + 200, 75, 75)
+    color9 = pygame.Rect((WIDTH - mini_width)/2 + 70, (HEIGHT - mini_height)/2 + 300, 75, 75)
+    color10 = pygame.Rect((WIDTH - mini_width)/2 + 170, (HEIGHT - mini_height)/2 + 300, 75, 75)
+    color11 = pygame.Rect((WIDTH - mini_width)/2 + 270, (HEIGHT - mini_height)/2 + 300, 75, 75)
+    color12 = pygame.Rect((WIDTH - mini_width)/2 + 370, (HEIGHT - mini_height)/2 + 300, 75, 75)
+    color13 = pygame.Rect((WIDTH - mini_width)/2 + 70, (HEIGHT - mini_height)/2 + 400, 75, 75)
+    color14 = pygame.Rect((WIDTH - mini_width)/2 + 170, (HEIGHT - mini_height)/2 + 400, 75, 75)
+    color15 = pygame.Rect((WIDTH - mini_width)/2 + 270, (HEIGHT - mini_height)/2 + 400, 75, 75)
+    color16 = pygame.Rect((WIDTH - mini_width)/2 + 370, (HEIGHT - mini_height)/2 + 400, 75, 75)
+
+    while value == "":
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        if color1.collidepoint(event.pos):
+                            value = COLORS[0][0]
+                        if color2.collidepoint(event.pos):
+                            value = COLORS[0][1]
+                        if color3.collidepoint(event.pos):
+                            value = COLORS[0][2]
+                        if color4.collidepoint(event.pos):
+                            value = COLORS[0][3]
+                        if color5.collidepoint(event.pos):
+                            value = COLORS[1][0]
+                        if color6.collidepoint(event.pos):
+                            value = COLORS[1][1]
+                        if color7.collidepoint(event.pos):
+                            value = COLORS[1][2]
+                        if color8.collidepoint(event.pos):
+                            value = COLORS[1][3]
+                        if color9.collidepoint(event.pos):
+                            value = COLORS[2][0]
+                        if color10.collidepoint(event.pos):
+                            value = COLORS[2][1]
+                        if color11.collidepoint(event.pos):
+                            value = COLORS[2][2]
+                        if color12.collidepoint(event.pos):
+                            value = COLORS[2][3]
+                        if color13.collidepoint(event.pos):
+                            value = COLORS[3][0]
+                        if color14.collidepoint(event.pos):
+                            value = COLORS[3][1]
+                        if color15.collidepoint(event.pos):
+                            value = COLORS[3][2]
+                        if color16.collidepoint(event.pos):
+                            value = COLORS[3][3]
+    
+    menu_trigger = 0
+
+    return(value)
 
 # draws letters on the board as user enters them
 class Letter:
@@ -437,8 +517,9 @@ def reset():
     draw_nav_bar()
 
     # Comment out below for windows (For now!! must fix)
-    mixer.music.play(-1)
+    # mixer.music.play(-1)
 
+    print(CORRECT_WORD)
     pygame.display.update()
 
 
@@ -449,11 +530,11 @@ def say(response, language):
     obj = gTTS(text=response, lang=language, slow=False)
     obj.save("audio.mp3")
     try :
+        # mac os version
         os.system("mpg123 audio.mp3")
     except:
+        # windows version
         os.system("mpg123.exe audio.mp3")
-    # Windows version comment above, uncomment below
-    # os.system("mpg123.exe audio.mp3")
 
 
 # Uses SpeechRecognition to translate a user response to text. Returns text
@@ -825,12 +906,11 @@ def delete_letter():
 
 def start_the_game() -> None:
     global start_game, audio_interface_enabled, started, game_result, activate, current_guess_string, \
-        key_pressed, rendered, activated
+        key_pressed, rendered, activated, menu_trigger
     start_game = 1
 
     SCREEN.fill(WHITE)
     print(CORRECT_WORD)
-    print(lang)
 
     draw_keyboard()
     draw_color_key()
@@ -1025,20 +1105,30 @@ def start_the_game() -> None:
                             start_game = 0
                             menu()
                         if font_sel_area.collidepoint(event.pos):
+                            menu_trigger = 1
                             draw_font_screen()
                         if correct_color_area.collidepoint(event.pos):
-                            draw_color_screen(1)
+                            menu_trigger = 1
+                            chosen_color = draw_color_screen()
+                            set_correct_color(chosen_color)
+                            reset()
                         if semi_color_area.collidepoint(event.pos):
-                            draw_color_screen(2)
+                            menu_trigger = 1
+                            chosen_color = draw_color_screen()
+                            set_semi_color(chosen_color)
+                            reset()
                         if worng_color_area.collidepoint(event.pos):
-                            draw_color_screen(3)
+                            menu_trigger = 1
+                            chosen_color = draw_color_screen()
+                            set_wrong_color(chosen_color)
+                            reset()
 
             pygame.display.flip()
 
             # comment out for testing because it's annoying :)
-            if not started:
-                say(startup, languages[current_language])
-                started = 1
+            # if not started:
+            #     say(startup, languages[current_language])
+            #     started = 1
 
         # how program should run when audio interface is enabled
         while audio_interface_enabled and start_game:
@@ -1105,13 +1195,24 @@ def set_language(selected: Tuple[Any, int], value: str) -> None:
         CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
 
 
-# def set_correct_color(value):
+def set_correct_color(value):
+    global CORRECT_COLOR
+    CORRECT_COLOR = value
 
-# def set_semi_color(value):
+def set_semi_color(value):
+    global SEMI_COLOR
+    SEMI_COLOR = value
 
-# def set_wrong_color(value):
+def set_wrong_color(value):
+    global WRONG_COLOR
+    WRONG_COLOR = value
 
-# def set_font(value):
+def set_font(value):
+    global FONT, FONT_MED, FONT_SM, FONT_XSM
+    FONT = value
+    FONT_MED = value
+    FONT_SM = value
+    FONT_XSM = value
 
 def background():
     SCREEN.fill(WHITE)
