@@ -1116,6 +1116,70 @@ def set_language(selected: Tuple[Any, int], value: str) -> None:
 def background():
     SCREEN.fill(WHITE)
 
+ABOUT = ["Welcome to World-le: the S3N1OR SQU4D’s accessible version of the",
+         "popular New York Times’s word-guessing game. This game was developed",
+         "in the Fall of 2022 for our CSC 355: Human Computer Interactions final project.",
+         " ",
+         "Our Mission",
+         "At the start of our process, we noticed that a number of Wordle’s qualities",
+         "were inaccessible. First, while versions of Wordle exist in languages",
+         "other than English online, the New York Times’s game is only available in",
+         "English, thereby excluding non-English speakers. Second, the color scheme is",
+         "inaccessible to the color blind community; the high contrast feature is even",
+         "insufficient. Additionally, there is no way for members of the Blind community",
+         "to play. Finally, physical impairments deter those unable to use their hands",
+         "from playing the game.",
+         " ",
+         "With these shortcomings in mind, we set out to make Wordle accessible to the",
+         "visually and physically impaired communities, as well as non-English speakers.",
+         "We have done this by implementing a hands-free option for users to play using",
+         "only their voice, as well as a language option for players to choose which",
+         "language they would like play in. In addition to our accessibility features,", 
+         "we also added a color picker to allow users customize their gaming experience.",
+         "With these implementations, we hope that this version of our World-le can truly",
+         "be “Wordle for the world.”",
+         " ",
+         "Meet the S3N1OR SQU4D",
+         "Summer Martin is a ",
+         " ",
+         "Max Parrone is a ",
+         " ",
+         "Kyla Ramos is a ",
+         " ",
+         "Caroline Francesconi is a senior at The College of New Jersey majoring in",
+         "statistics and minoring in Women’s, Gender, and Sexuality Studies. She has", 
+         "really enjoyed learning about accessible design in HCI, and hopes that her", 
+         "team’s final project engages individuals with differing abilities in a", 
+         "positive way. Caroline’s favorite five-letter word is “pasta.”"]
+
+INSTRUCTIONS = ["How to Play Using a Keyboard:",
+                "- Using your computer’s keyboard or the one on the screen, guess a five letter word.",
+                "- Press the delete key to remove a letter.",
+                "- Press the enter key to submit a guess.",
+                "- Letters in the correct position will appear green, as show here:"] 
+
+INSTRUCTIONS2 = ["- Letters in the word, but in the incorrect position will appear yellow, as shown here:"]
+                
+INSTRUCTIONS3 = ["- Incorrect letters will appear gray, as shown above." ,
+                 "- You have six attempts to guess the secret word."]
+                
+AUDIO_INSTRUCTIONS = [" ",
+                    "How to Play Hands-Free:",
+                    "- To activate hands-free mode, say <command>.",
+                    "- To disable hand-free mode, say “disable.”",
+                    "- To spell a word, you can either stash five individual letters,", 
+                    "  or stash a five-letter word. For example, “stash s, t, a, r, t” and “stash start” both",
+                    "  stash the word, start.",
+                    "- To submit a stashed word, say “submit.”",
+                    "- To delete the most recently stashed letter, say “delete.”",
+                    "- To clear a stashed word, say “clear.”",
+                    "- To replace a letter, say “replace,” followed by the character you want to replace,",
+                    "  the word “with,” and the new character. For example, “replace a with e.”",
+                    "- To hear a particular guessed word, say “read guess” followed by the number of the",
+                    "  guessed word. For example, “read guess one” will read out your first guessed word.",
+                    "- To hear your semi-correct letters, say “semi.”",
+                    "- To hear your previous wrong guessed words, say “wrong.”",
+                    "- To play again after finishing a game, say “play again.”"]
 
 def menu():
     mytheme = pygame_menu.themes.THEME_GREEN.copy()
@@ -1140,6 +1204,8 @@ def menu():
     about_theme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
     about_theme.title_font_color = BLACK
     about_theme.title_close_button_background_color = BLACK
+    about_theme.widget_font_color = BLACK
+    #about_theme.widget_box_margin = (-10,0)
 
     inst_theme = about_theme
 
@@ -1150,12 +1216,48 @@ def menu():
         width=WINDOW_SIZE[0] - 100
     )
 
+    for m in ABOUT:
+        about_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
+        about_menu.add.vertical_margin(1)
+        about_menu.add.horizontal_margin(10)
+        about_menu.widget_font_color = BLACK
+
     inst_menu = pygame_menu.Menu(
         height=WINDOW_SIZE[1] - 100,
         theme=inst_theme,
         title='Instructions',
         width=WINDOW_SIZE[0] - 100
     )
+
+    for m in INSTRUCTIONS:
+        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
+        inst_menu.add.vertical_margin(1)
+        inst_menu.add.horizontal_margin(10)
+        inst_menu.widget_font_color = BLACK
+
+    image_path_correct = pygame_menu.baseimage.BaseImage("assets/correct.jpg")
+    inst_menu.add.image(image_path_correct, align=pygame_menu.locals.ALIGN_LEFT)
+
+    for m in INSTRUCTIONS2:
+        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
+        inst_menu.add.vertical_margin(1)
+        inst_menu.add.horizontal_margin(10)
+        inst_menu.widget_font_color = BLACK
+
+    image_path_semicorrect = pygame_menu.baseimage.BaseImage("assets/semicorrect.jpg")
+    inst_menu.add.image(image_path_semicorrect, align=pygame_menu.locals.ALIGN_LEFT)
+
+    for m in INSTRUCTIONS3:
+        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
+        inst_menu.add.vertical_margin(1)
+        inst_menu.add.horizontal_margin(10)
+        inst_menu.widget_font_color = BLACK
+
+    for m in AUDIO_INSTRUCTIONS:
+        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
+        inst_menu.add.vertical_margin(1)
+        inst_menu.add.horizontal_margin(10)
+        inst_menu.widget_font_color = BLACK
 
     menu = pygame_menu.Menu(
         height=WINDOW_SIZE[1] - 100,
