@@ -89,7 +89,6 @@ COLORS = [[RED, REDORANGE, ORANGE, ORANGEYELLOW],
 CORRECT_COLOR = GREEN
 SEMI_COLOR = YELLOW
 WRONG_COLOR = GREY
-HOLD_COLOR = 0
 
 # FONT DEFAULTS
 FONT = pygame.font.Font("assets/FreeSans.otf", 40)
@@ -199,18 +198,37 @@ def draw_nav_bar():
 
 
 def draw_font_screen() :
-    # work in progress
-    pass
+    global menu_trigger
 
-def draw_color_screen():
-    global menu_trigger, HOLD_COLOR
     value = ""
     mini_width = WIDTH * 0.6
     mini_height = HEIGHT * 0.8
 
     pygame.draw.rect(SCREEN, GREY, ((WIDTH - mini_width)/2, (HEIGHT - mini_height)/2, mini_width, mini_height), 100, 4)
     pygame.draw.rect(SCREEN, WHITE, ((WIDTH - mini_width)/2 + 3, (HEIGHT - mini_height)/2 + 3, mini_width - 6, mini_height - 6), 300, 4)
+
+    pygame.display.update()
+
+    # while value == "":
+    #     x = 1
+
+    # menu_trigger = 0
     
+    return("assets/GFSDidotBold.otf")
+
+
+
+def draw_color_screen():
+    global menu_trigger
+    value = ""
+    mini_width = WIDTH * 0.6
+    mini_height = HEIGHT * 0.8
+
+    # need to add title to the mini menu
+    pygame.draw.rect(SCREEN, GREY, ((WIDTH - mini_width)/2, (HEIGHT - mini_height)/2, mini_width, mini_height), 100, 4)
+    pygame.draw.rect(SCREEN, WHITE, ((WIDTH - mini_width)/2 + 3, (HEIGHT - mini_height)/2 + 3, mini_width - 6, mini_height - 6), 300, 4)
+    
+    # draw the color squares
     c_x, c_y = ((WIDTH - mini_width)/2 + 70), (HEIGHT - mini_height)/2 + 100
     for i in range(4):
         for color in COLORS[i] :
@@ -1106,7 +1124,9 @@ def start_the_game() -> None:
                             menu()
                         if font_sel_area.collidepoint(event.pos):
                             menu_trigger = 1
-                            draw_font_screen()
+                            chosen_font = draw_font_screen()
+                            set_font(chosen_font)
+                            reset()
                         if correct_color_area.collidepoint(event.pos):
                             menu_trigger = 1
                             chosen_color = draw_color_screen()
@@ -1209,10 +1229,10 @@ def set_wrong_color(value):
 
 def set_font(value):
     global FONT, FONT_MED, FONT_SM, FONT_XSM
-    FONT = value
-    FONT_MED = value
-    FONT_SM = value
-    FONT_XSM = value
+    FONT = pygame.font.Font(value, 40)
+    FONT_MED = pygame.font.Font(value, 30)
+    FONT_SM = pygame.font.Font(value, 20)
+    FONT_XSM = pygame.font.Font(value, 15)
 
 def background():
     SCREEN.fill(WHITE)
