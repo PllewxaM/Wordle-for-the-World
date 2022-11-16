@@ -4,16 +4,21 @@ import pygame
 from pygame import mixer
 import sys
 import random
-import words
-from words import *
-import words2
-from words2 import *
 from gtts import gTTS
 import speech_recognition as sr
 import os
 from playsound import playsound
 import time
 
+# Import Word Files
+import words
+from words import *
+import words2
+from words2 import *
+
+# Import Message Files
+import messages
+from messages import *
 
 # INITIALIZERS AND GLOBAL VARIABLES #
 
@@ -37,20 +42,6 @@ threshold_initialized = 0
 # Text-to-speech languages: English, Spanish, French
 languages = ['en', 'es', 'fr']
 current_language = 0
-
-# Long sections of text used for instructing hands-free user
-startup = "Welcome to wordle for the world, to activate the hands free version of the program, press " \
-          "the space bar twice"
-activated = "Audio interface activated, if you need help or a refresher on audio commands, say, " \
-            "tutorial. To disable audio mode say disable."
-wordle_tutorial = "Insert wordle tutorial here"
-handsfree_tutorial = "Insert handsfree tutorial here"
-stash_tutorial = "Insert stash tutorial/example here"
-clear_tutorial = "The command clear will delete all the letters in your current guess stash"
-read_tutorial = "Insert read tutorial/example here"
-replace_tutorial = "Insert replace tutorial/example here"
-submit_tutorial = "Insert submit tutorial/example here"
-
 
 # select which file to get the word from based on user selection
 lang = "en"  # change this to get from user/ui
@@ -147,11 +138,12 @@ game_result = ""
 
 # Draws the game board gird on the screen
 def draw():
+    size = 60
     for col in range(0, 5):
         for row in range(0, 6):
             # change + values to adjust board positioning
             pygame.draw.rect(SCREEN, BLACK, [col * LETTER_X_SPACING + WIDTH/3.25,
-                                             row * LETTER_Y_SPACING + 70, 60, 60], 1, 1)
+                                             row * LETTER_Y_SPACING + 70, size, size], 1, 1)
 
 # draws the color key to show the user what colors are selected and what they mean
 def draw_color_key():
@@ -231,7 +223,8 @@ def draw_font_screen() :
 # draw the color squares on the color menu
 def draw_color_squrs() :
     size, fill, round = 75, 100, 4
-    c_x, c_y = ((WIDTH - WIDTH * 0.6)/2 + 70), (HEIGHT - HEIGHT * 0.8)/2 + 125
+    c_x = ((WIDTH - WIDTH * 0.6)/2 + 70)
+    c_y = (HEIGHT - HEIGHT * 0.8)/2 + 125
     shift_amount = 100
 
     for i in range(4):
@@ -247,11 +240,12 @@ def draw_color_squrs() :
 def draw_color_screen(current):
     value = current
     done = 0
+    round, fill = 4, 100
+    size = 75
     # width and height of the color menu
     mini_width = WIDTH * 0.6
     mini_height = HEIGHT * 0.8
-    round, fill = 4, 100
-    size = 75
+    
 
     # draw background screen
     pygame.draw.rect(SCREEN, GREY, ((WIDTH - mini_width)/2, (HEIGHT - mini_height)/2, \
@@ -422,8 +416,6 @@ class KeyButton:
         self.text_surface = FONT.render(self.text, True, WHITE)
         self.text_rect = self.text_surface.get_rect(center=(self.x + (self.width/2), self.y + (self.height/2)))
         SCREEN.blit(self.text_surface, self.text_rect)
-        # pygame.display.update()
-
 
 # draw and handle keyboard larger buttons
 class BigKeyButton:
@@ -442,8 +434,6 @@ class BigKeyButton:
         self.text_surface = FONT_MED.render(self.text, True, WHITE)
         self.text_rect = self.text_surface.get_rect(center=(self.x + (self.width/2), self.y + (self.height/2)))
         SCREEN.blit(self.text_surface, self.text_rect)
-        # pygame.display.update()
-
 
 def draw_keyboard():
     # starting keyboard location
@@ -487,7 +477,6 @@ def add_correct(char):
     global correct_guesses
     if char not in correct_guesses:
         correct_guesses.append(char)
-
 
 # check what parts of the user's guess is correct
 def check_guess(guess_to_check):
@@ -539,7 +528,6 @@ def check_guess(guess_to_check):
     if guesses_count == 6 and game_result == "":
         game_result = "L"
 
-
 # display loosing screen and call reset
 def lose_play_again():
     # Puts the play again text on the screen.
@@ -553,7 +541,6 @@ def lose_play_again():
     SCREEN.blit(word_was_text, word_was_rect)
     SCREEN.blit(play_again_text, play_again_rect)
     pygame.display.update()
-
 
 # display winning screen and call reset
 def correct_play_again():
@@ -572,7 +559,6 @@ def correct_play_again():
     SCREEN.blit(word_was_text, word_was_rect)
     SCREEN.blit(play_again_text, play_again_rect)
     pygame.display.update()
-
 
 # reset global variables
 def reset():
@@ -612,6 +598,34 @@ def reset():
     # mixer.music.play(-1)
 
     print(CORRECT_WORD)
+    pygame.display.update()
+
+# reset the screen and redraw with new colors
+def reset_screen():
+    SCREEN.fill(WHITE)
+
+    for key in keys:
+        for l in correct_guesses:
+            if key.text == l.upper():
+                key.bg_color = CORRECT_COLOR
+        for l in semi_correct_guesses:
+            if key.text == l.upper():
+                key.bg_color = SEMI_COLOR
+        key.draw()
+
+    draw_color_key()
+    draw_nav_bar()
+
+    for guess in guesses:
+        for letter in guess:
+            for l in correct_guesses:
+                if letter.text == l.upper():
+                    letter.bg_color = CORRECT_COLOR
+            for l in semi_correct_guesses:
+                if letter.text == l.upper():
+                    letter.bg_color = SEMI_COLOR
+            letter.draw()
+
     pygame.display.update()
 
 
@@ -810,7 +824,6 @@ def read_guess(guess_number):
     else:
         say_and_confirm_by_char(guesses_str[guess_number - 1], CORRECT_WORD.upper(), languages[current_language])
 
-
 def handsfree():
     global current_guess_string, activate, audio_interface_enabled
 
@@ -828,9 +841,9 @@ def handsfree():
                 say("say word for wordle tutorial, say free for handsfree tutorial", languages[current_language])
                 response = listen()
                 if "word" in response:
-                    say(wordle_tutorial, languages[current_language])
+                    say(WORDLE_TUTORIAL, languages[current_language])
                 elif "free" in response:
-                    say(handsfree_tutorial, languages[current_language])
+                    say(HANDSFREE_TUTORIAL, languages[current_language])
                 waiting_for_command = 0
             elif "replace" in command:
                 say("you said: " + command, languages[current_language])
@@ -901,7 +914,6 @@ def handsfree():
         except Exception as e:
             print("exception: " + repr(e))
 
-
 # Identifies whether you are stashing a word or a character, calls the appropriate
 # function or tells the user the input is invalid.
 def stash(response):
@@ -937,7 +949,6 @@ def stash(response):
     else:
         say("You can only stash individual letters, or five letter words. Try again!", languages[current_language])
 
-
 # Takes stash command as an input and places new letter on the screen
 def stash_char(char_to_stash):
     global key_pressed
@@ -948,7 +959,6 @@ def stash_char(char_to_stash):
         else:
             say("your stash is full! submit or delete to guess more letters.", languages[current_language])
 
-
 # delete for handsfree version
 def delete():
     global current_guess_string
@@ -958,7 +968,6 @@ def delete():
         delete_letter()
     else:
         say("You dont have any letters to delete!", languages[current_language])
-
 
 # submit for hands-free version
 def submit():
@@ -986,7 +995,6 @@ def create_new_letter():
         for letter in guess:
             letter.draw()
 
-
 # delete for traditional version of game
 def delete_letter():
     # Deletes the last letter from the guess.
@@ -997,10 +1005,11 @@ def delete_letter():
     current_guess.pop()
     current_letter_bg_x -= LETTER_X_SPACING
 
+# GAME CONTROL
 
 def start_the_game() -> None:
     global start_game, audio_interface_enabled, started, game_result, activate, current_guess_string, \
-        key_pressed, rendered, activated
+        key_pressed, rendered
     start_game = 1
 
     SCREEN.fill(WHITE)
@@ -1201,25 +1210,25 @@ def start_the_game() -> None:
                         if font_sel_area.collidepoint(event.pos):
                             chosen_font = draw_font_screen()
                             set_font(chosen_font)
-                            reset()
+                            reset_screen()
                         if correct_color_area.collidepoint(event.pos):
                             chosen_color = draw_color_screen(CORRECT_COLOR)
                             set_correct_color(chosen_color)
-                            reset()
+                            reset_screen()
                         if semi_color_area.collidepoint(event.pos):
                             chosen_color = draw_color_screen(SEMI_COLOR)
                             set_semi_color(chosen_color)
-                            reset()
+                            reset_screen()
                         if worng_color_area.collidepoint(event.pos):
                             chosen_color = draw_color_screen(WRONG_COLOR)
                             set_wrong_color(chosen_color)
-                            reset()
+                            reset_screen()
 
             pygame.display.flip()
 
             # comment out for testing because it's annoying :)
             # if not started:
-            #     say(startup, languages[current_language])
+            #     say(STARTUP, languages[current_language])
             #     started = 1
 
         # how program should run when audio interface is enabled
@@ -1243,7 +1252,7 @@ def start_the_game() -> None:
             else:
                 # mixer.music.play()
                 pygame.display.flip()
-                say(activated, languages[current_language])
+                say(ACTIVATED, languages[current_language])
                 time.sleep(0.1)
                 # mixer.music.set_volume(0.025)
             for event in pygame.event.get():
@@ -1271,6 +1280,7 @@ def start_the_game() -> None:
 
             rendered = 1
 
+# SETTERS
 
 def set_language(selected: Tuple[Any, int], value: str) -> None:
     global lang, CORRECT_WORD
@@ -1286,21 +1296,17 @@ def set_language(selected: Tuple[Any, int], value: str) -> None:
     elif lang == "kid":
         CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
 
-
 def set_correct_color(value):
     global CORRECT_COLOR
     CORRECT_COLOR = value
-
 
 def set_semi_color(value):
     global SEMI_COLOR
     SEMI_COLOR = value
 
-
 def set_wrong_color(value):
     global WRONG_COLOR
     WRONG_COLOR = value
-
 
 def set_font(value):
     global FONT, FONT_MED, FONT_SM, FONT_XSM
@@ -1309,116 +1315,58 @@ def set_font(value):
     FONT_SM = pygame.font.Font(value, 20)
     FONT_XSM = pygame.font.Font(value, 15)
 
+# MENU
 
 def background():
     SCREEN.fill(WHITE)
-
-ABOUT = ["", 
-         "Welcome to World-le: the S3N1OR SQU4D’s accessible version of the",
-         "popular New York Times’s word-guessing game. This game was developed",
-         "in the Fall of 2022 for our CSC 355: Human Computer Interactions final project.",
-         " ",
-         "Our Mission",
-         "At the start of our process, we noticed that a number of Wordle’s qualities",
-         "were inaccessible. First, while versions of Wordle exist in languages",
-         "other than English online, the New York Times’s game is only available in",
-         "English, thereby excluding non-English speakers. Second, the color scheme is",
-         "inaccessible to the color blind community; the high contrast feature is even",
-         "insufficient. Additionally, there is no way for members of the Blind community",
-         "to play. Finally, physical impairments deter those unable to use their hands",
-         "from playing the game.",
-         " ",
-         "With these shortcomings in mind, we set out to make Wordle accessible to the",
-         "visually and physically impaired communities, as well as non-English speakers.",
-         "We have done this by implementing a hands-free option for users to play using",
-         "only their voice, as well as a language option for players to choose which",
-         "language they would like play in. In addition to our accessibility features,", 
-         "we also added a color picker to allow users customize their gaming experience.",
-         "With these implementations, we hope that this version of our World-le can truly",
-         "be “Wordle for the world.”",
-         " ",
-         "Meet the S3N1OR SQU4D",
-         "Summer Martin is a ",
-         " ",
-         "Max Parrone is a ",
-         " ",
-         "Kyla Ramos is a ",
-         " ",
-         "Caroline Francesconi is a senior at The College of New Jersey majoring in",
-         "statistics and minoring in Women’s, Gender, and Sexuality Studies. She has", 
-         "really enjoyed learning about accessible design in HCI, and hopes that her", 
-         "team’s final project engages individuals with differing abilities in a", 
-         "positive way. Caroline’s favorite five-letter word is “pasta.”"]
-
-INSTRUCTIONS = ["How to Play Using a Keyboard:",
-                "- Using your computer’s keyboard or the one on the screen, guess a five letter word.",
-                "- Press the delete key to remove a letter.",
-                "- Press the enter key to submit a guess.",
-                "- Letters in the correct position will appear green, as show here:"] 
-
-INSTRUCTIONS2 = ["- Letters in the word, but in the incorrect position will appear yellow, as shown here:"]
-                
-INSTRUCTIONS3 = ["- Incorrect letters will appear gray, as shown above." ,
-                 "- You have six attempts to guess the secret word."]
-                
-AUDIO_INSTRUCTIONS = [" ",
-                    "How to Play Hands-Free:",
-                    "- To activate hands-free mode, say <command>.",
-                    "- To disable hand-free mode, say “disable.”",
-                    "- To spell a word, you can either stash five individual letters,", 
-                    "  or stash a five-letter word. For example, “stash s, t, a, r, t” and “stash start” both",
-                    "  stash the word, start.",
-                    "- To submit a stashed word, say “submit.”",
-                    "- To delete the most recently stashed letter, say “delete.”",
-                    "- To clear a stashed word, say “clear.”",
-                    "- To replace a letter, say “replace,” followed by the character you want to replace,",
-                    "  the word “with,” and the new character. For example, “replace a with e.”",
-                    "- To hear a particular guessed word, say “read guess” followed by the number of the",
-                    "  guessed word. For example, “read guess one” will read out your first guessed word.",
-                    "- To hear your semi-correct letters, say “semi.”",
-                    "- To hear your previous wrong guessed words, say “wrong.”",
-                    "- To play again after finishing a game, say “play again.”", "", ""]    
 
 def menu():
 
     screen_difference = 50
     padding = 10
 
-    # COLOR MENU PAGE
+    # MENU THEMES
+    mytheme = pygame_menu.themes.THEME_GREEN.copy()
+    mytheme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
+    mytheme.title_font = "assets/FreeSans.otf"
+    mytheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
+    mytheme.title_offset = (WIDTH/2 - 155, padding * 8)
+    mytheme.title_font_color = BLACK
+    mytheme.title_close_button_background_color = BLACK
+    
+    mytheme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
+    mytheme.widget_font_color = BLACK
+    mytheme.widget_font = "assets/FreeSans.otf"
+    mytheme.widget_padding = padding
+    mytheme.widget_margin = (0, 3)
 
     color_theme = pygame_menu.themes.THEME_GREEN.copy()
     color_theme.background_color = WHITE
+    color_theme.title_font_color = WHITE
     color_theme.widget_font_color = BLACK
     color_theme.widget_selection_effect = pygame_menu.widgets.NoneSelection()
-    color_theme.title_font_color = WHITE
-    
+
+    about_theme = color_theme.copy()
+    about_theme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
+    about_theme.title_font = "assets/FreeSans.otf"
+
+    inst_theme = about_theme
+
+    # MENUS
+
+    menu = pygame_menu.Menu(
+        height=HEIGHT - screen_difference,
+        theme=mytheme,
+        title='WORLD-LE',
+        width=WIDTH - screen_difference
+    )
+
     color_menu = pygame_menu.Menu(
         height=HEIGHT - screen_difference,
         theme=color_theme,
         title='Change the Game Colors',
         width=WIDTH - screen_difference
     )
-    
-    color_instructions = ["On this screen you can input colors using their hexidecimal code.", 
-    "Don't worry if you're not sure how to do this, you can also change the colors from",  
-    "the main game screem by clicking on the color key.", 
-    "From there you can pick from assorted pre-set colors and themes.","", "",""]
-
-    for m in color_instructions:
-        color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
-    
-    color_menu.add.color_input("Correct Letter Color  ", color_type= 'hex', onchange=set_correct_color, default=GREEN)
-    color_menu.add.color_input("Semi Correct Letter Color  ", color_type= 'hex', onchange=set_semi_color, default=YELLOW)
-    color_menu.add.color_input("Wrong Letter Color  ", color_type='hex', onchange=set_wrong_color, default=GREY)
-    
-    space_holder = ["", "", "", ""]
-    for m in space_holder:
-        color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
-
-    # ABOUT MENU    
-    about_theme = color_theme.copy()
-    about_theme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
-    about_theme.title_font = "assets/FreeSans.otf"
 
     about_menu = pygame_menu.Menu(
         height=HEIGHT - screen_difference,
@@ -1427,19 +1375,43 @@ def menu():
         width=WIDTH - screen_difference
     )
 
-    for m in ABOUT:
-        about_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
-
-
-    # INSTRUCTIONS MENU
-    inst_theme = about_theme
-
     inst_menu = pygame_menu.Menu(
         height=HEIGHT - screen_difference,
         theme=inst_theme,
         title='Game Instructions',
         width=WIDTH - screen_difference
     )
+
+    # COLOR MENU PAGE   
+
+    for m in COLOR_INSTRUCTIONS:
+        color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
+    
+    color_menu.add.color_input("Correct Letter Color  ", color_type= 'hex', onchange=set_correct_color, default=GREEN)
+    color_menu.add.color_input("Semi Correct Letter Color  ", color_type= 'hex', onchange=set_semi_color, default=YELLOW)
+    color_menu.add.color_input("Wrong Letter Color  ", color_type='hex', onchange=set_wrong_color, default=GREY)
+    
+    for m in SPACES:
+        color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
+
+    color_menu.add.button("Back", pygame_menu.events.BACK)
+
+    for m in SPACES:
+        color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
+
+    # ABOUT MENU PAGE
+    for m in ABOUT:
+        about_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
+
+    for m in SPACES:
+        about_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
+    
+    about_menu.add.button("Back", pygame_menu.events.BACK)
+
+    for m in SPACES:
+        about_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
+
+    # INSTRUCTIONS MENU PAGE
 
     for m in INSTRUCTIONS:
         inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
@@ -1458,30 +1430,16 @@ def menu():
 
     for m in AUDIO_INSTRUCTIONS:
         inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-        
-    # MAIN MENU PAGE
-
-    mytheme = pygame_menu.themes.THEME_GREEN.copy()
-    mytheme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
-    mytheme.title_font = "assets/FreeSans.otf"
-    mytheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
-    mytheme.title_offset = (WIDTH/2 - 155, padding * 8)
-    mytheme.title_font_color = BLACK
-    mytheme.title_close_button_background_color = BLACK
     
-    mytheme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
-    mytheme.widget_font_color = BLACK
-    mytheme.widget_font = "assets/FreeSans.otf"
-    mytheme.widget_padding = padding
-    mytheme.widget_margin = (0, 3)
+    for m in SPACES:
+        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
+    
+    inst_menu.add.button("Back", pygame_menu.events.BACK)
 
-    menu = pygame_menu.Menu(
-        height=HEIGHT - screen_difference,
-        theme=mytheme,
-        title='WORLD-LE',
-        width=WIDTH - screen_difference
-    )
+    for m in SPACES:
+        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
 
+    # MAIN MENU PAGE
     menu.add.button('Play', start_the_game)
     menu.add.selector('Language: ', [("English", "en"), ("Spanish", "sp"), ("German", "ger"),
                                      ("French", "fr"), ("Kid Friendly", "kid")], onchange=set_language, default=0)
@@ -1493,11 +1451,9 @@ def menu():
     if not start_game:
         menu.mainloop(SCREEN, background)
 
-
 def main():
     # mixer.music.play(-1)
     menu()
-
 
 if __name__ == "__main__":
     main()
