@@ -143,7 +143,7 @@ game_result = ""
 
 ####### FUNCTIONS #######
 
-# GAME BOARD
+# GAME BOARD #      
 
 # Draws the game board gird on the screen
 def draw():
@@ -243,6 +243,7 @@ def draw_color_squrs() :
 
     pygame.display.update()
 
+# draws the color menu and controls the menu functionality, returns selected color
 def draw_color_screen(current):
     value = current
     done = 0
@@ -1312,7 +1313,8 @@ def set_font(value):
 def background():
     SCREEN.fill(WHITE)
 
-ABOUT = ["Welcome to World-le: the S3N1OR SQU4D’s accessible version of the",
+ABOUT = ["", 
+         "Welcome to World-le: the S3N1OR SQU4D’s accessible version of the",
          "popular New York Times’s word-guessing game. This game was developed",
          "in the Fall of 2022 for our CSC 355: Human Computer Interactions final project.",
          " ",
@@ -1375,12 +1377,89 @@ AUDIO_INSTRUCTIONS = [" ",
                     "  guessed word. For example, “read guess one” will read out your first guessed word.",
                     "- To hear your semi-correct letters, say “semi.”",
                     "- To hear your previous wrong guessed words, say “wrong.”",
-                    "- To play again after finishing a game, say “play again.”"]
+                    "- To play again after finishing a game, say “play again.”", "", ""]    
 
 def menu():
 
-    screen_difference = 100
+    screen_difference = 50
     padding = 10
+
+    # COLOR MENU PAGE
+
+    color_theme = pygame_menu.themes.THEME_GREEN.copy()
+    color_theme.background_color = WHITE
+    color_theme.widget_font_color = BLACK
+    color_theme.widget_selection_effect = pygame_menu.widgets.NoneSelection()
+    color_theme.title_font_color = WHITE
+    
+    color_menu = pygame_menu.Menu(
+        height=HEIGHT - screen_difference,
+        theme=color_theme,
+        title='Change the Game Colors',
+        width=WIDTH - screen_difference
+    )
+    
+    color_instructions = ["On this screen you can input colors using their hexidecimal code.", 
+    "Don't worry if you're not sure how to do this, you can also change the colors from",  
+    "the main game screem by clicking on the color key.", 
+    "From there you can pick from assorted pre-set colors and themes.","", "",""]
+
+    for m in color_instructions:
+        color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
+    
+    color_menu.add.color_input("Correct Letter Color  ", color_type= 'hex', onchange=set_correct_color, default=GREEN)
+    color_menu.add.color_input("Semi Correct Letter Color  ", color_type= 'hex', onchange=set_semi_color, default=YELLOW)
+    color_menu.add.color_input("Wrong Letter Color  ", color_type='hex', onchange=set_wrong_color, default=GREY)
+    
+    space_holder = ["", "", "", ""]
+    for m in space_holder:
+        color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
+
+    # ABOUT MENU    
+    about_theme = color_theme.copy()
+    about_theme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
+    about_theme.title_font = "assets/FreeSans.otf"
+
+    about_menu = pygame_menu.Menu(
+        height=HEIGHT - screen_difference,
+        theme=about_theme,
+        title='About',
+        width=WIDTH - screen_difference
+    )
+
+    for m in ABOUT:
+        about_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
+
+
+    # INSTRUCTIONS MENU
+    inst_theme = about_theme
+
+    inst_menu = pygame_menu.Menu(
+        height=HEIGHT - screen_difference,
+        theme=inst_theme,
+        title='Game Instructions',
+        width=WIDTH - screen_difference
+    )
+
+    for m in INSTRUCTIONS:
+        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
+
+    image_path_correct = pygame_menu.baseimage.BaseImage("assets/correct.jpg")
+    inst_menu.add.image(image_path_correct, align=pygame_menu.locals.ALIGN_LEFT)
+
+    for m in INSTRUCTIONS2:
+        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
+
+    image_path_semicorrect = pygame_menu.baseimage.BaseImage("assets/semicorrect.jpg")
+    inst_menu.add.image(image_path_semicorrect, align=pygame_menu.locals.ALIGN_LEFT)
+
+    for m in INSTRUCTIONS3:
+        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
+
+    for m in AUDIO_INSTRUCTIONS:
+        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
+        
+    # MAIN MENU PAGE
 
     mytheme = pygame_menu.themes.THEME_GREEN.copy()
     mytheme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
@@ -1395,68 +1474,6 @@ def menu():
     mytheme.widget_font = "assets/FreeSans.otf"
     mytheme.widget_padding = padding
     mytheme.widget_margin = (0, 3)
-    
-    about_theme = pygame_menu.themes.THEME_GREEN.copy()
-    about_theme.title_close_button_background_color = BLACK
-    about_theme.title_offset = (padding * 2, padding)
-    about_theme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
-    about_theme.title_font = "assets/FreeSans.otf"
-    about_theme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
-    about_theme.title_font_color = BLACK
-    about_theme.title_close_button_background_color = BLACK
-    about_theme.widget_font_color = BLACK
-
-    inst_theme = about_theme
-
-    about_menu = pygame_menu.Menu(
-        height=HEIGHT - screen_difference,
-        theme=about_theme,
-        title='About',
-        width=WIDTH - screen_difference
-    )
-
-    for m in ABOUT:
-        about_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
-        about_menu.add.vertical_margin(padding)
-        about_menu.add.horizontal_margin(padding)
-        about_menu.widget_font_color = BLACK
-
-    inst_menu = pygame_menu.Menu(
-        height=HEIGHT - screen_difference,
-        theme=inst_theme,
-        title='Instructions',
-        width=WIDTH - screen_difference
-    )
-
-    for m in INSTRUCTIONS:
-        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-        inst_menu.add.vertical_margin(padding)
-        inst_menu.add.horizontal_margin(padding)
-        inst_menu.widget_font_color = BLACK
-
-    image_path_correct = pygame_menu.baseimage.BaseImage("assets/correct.jpg")
-    inst_menu.add.image(image_path_correct, align=pygame_menu.locals.ALIGN_LEFT)
-
-    for m in INSTRUCTIONS2:
-        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-        inst_menu.add.vertical_margin(padding)
-        inst_menu.add.horizontal_margin(padding)
-        inst_menu.widget_font_color = BLACK
-
-    image_path_semicorrect = pygame_menu.baseimage.BaseImage("assets/semicorrect.jpg")
-    inst_menu.add.image(image_path_semicorrect, align=pygame_menu.locals.ALIGN_LEFT)
-
-    for m in INSTRUCTIONS3:
-        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-        inst_menu.add.vertical_margin(padding)
-        inst_menu.add.horizontal_margin(padding)
-        inst_menu.widget_font_color = BLACK
-
-    for m in AUDIO_INSTRUCTIONS:
-        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-        inst_menu.add.vertical_margin(padding)
-        inst_menu.add.horizontal_margin(padding)
-        inst_menu.widget_font_color = BLACK
 
     menu = pygame_menu.Menu(
         height=HEIGHT - screen_difference,
@@ -1469,10 +1486,9 @@ def menu():
     menu.add.selector('Language: ', [("English", "en"), ("Spanish", "sp"), ("German", "ger"),
                                      ("French", "fr"), ("Kid Friendly", "kid")], onchange=set_language, default=0)
     menu.add.button('Instructions', inst_menu)
+    menu.add.button('Set Colors', color_menu)
     menu.add.button('About', about_menu)
     menu.add.button('Quit', pygame_menu.events.EXIT)
-    
-    about_menu.add.button('Quit', pygame_menu.events.EXIT)
 
     if not start_game:
         menu.mainloop(SCREEN, background)
