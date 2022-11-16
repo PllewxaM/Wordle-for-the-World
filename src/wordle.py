@@ -137,7 +137,6 @@ current_guess_string = ""
 
 # change this to adjust x coordinate of letter position
 current_letter_bg_x = WIDTH/3.25
-current_letter_bg_y = 70
 
 game_result = ""
 
@@ -146,34 +145,37 @@ game_result = ""
 
 # GAME BOARD
 
+# Draws the game board gird on the screen
 def draw():
-    sqr_size = 60
     for col in range(0, 5):
         for row in range(0, 6):
             # change + values to adjust board positioning
-            pygame.draw.rect(SCREEN, BLACK, [col * LETTER_X_SPACING + current_letter_bg_x,
-                                             row * LETTER_Y_SPACING + current_letter_bg_y, sqr_size, sqr_size], 1, 1)
+            pygame.draw.rect(SCREEN, BLACK, [col * LETTER_X_SPACING + WIDTH/3.25,
+                                             row * LETTER_Y_SPACING + 70, 60, 60], 1, 1)
 
-
+# draws the color key to show the user what colors are selected and what they mean
 def draw_color_key():
+    # function variables
     key_width, key_height = 155, 225
     block_x, block_y = WIDTH - 170, 70
-    pygame.draw.rect(SCREEN, BLACK, [block_x, block_y, key_width, key_height], 1, 5)
-    color_text = FONT_SM.render("Color Key", True, BLACK)
-    color_rect = color_text.get_rect(center=(WIDTH - 185/2, 95))
-    SCREEN.blit(color_text, color_rect)
-
-    color_x = WIDTH - 155
-    color_y = 130
-    size = 30
-    shape = 100
+    title_x, title_y = WIDTH - 185/2, 95
+    color_x, color_y = WIDTH - 155, 130
+    size, shape, round_edge = 30, 100, 5
     text_x = WIDTH - 70
 
+    # Draws the color key outline and title of area
+    pygame.draw.rect(SCREEN, BLACK, [block_x, block_y, key_width, key_height], 1, round_edge)
+    color_text = FONT_SM.render("Color Key", True, BLACK)
+    color_rect = color_text.get_rect(center=(title_x, title_y))
+    SCREEN.blit(color_text, color_rect)
+
+    # draws the correct color circle and lable of color
     pygame.draw.rect(SCREEN, CORRECT_COLOR, [color_x, color_y, size, size], shape, shape)
     correct_text = FONT_XSM.render("CORRECT", True, BLACK)
     correct_rect = correct_text.get_rect(center=(text_x, color_y + 15))
     SCREEN.blit(correct_text, correct_rect)
 
+    # draws the semi correct color circle and lable of color
     pygame.draw.rect(SCREEN, SEMI_COLOR, [color_x, color_y + 50, size, size], shape, shape)
     semi_text = FONT_XSM.render("SEMI", True, BLACK)
     semi_rect = semi_text.get_rect(center=(text_x, color_y + 55))
@@ -182,6 +184,7 @@ def draw_color_key():
     semi_rect = semi_text.get_rect(center=(text_x, color_y + 75))
     SCREEN.blit(semi_text, semi_rect)
 
+    # draws the wrong color circle and lable of color
     pygame.draw.rect(SCREEN, WRONG_COLOR, [color_x, color_y + 105, size, size], shape, shape)
     wrong_text = FONT_XSM.render("WRONG", True, BLACK)
     wrong_rect = wrong_text.get_rect(center=(text_x, color_y + 120))
@@ -189,26 +192,34 @@ def draw_color_key():
 
     pygame.display.update()
 
-
+# draws the navagation bar at the top of the screen and the contents on the bar
 def draw_nav_bar():
-    pygame.draw.rect(SCREEN, LT_GREY, [0, 0, WIDTH, 50], 100)
-    pygame.draw.rect(SCREEN, BLACK, [10, 10, 30, 30], 100)
-    pygame.draw.rect(SCREEN, RED, [WIDTH - 40, 10, 30, 30], 100)
+    size, fill = 30, 100
+    
+    # actual nav bar
+    pygame.draw.rect(SCREEN, LT_GREY, [0, 0, WIDTH, 50], fill)
+    # menu placeholder - change to something else
+    pygame.draw.rect(SCREEN, BLACK, [10, 10, size, size], fill)
+    # font selector placeholder
+    pygame.draw.rect(SCREEN, RED, [WIDTH - 40, 10, size, size], fill)
+    # Draws title of the application
     header_text = FONT.render("WORLDLE", True, WHITE)
     header_rect = header_text.get_rect(center=(WIDTH/2, 25))
     SCREEN.blit(header_text, header_rect)
 
-
+# draws the font menu on the screen when the font change icon is selected
 def draw_font_screen() :
-
     value = ""
     mini_width = WIDTH * 0.6
     mini_height = HEIGHT * 0.8
+    fill_val, round_val = 300, 4
 
+    # draw background rectangle
     pygame.draw.rect(SCREEN, GREY, ((WIDTH - mini_width)/2, 
-                    (HEIGHT - mini_height)/2, mini_width, mini_height), 100, 4)
+                    (HEIGHT - mini_height)/2, mini_width, mini_height), fill_val, round_val)
+    # draw front rectangle
     pygame.draw.rect(SCREEN, WHITE, ((WIDTH - mini_width)/2 + 3, 
-                    (HEIGHT - mini_height)/2 + 3, mini_width - 6, mini_height - 6), 300, 4)
+                    (HEIGHT - mini_height)/2 + 3, mini_width - 6, mini_height - 6), fill_val, round_val)
 
     pygame.display.update()
 
@@ -217,82 +228,145 @@ def draw_font_screen() :
     
     return("assets/GFSDidotBold.otf")
 
+# draw the color squares on the color menu
+def draw_color_squrs() :
+    size, fill, round = 75, 100, 4
+    c_x, c_y = ((WIDTH - WIDTH * 0.6)/2 + 70), (HEIGHT - HEIGHT * 0.8)/2 + 125
+    shift_amount = 100
 
-def draw_color_screen():
-    value = ""
-    mini_width = WIDTH * 0.6
-    mini_height = HEIGHT * 0.8
-
-    # need to add title to the mini menu
-    pygame.draw.rect(SCREEN, GREY, ((WIDTH - mini_width)/2, (HEIGHT - mini_height)/2, \
-                     mini_width, mini_height), 100, 4)
-    pygame.draw.rect(SCREEN, WHITE, ((WIDTH - mini_width)/2 + 3, (HEIGHT - mini_height)/2 + 3, \
-                     mini_width - 6, mini_height - 6), 300, 4)
-    
-    # draw the color squares
-    c_x, c_y = ((WIDTH - mini_width)/2 + 70), (HEIGHT - mini_height)/2 + 125
     for i in range(4):
         for color in COLORS[i] :
-            pygame.draw.rect(SCREEN, color, (c_x, c_y, 75, 75), 100, 4)
-            c_x += 100
-        c_x = ((WIDTH - mini_width)/2 + 70)
-        c_y += 100
+            pygame.draw.rect(SCREEN, color, (c_x, c_y, size, size), fill, round)
+            c_x += shift_amount
+        c_x = ((WIDTH - WIDTH * 0.6)/2 + 70)
+        c_y += shift_amount
 
     pygame.display.update()
 
-    color1 = pygame.Rect((WIDTH - mini_width)/2 + 70, (HEIGHT - mini_height)/2 + 100, 75, 75)
-    color2 = pygame.Rect((WIDTH - mini_width)/2 + 170, (HEIGHT - mini_height)/2 + 100, 75, 75)
-    color3 = pygame.Rect((WIDTH - mini_width)/2 + 270, (HEIGHT - mini_height)/2 + 100, 75, 75)
-    color4 = pygame.Rect((WIDTH - mini_width)/2 + 370, (HEIGHT - mini_height)/2 + 100, 75, 75)
-    color5 = pygame.Rect((WIDTH - mini_width)/2 + 70, (HEIGHT - mini_height)/2 + 200, 75, 75)
-    color6 = pygame.Rect((WIDTH - mini_width)/2 + 170, (HEIGHT - mini_height)/2 + 200, 75, 75)
-    color7 = pygame.Rect((WIDTH - mini_width)/2 + 270, (HEIGHT - mini_height)/2 + 200, 75, 75)
-    color8 = pygame.Rect((WIDTH - mini_width)/2 + 370, (HEIGHT - mini_height)/2 + 200, 75, 75)
-    color9 = pygame.Rect((WIDTH - mini_width)/2 + 70, (HEIGHT - mini_height)/2 + 300, 75, 75)
-    color10 = pygame.Rect((WIDTH - mini_width)/2 + 170, (HEIGHT - mini_height)/2 + 300, 75, 75)
-    color11 = pygame.Rect((WIDTH - mini_width)/2 + 270, (HEIGHT - mini_height)/2 + 300, 75, 75)
-    color12 = pygame.Rect((WIDTH - mini_width)/2 + 370, (HEIGHT - mini_height)/2 + 300, 75, 75)
-    color13 = pygame.Rect((WIDTH - mini_width)/2 + 70, (HEIGHT - mini_height)/2 + 400, 75, 75)
-    color14 = pygame.Rect((WIDTH - mini_width)/2 + 170, (HEIGHT - mini_height)/2 + 400, 75, 75)
-    color15 = pygame.Rect((WIDTH - mini_width)/2 + 270, (HEIGHT - mini_height)/2 + 400, 75, 75)
-    color16 = pygame.Rect((WIDTH - mini_width)/2 + 370, (HEIGHT - mini_height)/2 + 400, 75, 75)
+def draw_color_screen(current):
+    value = current
+    done = 0
+    # width and height of the color menu
+    mini_width = WIDTH * 0.6
+    mini_height = HEIGHT * 0.8
+    round, fill = 4, 100
+    size = 75
 
-    while value == "":
+    # draw background screen
+    pygame.draw.rect(SCREEN, GREY, ((WIDTH - mini_width)/2, (HEIGHT - mini_height)/2, \
+        mini_width, mini_height), fill, round)
+    # draw front screen
+    pygame.draw.rect(SCREEN, WHITE, ((WIDTH - mini_width)/2 + 3, (HEIGHT - mini_height)/2 + 3, \
+        mini_width - 6, mini_height - 6), fill * 3, round)
+    # draw menu title
+    color_text = FONT.render("Change Color", True, BLACK)
+    color_rect = color_text.get_rect(center=(WIDTH/2, (HEIGHT - mini_height)/2 + 45))
+    SCREEN.blit(color_text, color_rect)
+    
+    # draw done button
+    pygame.draw.rect(SCREEN, LT_GREY, ((WIDTH - 200)/ 2, HEIGHT - 150, 200, 50), 25, round)
+    done_text = FONT.render("DONE", True, WHITE)
+    done_rect = done_text.get_rect(center=(WIDTH/ 2, HEIGHT - 125))
+    SCREEN.blit(done_text, done_rect)
+    
+    # draw the color squares
+    draw_color_squrs()
+    
+    # create areas for each of the color squares
+    x_loc_one, y_loc_one = (WIDTH - mini_width)/2 + 70, (HEIGHT - mini_height)/2 + 125
+    x_loc_two, y_loc_two = (WIDTH - mini_width)/2 + 170, (HEIGHT - mini_height)/2 + 225
+    x_loc_three, y_loc_three = (WIDTH - mini_width)/2 + 270, (HEIGHT - mini_height)/2 + 325
+    x_loc_four, y_loc_four = (WIDTH - mini_width)/2 + 370, (HEIGHT - mini_height)/2 + 425
+
+    color1 = pygame.Rect(x_loc_one, y_loc_one, size, size)
+    color2 = pygame.Rect(x_loc_two, y_loc_one, size, size)
+    color3 = pygame.Rect(x_loc_three, y_loc_one, size, size)
+    color4 = pygame.Rect(x_loc_four, y_loc_one, size, size)
+    color5 = pygame.Rect(x_loc_one, y_loc_two, size, size)
+    color6 = pygame.Rect(x_loc_two, y_loc_two, size, size)
+    color7 = pygame.Rect(x_loc_three, y_loc_two, size, size)
+    color8 = pygame.Rect(x_loc_four, y_loc_two, size, size)
+    color9 = pygame.Rect(x_loc_one, y_loc_three, size, size)
+    color10 = pygame.Rect(x_loc_two, y_loc_three, size, size)
+    color11 = pygame.Rect(x_loc_three, y_loc_three, size, size)
+    color12 = pygame.Rect(x_loc_four, y_loc_three, size, size)
+    color13 = pygame.Rect(x_loc_one, y_loc_four, size, size)
+    color14 = pygame.Rect(x_loc_two, y_loc_four, size, size)
+    color15 = pygame.Rect(x_loc_three, y_loc_four, size, size)
+    color16 = pygame.Rect(x_loc_four, y_loc_four, size, size)
+    done_area = pygame.Rect((WIDTH - 200)/ 2, HEIGHT - 150, 200, 50)
+
+    while not done:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         if color1.collidepoint(event.pos):
                             value = COLORS[0][0]
+                            draw_color_squrs()
+                            pygame.draw.rect(SCREEN, BLACK, color1, 3, round)
                         if color2.collidepoint(event.pos):
                             value = COLORS[0][1]
+                            draw_color_squrs()
+                            pygame.draw.rect(SCREEN, BLACK, color2, 3, round)
                         if color3.collidepoint(event.pos):
                             value = COLORS[0][2]
+                            draw_color_squrs()
+                            pygame.draw.rect(SCREEN, BLACK, color3, 3, round)
                         if color4.collidepoint(event.pos):
                             value = COLORS[0][3]
+                            draw_color_squrs()
+                            pygame.draw.rect(SCREEN, BLACK, color4, 3, round)
                         if color5.collidepoint(event.pos):
                             value = COLORS[1][0]
+                            draw_color_squrs()
+                            pygame.draw.rect(SCREEN, BLACK, color5, 3, round)
                         if color6.collidepoint(event.pos):
                             value = COLORS[1][1]
+                            draw_color_squrs()
+                            pygame.draw.rect(SCREEN, BLACK, color6, 3, round)
                         if color7.collidepoint(event.pos):
                             value = COLORS[1][2]
+                            draw_color_squrs()
+                            pygame.draw.rect(SCREEN, BLACK, color7, 3, round)
                         if color8.collidepoint(event.pos):
                             value = COLORS[1][3]
+                            draw_color_squrs()
+                            pygame.draw.rect(SCREEN, BLACK, color8, 3, round)
                         if color9.collidepoint(event.pos):
                             value = COLORS[2][0]
+                            draw_color_squrs()
+                            pygame.draw.rect(SCREEN, BLACK, color9, 3, round)
                         if color10.collidepoint(event.pos):
                             value = COLORS[2][1]
+                            draw_color_squrs()
+                            pygame.draw.rect(SCREEN, BLACK, color10, 3, round)
                         if color11.collidepoint(event.pos):
                             value = COLORS[2][2]
+                            draw_color_squrs()
+                            pygame.draw.rect(SCREEN, BLACK, color11, 3, round)
                         if color12.collidepoint(event.pos):
                             value = COLORS[2][3]
+                            draw_color_squrs()
+                            pygame.draw.rect(SCREEN, BLACK, color12, 3, round)
                         if color13.collidepoint(event.pos):
                             value = COLORS[3][0]
+                            draw_color_squrs()
+                            pygame.draw.rect(SCREEN, BLACK, color13, 3, round)
                         if color14.collidepoint(event.pos):
                             value = COLORS[3][1]
+                            draw_color_squrs()
+                            pygame.draw.rect(SCREEN, BLACK, color14, 3, round)
                         if color15.collidepoint(event.pos):
                             value = COLORS[3][2]
+                            draw_color_squrs()
+                            pygame.draw.rect(SCREEN, BLACK, color15, 3, round)
                         if color16.collidepoint(event.pos):
                             value = COLORS[3][3]
+                            draw_color_squrs()
+                            pygame.draw.rect(SCREEN, BLACK, color16, 3, round)
+                        if done_area.collidepoint(event.pos):
+                            done = 1
+                        pygame.display.update()
     
     return(value)
 
@@ -1128,15 +1202,15 @@ def start_the_game() -> None:
                             set_font(chosen_font)
                             reset()
                         if correct_color_area.collidepoint(event.pos):
-                            chosen_color = draw_color_screen()
+                            chosen_color = draw_color_screen(CORRECT_COLOR)
                             set_correct_color(chosen_color)
                             reset()
                         if semi_color_area.collidepoint(event.pos):
-                            chosen_color = draw_color_screen()
+                            chosen_color = draw_color_screen(SEMI_COLOR)
                             set_semi_color(chosen_color)
                             reset()
                         if worng_color_area.collidepoint(event.pos):
-                            chosen_color = draw_color_screen()
+                            chosen_color = draw_color_screen(WRONG_COLOR)
                             set_wrong_color(chosen_color)
                             reset()
 
