@@ -93,6 +93,7 @@ current_letter_bg_x = WIDTH / 3.25
 
 game_result = ""
 
+
 """FUNCTIONS"""
 
 
@@ -125,13 +126,13 @@ def draw_color_key():
     SCREEN.blit(color_text, color_rect)
 
     # draws the correct color circle and lable of color
-    pygame.draw.rect(SCREEN, correct_color, [color_x, color_y, size, size], shape, shape)
+    pygame.draw.rect(SCREEN, correct_color, [color_x, color_y, size, size], 0, shape)
     correct_text = my_font_xsm.render("CORRECT", True, sub_color)
     correct_rect = correct_text.get_rect(center=(text_x, color_y + 15))
     SCREEN.blit(correct_text, correct_rect)
 
     # draws the semi correct color circle and lable of color
-    pygame.draw.rect(SCREEN, semi_color, [color_x, color_y + 50, size, size], shape, shape)
+    pygame.draw.rect(SCREEN, semi_color, [color_x, color_y + 50, size, size], 0, shape)
     semi_text = my_font_xsm.render("SEMI", True, sub_color)
     semi_rect = semi_text.get_rect(center=(text_x, color_y + 55))
     SCREEN.blit(semi_text, semi_rect)
@@ -140,7 +141,7 @@ def draw_color_key():
     SCREEN.blit(semi_text, semi_rect)
 
     # draws the wrong color circle and lable of color
-    pygame.draw.rect(SCREEN, wrong_color, [color_x, color_y + 105, size, size], shape, shape)
+    pygame.draw.rect(SCREEN, wrong_color, [color_x, color_y + 105, size, size], 0, shape)
     wrong_text = my_font_xsm.render("WRONG", True, sub_color)
     wrong_rect = wrong_text.get_rect(center=(text_x, color_y + 120))
     SCREEN.blit(wrong_text, wrong_rect)
@@ -150,12 +151,12 @@ def draw_color_key():
 
 # draws the navagation bar at the top of the screen and the contents on the bar
 def draw_nav_bar():
-    size, fill = 30, 100
+    size = 30
 
     # actual nav bar
-    pygame.draw.rect(SCREEN, sub_color2, [0, 0, WIDTH, 50], fill)
+    pygame.draw.rect(SCREEN, sub_color2, [0, 0, WIDTH, 50], 0)
     # menu placeholder - change to something else
-    pygame.draw.rect(SCREEN, BLACK, [10, 10, size, size], fill)
+    pygame.draw.rect(SCREEN, BLACK, [10, 10, size, size], 0)
 
     # font selector icon
     font_image = pygame.image.load('assets/font-icon.png')
@@ -178,27 +179,25 @@ def draw_nav_bar():
     rec3.center = (WIDTH - 140), 25
     SCREEN.blit(dark_image, rec3)
 
-    # pygame.draw.rect(SCREEN, 'assets/font-icon.png', [WIDTH - 40, 10, size, size], fill)
     # Draws title of the application
     header_text = my_font.render("WORLDLE", True, main_color)
     header_rect = header_text.get_rect(center=(WIDTH / 2, 25))
     SCREEN.blit(header_text, header_rect)
 
 
-# draws the font menu on the screen when the font change icon is selected
+# draws the font menu on the screen when the font change icon is selected - WORK IN PROGRESS
 def draw_font_screen():
     value = ""
     mini_width = WIDTH * 0.6
     mini_height = HEIGHT * 0.8
-    fill_val, round_val = 300, 4
+    round = 4
 
     # draw background rectangle
     pygame.draw.rect(SCREEN, GREY, ((WIDTH - mini_width) / 2,
-                                    (HEIGHT - mini_height) / 2, mini_width, mini_height), fill_val, round_val)
+                                    (HEIGHT - mini_height) / 2, mini_width, mini_height), 0, round)
     # draw front rectangle
     pygame.draw.rect(SCREEN, main_color, ((WIDTH - mini_width) / 2 + 3,
-                                          (HEIGHT - mini_height) / 2 + 3, mini_width - 6, mini_height - 6), fill_val,
-                     round_val)
+                                          (HEIGHT - mini_height) / 2 + 3, mini_width - 6, mini_height - 6), 0, round)
 
     pygame.display.update()
 
@@ -210,14 +209,14 @@ def draw_font_screen():
 
 # draw the color squares on the color menu
 def draw_color_squrs():
-    size, fill, round = 75, 100, 4
+    size, round = 75, 4
     c_x = ((WIDTH - WIDTH * 0.6) / 2 + 70)
     c_y = (HEIGHT - HEIGHT * 0.8) / 2 + 125
     shift_amount = 100
 
     for i in range(4):
         for color in COLORS[i]:
-            pygame.draw.rect(SCREEN, color, (c_x, c_y, size, size), fill, round)
+            pygame.draw.rect(SCREEN, color, (c_x, c_y, size, size), 0, round)
             c_x += shift_amount
         c_x = ((WIDTH - WIDTH * 0.6) / 2 + 70)
         c_y += shift_amount
@@ -229,7 +228,7 @@ def draw_color_squrs():
 def draw_color_screen(current):
     value = current
     done = 0
-    round, fill = 4, 100
+    round = 4
     size = 75
     # width and height of the color menu
     mini_width = WIDTH * 0.6
@@ -237,17 +236,17 @@ def draw_color_screen(current):
 
     # draw background screen
     pygame.draw.rect(SCREEN, GREY, ((WIDTH - mini_width) / 2, (HEIGHT - mini_height) / 2,
-                                    mini_width, mini_height), fill, round)
+                                    mini_width, mini_height), 0, round)
     # draw front screen
     pygame.draw.rect(SCREEN, main_color, ((WIDTH - mini_width) / 2 + 3, (HEIGHT - mini_height) / 2 + 3,
-                                          mini_width - 6, mini_height - 6), fill * 3, round)
+                                          mini_width - 6, mini_height - 6), 0, round)
     # draw menu title
     color_text = my_font.render("Change Color", True, sub_color)
     color_rect = color_text.get_rect(center=(WIDTH / 2, (HEIGHT - mini_height) / 2 + 45))
     SCREEN.blit(color_text, color_rect)
 
     # draw done button
-    pygame.draw.rect(SCREEN, sub_color2, ((WIDTH - 200) / 2, HEIGHT - 150, 200, 50), 25, round)
+    pygame.draw.rect(SCREEN, sub_color2, ((WIDTH - 200) / 2, HEIGHT - 150, 200, 50), 0, round)
     done_text = my_font.render("DONE", True, WHITE)
     done_rect = done_text.get_rect(center=(WIDTH / 2, HEIGHT - 125))
     SCREEN.blit(done_text, done_rect)
@@ -356,18 +355,18 @@ def draw_color_screen(current):
 
 # draw screen where you select which color to change
 def draw_select_color():
-    round, fill = 4, 100
+    round = 4
     done = 0
     # width and height of the color menu
-    mini_width = WIDTH * 0.7
+    mini_width = WIDTH * 0.6
     mini_height = HEIGHT * 0.85
 
     # draw background screen
     pygame.draw.rect(SCREEN, GREY, ((WIDTH - mini_width) / 2, (HEIGHT - mini_height) / 2,
-                                    mini_width, mini_height), fill, round)
+                                    mini_width, mini_height), 0, round)
     # draw front screen
     pygame.draw.rect(SCREEN, main_color, ((WIDTH - mini_width) / 2 + 3, (HEIGHT - mini_height) / 2 + 3,
-                                          mini_width - 6, mini_height - 6), fill * 3, round)
+                                          mini_width - 6, mini_height - 6), 0, round)
     # draw menu title
     color_text = my_font.render("SELECT COLOR", True, sub_color)
     color_rect = color_text.get_rect(center=(WIDTH / 2, (HEIGHT - mini_height) / 2 + 45))
@@ -377,26 +376,31 @@ def draw_select_color():
     SCREEN.blit(color2_text, color2_rect)
 
     # draw correct select button
-    pygame.draw.rect(SCREEN, correct_color, PICK_ONE_AREA, 50, round)
-    c_text = my_font.render("CORRECT COLOR", True, BLACK)
-    c_rect = c_text.get_rect(center=(WIDTH / 2, HEIGHT - 500))
+    pygame.draw.rect(SCREEN, correct_color, PICK_ONE_AREA, 0, round)
+    c_text = my_font_med.render("Change Correct Color", True, BLACK)
+    c_rect = c_text.get_rect(center=(WIDTH / 2, HEIGHT - 510))
     SCREEN.blit(c_text, c_rect)
 
     # draw semi correct select button
-    pygame.draw.rect(SCREEN, semi_color, PICK_TWO_AREA, 50, round)
-    s_text = my_font.render("SEMI CORRECT COLOR", True, BLACK)
-    s_rect = s_text.get_rect(center=(WIDTH / 2, HEIGHT - 350))
+    pygame.draw.rect(SCREEN, semi_color, PICK_TWO_AREA, 0, round)
+    s_text = my_font_med.render("Change Semi Correct Color", True, BLACK)
+    s_rect = s_text.get_rect(center=(WIDTH / 2, HEIGHT - 410))
     SCREEN.blit(s_text, s_rect)
 
     # draw wrong select button
-    pygame.draw.rect(SCREEN, wrong_color, PICK_THREE_AREA, 50, round)
-    w_text = my_font.render("WRONG COLOR", True, BLACK)
-    w_rect = w_text.get_rect(center=(WIDTH / 2, HEIGHT - 200))
+    pygame.draw.rect(SCREEN, wrong_color, PICK_THREE_AREA, 0, round)
+    w_text = my_font_med.render("Change Wrong Color", True, BLACK)
+    w_rect = w_text.get_rect(center=(WIDTH / 2, HEIGHT - 310))
     SCREEN.blit(w_text, w_rect)
 
+    pygame.draw.rect(SCREEN, HIGH_CONTRAST_2, PICK_FOUR_AREA, 0, round)
+    hc_text = my_font_med.render("Activate High Contrast Mode", True, BLACK)
+    hc_rect = hc_text.get_rect(center=(WIDTH / 2, HEIGHT - 185))
+    SCREEN.blit(hc_text, hc_rect)
+
     # draw cancel button
-    pygame.draw.rect(SCREEN, sub_color2, CANCEL_AREA, 25, round)
-    can_text = my_font_med.render("CANCEL", True, WHITE)
+    pygame.draw.rect(SCREEN, sub_color2, CANCEL_AREA, 0, round)
+    can_text = my_font_sm.render("CANCEL", True, WHITE)
     can_rect = can_text.get_rect(center=(WIDTH / 2, HEIGHT - 100))
     SCREEN.blit(can_text, can_rect)
 
@@ -420,6 +424,11 @@ def draw_select_color():
                         reset_screen()
                         chosen_color = draw_color_screen(wrong_color)
                         set_wrong_color(chosen_color)
+                        done = 1
+                    if PICK_FOUR_AREA.collidepoint(event.pos):
+                        set_correct_color(HIGH_CONTRAST_1)
+                        set_semi_color(HIGH_CONTRAST_2)
+                        set_wrong_color(HIGH_CONTRAST_3)
                         done = 1
                     if CANCEL_AREA.collidepoint(event.pos):
                         done = 1
@@ -472,7 +481,7 @@ class KeyButton:
 
     def draw(self):
         # Puts the key and its text on the screen at the desired position.
-        pygame.draw.rect(SCREEN, self.bg_color, self.rect, 100, 4)
+        pygame.draw.rect(SCREEN, self.bg_color, self.rect, 0, 4)
         self.text_surface = my_font.render(self.text, True, main_color)
         self.text_rect = self.text_surface.get_rect(center=(self.x + (self.width / 2), self.y + (self.height / 2)))
         SCREEN.blit(self.text_surface, self.text_rect)
@@ -491,7 +500,7 @@ class BigKeyButton:
         self.bg_color = sub_color2
 
     def draw(self):
-        pygame.draw.rect(SCREEN, self.bg_color, self.rect, 100, 4)
+        pygame.draw.rect(SCREEN, self.bg_color, self.rect, 0, 4)
         self.text_surface = my_font_med.render(self.text, True, main_color)
         self.text_rect = self.text_surface.get_rect(center=(self.x + (self.width / 2), self.y + (self.height / 2)))
         SCREEN.blit(self.text_surface, self.text_rect)
@@ -753,12 +762,15 @@ def say_and_confirm_by_char(guess, correct, language):
     for c in chars:
         say(c, language)
         time.sleep(0.025)
-        if c == correct[correct_index]:
-            playsound('sound_effects/correct_char_trimmed.mp3')
-        elif c in correct:
-            playsound('sound_effects/semi_correct_char_trimmed.wav')
-        else:
-            playsound('sound_effects/incorrect_char_trimmed.wav')
+        try:
+            if c == correct[correct_index]:
+                playsound('sound_effects/correct_char_trimmed.mp3')
+            elif c in correct:
+                playsound('sound_effects/semi_correct_char_trimmed.wav')
+            else:
+                playsound('sound_effects/incorrect_char_trimmed.wav')
+        except Exception as e:
+            print(str(e)+ "NOT WORKING :)")
         correct_index = correct_index + 1
 
 
@@ -766,21 +778,21 @@ def play_background_music():
     try:
         mixer.music.play(-1)
     except Exception as e:
-        print(e + "Playing background music only works on mac as of now")
+        print(str(e) + "Playing background music only works on mac as of now")
 
 
 def pause_background_music():
     try:
         mixer.music.pause()
     except Exception as e:
-        print(e + "cant pause what never started")
+        print(str(e) + "cant pause what never started")
 
 
 def set_background_music_volume(level):
     try:
         mixer.music.set_volume(level)
     except Exception as e:
-        print(e + "Volume controls only work if music is there")
+        print(str(e) + "Volume controls only work if music is there")
 
 
 # Prevents sound effect repeat at end of game (eog) through the use of a state variable,
@@ -790,11 +802,17 @@ def eog_sound(current_game_result):
     if eog_sound_allowed:
         if current_game_result == "W":
             pause_background_music()
-            playsound('sound_effects/correct_word_trimmed.mp3')
+            try:
+                playsound('sound_effects/correct_word_trimmed.mp3')
+            except Exception as e:
+                print(str(e) + "NOT WORKING :)")
             eog_sound_allowed = 0
         elif current_game_result == "L":
             pause_background_music()
-            playsound('sound_effects/no_more_guesses_trimmed.wav')
+            try:
+                playsound('sound_effects/no_more_guesses_trimmed.wav')
+            except Exception as e:
+                print(str(e) + "NOT WORKING :)")
             eog_sound_allowed = 0
 
 
@@ -1143,10 +1161,10 @@ def start_the_game() -> None:
             draw()
             if game_result == "L":
                 # NO need to comment sound anymore
-                eog_sound(game_result)
+                # eog_sound(game_result)
                 lose_play_again()
             if game_result == "W":
-                eog_sound(game_result)
+                # eog_sound(game_result)
                 correct_play_again()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -1432,16 +1450,17 @@ def menu():
     padding = 10
 
     # MENU THEMES
-    mytheme = pygame_menu.themes.THEME_GREEN.copy()
-    mytheme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
+    mytheme = pygame_menu.themes.THEME_DARK.copy()
+    # mytheme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
+    mytheme.background_color = GREY
     mytheme.title_font = "assets/FreeSans.otf"
     mytheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
-    mytheme.title_offset = (WIDTH / 2 - 155, padding * 8)
-    mytheme.title_font_color = BLACK
+    mytheme.title_offset = (WIDTH / 2 - 140, padding * 8)
+    mytheme.title_font_color = WHITE
     mytheme.title_close_button_background_color = BLACK
 
     mytheme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
-    mytheme.widget_font_color = BLACK
+    mytheme.widget_font_color = WHITE
     mytheme.widget_font = "assets/FreeSans.otf"
     mytheme.widget_padding = padding
     mytheme.widget_margin = (0, 3)
@@ -1453,7 +1472,8 @@ def menu():
     color_theme.widget_selection_effect = pygame_menu.widgets.NoneSelection()
 
     about_theme = color_theme.copy()
-    about_theme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
+    # about_theme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
+    about_theme.background_color = WHITE
     about_theme.title_font = "assets/FreeSans.otf"
 
     inst_theme = about_theme
@@ -1559,7 +1579,6 @@ def menu():
 
 
 def main():
-    # NO NEED TO COMMENT
     play_background_music()
     menu()
 
