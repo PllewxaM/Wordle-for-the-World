@@ -75,8 +75,8 @@ SPACES = [" ", " "]
 # Long sections of text used for instructing hands-free user
 STARTUP = "Welcome to wordle for the world, to activate the hands free version of the program, press " \
           "the space bar twice"
-ACTIVATED = "Audio interface activated, if you need help or a refresher on audio commands, say, " \
-            "tutorial. To disable audio mode say disable."
+ACTIVATED = "Audio interface activated, if you need help with playing the game, say: tutorial. " \
+            "To disable audio mode say disable."
 WORDLE_TUTORIAL = "Insert wordle tutorial here"
 HANDSFREE_TUTORIAL = "Insert handsfree tutorial here"
 STASH_TUTORIAL = "Insert stash tutorial/example here"
