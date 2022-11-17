@@ -9,16 +9,12 @@ import speech_recognition as sr
 import os
 from playsound import playsound
 import time
-
-# Import Word Files
 import words
 from words import *
 import words2
 from words2 import *
-
-# Import Message Files
-import messages
 from messages import *
+from constants import *
 
 # INITIALIZERS AND GLOBAL VARIABLES #
 
@@ -44,73 +40,30 @@ languages = ['en', 'es', 'fr']
 current_language = 0
 
 # select which file to get the word from based on user selection
-lang = "en"  # change this to get from user/ui
+lang = "en"
 
-CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+# default
+correct_word = WORDS[random.randint(0, len(WORDS) - 1)]
 
-# COLORS
-RED = "#d90000"
-REDORANGE = "#ff6100"
-ORANGE = "#ff8600"
-ORANGEYELLOW = "#ffc700"
-YELLOW = "#c9b458"
-YELLOWGREEN = "#a8d800"
-GREEN = "#6aaa64"
-GREENBLUE = "#00d9c5"
-BLUE = "#0085ff"
-LT_BLUE = "#91dcfa"
-BLUEPURPLE = "#623ced"
-PURPLE = "#9150f3"
-LT_PURPLE = "#b39dfc"
-PURPLEPINK = "#b912f4"
-PINK = "#fb00ff"
-REDPINK = "#ff0081"
-GREY = "#787c7e"
-LT_GREY = "#abadaf"
-WHITE = "#ffffff"
-BLACK = "#000000"
-
-COLORS = [[RED, REDORANGE, ORANGE, ORANGEYELLOW], 
-        [YELLOW, YELLOWGREEN, GREEN, GREENBLUE], 
-        [BLUE, LT_BLUE, BLUEPURPLE, PURPLE],
-        [LT_PURPLE, PURPLEPINK, PINK, REDPINK]]
-
-# DEFAULTS
-CORRECT_COLOR = GREEN
-SEMI_COLOR = YELLOW
-WRONG_COLOR = GREY
+# DEFAULT COLORS
+correct_color = GREEN
+semi_color = YELLOW
+wrong_color = GREY
 
 # FONT DEFAULTS
-FONT = pygame.font.Font("assets/FreeSans.otf", 40)
-FONT_MED = pygame.font.Font("assets/FreeSans.otf", 30)
-FONT_SM = pygame.font.Font("assets/FreeSans.otf", 20)
-FONT_XSM = pygame.font.Font("assets/FreeSans.otf", 15)
+my_font = pygame.font.Font("assets/FreeSans.otf", 40)
+my_font_med = pygame.font.Font("assets/FreeSans.otf", 30)
+my_font_sm = pygame.font.Font("assets/FreeSans.otf", 20)
+my_font_xsm = pygame.font.Font("assets/FreeSans.otf", 15)
 
 # SCREEN
-WIDTH, HEIGHT = 850, 750
-
-SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("World-le")
 pygame.display.set_icon(pygame.image.load("assets/Icon.png"))
 pygame.display.update()
 
 # KEYBOARD
-ALPHABET = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"]
 keys = []
 key_pressed = ''
-
-# GAME BOARD
-LETTER_X_SPACING = 65
-LETTER_Y_SPACING = 70
-LETTER_SIZE = 60
-
-BOARD = [[" ", " ", " ", " ", " "],
-         [" ", " ", " ", " ", " "],
-         [" ", " ", " ", " ", " "],
-         [" ", " ", " ", " ", " "],
-         [" ", " ", " ", " ", " "],
-         [" ", " ", " ", " ", " "]]
-
 
 # WORD/LETTER CONTROL
 guesses_count = 0
@@ -157,28 +110,28 @@ def draw_color_key():
 
     # Draws the color key outline and title of area
     pygame.draw.rect(SCREEN, BLACK, [block_x, block_y, key_width, key_height], 1, round_edge)
-    color_text = FONT_SM.render("Color Key", True, BLACK)
+    color_text = my_font_sm.render("Color Key", True, BLACK)
     color_rect = color_text.get_rect(center=(title_x, title_y))
     SCREEN.blit(color_text, color_rect)
 
     # draws the correct color circle and lable of color
-    pygame.draw.rect(SCREEN, CORRECT_COLOR, [color_x, color_y, size, size], shape, shape)
-    correct_text = FONT_XSM.render("CORRECT", True, BLACK)
+    pygame.draw.rect(SCREEN, correct_color, [color_x, color_y, size, size], shape, shape)
+    correct_text = my_font_xsm.render("CORRECT", True, BLACK)
     correct_rect = correct_text.get_rect(center=(text_x, color_y + 15))
     SCREEN.blit(correct_text, correct_rect)
 
     # draws the semi correct color circle and lable of color
-    pygame.draw.rect(SCREEN, SEMI_COLOR, [color_x, color_y + 50, size, size], shape, shape)
-    semi_text = FONT_XSM.render("SEMI", True, BLACK)
+    pygame.draw.rect(SCREEN, semi_color, [color_x, color_y + 50, size, size], shape, shape)
+    semi_text = my_font_xsm.render("SEMI", True, BLACK)
     semi_rect = semi_text.get_rect(center=(text_x, color_y + 55))
     SCREEN.blit(semi_text, semi_rect)
-    semi_text = FONT_XSM.render("CORRECT", True, BLACK)
+    semi_text = my_font_xsm.render("CORRECT", True, BLACK)
     semi_rect = semi_text.get_rect(center=(text_x, color_y + 75))
     SCREEN.blit(semi_text, semi_rect)
 
     # draws the wrong color circle and lable of color
-    pygame.draw.rect(SCREEN, WRONG_COLOR, [color_x, color_y + 105, size, size], shape, shape)
-    wrong_text = FONT_XSM.render("WRONG", True, BLACK)
+    pygame.draw.rect(SCREEN, wrong_color, [color_x, color_y + 105, size, size], shape, shape)
+    wrong_text = my_font_xsm.render("WRONG", True, BLACK)
     wrong_rect = wrong_text.get_rect(center=(text_x, color_y + 120))
     SCREEN.blit(wrong_text, wrong_rect)
 
@@ -195,7 +148,7 @@ def draw_nav_bar():
     # font selector placeholder
     pygame.draw.rect(SCREEN, RED, [WIDTH - 40, 10, size, size], fill)
     # Draws title of the application
-    header_text = FONT.render("WORLDLE", True, WHITE)
+    header_text = my_font.render("WORLDLE", True, WHITE)
     header_rect = header_text.get_rect(center=(WIDTH/2, 25))
     SCREEN.blit(header_text, header_rect)
 
@@ -254,13 +207,13 @@ def draw_color_screen(current):
     pygame.draw.rect(SCREEN, WHITE, ((WIDTH - mini_width)/2 + 3, (HEIGHT - mini_height)/2 + 3, \
         mini_width - 6, mini_height - 6), fill * 3, round)
     # draw menu title
-    color_text = FONT.render("Change Color", True, BLACK)
+    color_text = my_font.render("Change Color", True, BLACK)
     color_rect = color_text.get_rect(center=(WIDTH/2, (HEIGHT - mini_height)/2 + 45))
     SCREEN.blit(color_text, color_rect)
     
     # draw done button
     pygame.draw.rect(SCREEN, LT_GREY, ((WIDTH - 200)/ 2, HEIGHT - 150, 200, 50), 25, round)
-    done_text = FONT.render("DONE", True, WHITE)
+    done_text = my_font.render("DONE", True, WHITE)
     done_rect = done_text.get_rect(center=(WIDTH/ 2, HEIGHT - 125))
     SCREEN.blit(done_text, done_rect)
     
@@ -378,7 +331,7 @@ class Letter:
         self.bg_rect = (bg_position[0], bg_position[1], LETTER_SIZE, LETTER_SIZE)
         self.text = text
         self.text_position = (self.bg_x + 30, self.bg_y + 30)
-        self.text_surface = FONT.render(self.text, True, self.text_color)
+        self.text_surface = my_font.render(self.text, True, self.text_color)
         self.text_rect = self.text_surface.get_rect(center=self.text_position)
 
     def draw(self):
@@ -386,7 +339,7 @@ class Letter:
         pygame.draw.rect(SCREEN, self.bg_color, self.bg_rect)
         if self.bg_color == WHITE:
             pygame.draw.rect(SCREEN, GREY, self.bg_rect, 3)
-        self.text_surface = FONT.render(self.text, True, self.text_color)
+        self.text_surface = my_font.render(self.text, True, self.text_color)
         SCREEN.blit(self.text_surface, self.text_rect)
         pygame.display.update()
 
@@ -413,7 +366,7 @@ class KeyButton:
     def draw(self):
         # Puts the key and its text on the screen at the desired position.
         pygame.draw.rect(SCREEN, self.bg_color, self.rect, 100, 4)
-        self.text_surface = FONT.render(self.text, True, WHITE)
+        self.text_surface = my_font.render(self.text, True, WHITE)
         self.text_rect = self.text_surface.get_rect(center=(self.x + (self.width/2), self.y + (self.height/2)))
         SCREEN.blit(self.text_surface, self.text_rect)
 
@@ -431,7 +384,7 @@ class BigKeyButton:
 
     def draw(self):
         pygame.draw.rect(SCREEN, self.bg_color, self.rect, 100, 4)
-        self.text_surface = FONT_MED.render(self.text, True, WHITE)
+        self.text_surface = my_font_med.render(self.text, True, WHITE)
         self.text_rect = self.text_surface.get_rect(center=(self.x + (self.width/2), self.y + (self.height/2)))
         SCREEN.blit(self.text_surface, self.text_rect)
 
@@ -466,12 +419,10 @@ def add_semi(char):
     if char not in semi_correct_guesses:
         semi_correct_guesses.append(char)
 
-
 def add_incorrect(char):
     global incorrect_guesses
     if char not in incorrect_guesses:
         incorrect_guesses.append(char)
-
 
 def add_correct(char):
     global correct_guesses
@@ -486,23 +437,23 @@ def check_guess(guess_to_check):
     guesses_str.append(current_guess_string)
     for i in range(5):
         lowercase_letter = guess_to_check[i].text.lower()
-        if lowercase_letter in CORRECT_WORD:
-            if lowercase_letter == CORRECT_WORD[i]:
-                guess_to_check[i].bg_color = CORRECT_COLOR
+        if lowercase_letter in correct_word:
+            if lowercase_letter == correct_word[i]:
+                guess_to_check[i].bg_color = correct_color
                 add_correct(lowercase_letter)
                 for key in keys:
                     if key.text == lowercase_letter.upper():
-                        key.bg_color = CORRECT_COLOR
+                        key.bg_color = correct_color
                         key.draw()
                 guess_to_check[i].text_color = WHITE
                 if not game_decided:
                     game_result = "W"
             else:
-                guess_to_check[i].bg_color = SEMI_COLOR
+                guess_to_check[i].bg_color = semi_color
                 add_semi(lowercase_letter)
                 for key in keys:
                     if key.text == lowercase_letter.upper():
-                        key.bg_color = SEMI_COLOR
+                        key.bg_color = semi_color
                         key.draw()
                 guess_to_check[i].text_color = WHITE
                 game_result = ""
@@ -512,7 +463,7 @@ def check_guess(guess_to_check):
             add_incorrect(lowercase_letter)
             for key in keys:
                 if key.text == lowercase_letter.upper():
-                    key.bg_color = WRONG_COLOR
+                    key.bg_color = wrong_color
                     key.draw()
             guess_to_check[i].text_color = WHITE
             game_result = ""
@@ -536,7 +487,7 @@ def lose_play_again():
     play_again_font = pygame.font.Font("assets/FreeSansBold.otf", 40)
     play_again_text = play_again_font.render("Press ENTER to Play Again!", True, WHITE)
     play_again_rect = play_again_text.get_rect(center=(WIDTH/2, 320))
-    word_was_text = play_again_font.render(f"Sorry, the word was {CORRECT_WORD}!", True, WHITE)
+    word_was_text = play_again_font.render(f"Sorry, the word was {correct_word}!", True, WHITE)
     word_was_rect = word_was_text.get_rect(center=(WIDTH/2, 250))
     SCREEN.blit(word_was_text, word_was_rect)
     SCREEN.blit(play_again_text, play_again_rect)
@@ -546,11 +497,11 @@ def lose_play_again():
 def correct_play_again():
     # Puts the play again text on the screen.
     SCREEN.fill(WHITE)
-    pygame.draw.rect(SCREEN, CORRECT_COLOR, (10, 10, WIDTH - 20, HEIGHT - 20))
+    pygame.draw.rect(SCREEN, correct_color, (10, 10, WIDTH - 20, HEIGHT - 20))
     play_again_font = pygame.font.Font("assets/FreeSansBold.otf", 40)
     con_text = play_again_font.render(f"Congratulations!", True, WHITE)
     con_rect = con_text.get_rect(center=(WIDTH/2, 250))
-    word_was_text = play_again_font.render(f"The word was {CORRECT_WORD}!", True, WHITE)
+    word_was_text = play_again_font.render(f"The word was {correct_word}!", True, WHITE)
     word_was_rect = word_was_text.get_rect(center=(WIDTH/2, 320))
     play_again_text = play_again_font.render("Press ENTER to Play Again!", True, WHITE)
     play_again_rect = play_again_text.get_rect(center=(WIDTH/2, 390))
@@ -563,7 +514,7 @@ def correct_play_again():
 # reset global variables
 def reset():
     # Resets all global variables to their default states.
-    global guesses_count, CORRECT_WORD, guesses, current_guess, current_guess_string, game_result, lang, \
+    global guesses_count, correct_word, guesses, current_guess, current_guess_string, game_result, lang, \
         semi_correct_guesses, correct_guesses, incorrect_guesses
     SCREEN.fill(WHITE)
 
@@ -577,15 +528,15 @@ def reset():
     semi_correct_guesses = []
 
     if lang == "en":
-        CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+        correct_word = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
     elif lang == "sp":
-        CORRECT_WORD = words2.WORDS2[random.randint(0, len(words2.WORDS2) - 1)]
+        correct_word = words2.WORDS2[random.randint(0, len(words2.WORDS2) - 1)]
     elif lang == "ger":
-        CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+        correct_word = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
     elif lang == "fr":
-        CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+        correct_word = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
     elif lang == "kid":
-        CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+        correct_word = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
 
     for key in keys:
         key.bg_color = LT_GREY
@@ -597,7 +548,7 @@ def reset():
     # Comment out below for windows (For now!! must fix)
     # mixer.music.play(-1)
 
-    print(CORRECT_WORD)
+    print(correct_word)
     pygame.display.update()
 
 # reset the screen and redraw with new colors
@@ -607,10 +558,13 @@ def reset_screen():
     for key in keys:
         for l in correct_guesses:
             if key.text == l.upper():
-                key.bg_color = CORRECT_COLOR
+                key.bg_color = correct_color
         for l in semi_correct_guesses:
             if key.text == l.upper():
-                key.bg_color = SEMI_COLOR
+                key.bg_color = semi_color
+        for l in incorrect_guesses:
+            if key.text == l.upper():
+                key.bg_color = wrong_color
         key.draw()
 
     draw_color_key()
@@ -620,10 +574,10 @@ def reset_screen():
         for letter in guess:
             for l in correct_guesses:
                 if letter.text == l.upper():
-                    letter.bg_color = CORRECT_COLOR
+                    letter.bg_color = correct_color
             for l in semi_correct_guesses:
                 if letter.text == l.upper():
-                    letter.bg_color = SEMI_COLOR
+                    letter.bg_color = semi_color
             letter.draw()
 
     pygame.display.update()
@@ -641,7 +595,6 @@ def say(response, language):
     except:
         # windows version
         os.system("mpg123.exe audio.mp3")
-
 
 # Uses SpeechRecognition to translate a user response to text. Returns text
 def listen():
@@ -664,13 +617,11 @@ def listen():
     cur_text = r.recognize_google(audio)
     return cur_text
 
-
 def say_by_char(response, language):
     chars = [*response]
     for c in chars:
         say(c, language)
         time.sleep(0.025)
-
 
 def say_and_confirm_by_char(guess, correct, language):
     chars = [*guess]
@@ -686,7 +637,6 @@ def say_and_confirm_by_char(guess, correct, language):
         else:
             playsound('sound_effects/incorrect_char_trimmed.wav')
         correct_index = correct_index + 1
-
 
 # Control for common letter misinterpretations. Called if word returned to 'stash' instead of a char
 # Returns a character if possible, if none found, returns original word.
@@ -740,7 +690,6 @@ def fix_char(fuzzy_char):
     else:
         return fuzzy_char    # add more if found
 
-
 def word_to_int(word):
     if word == 'one' or word == 'won':
         return 1
@@ -755,13 +704,11 @@ def word_to_int(word):
     else:
         return word
 
-
 def clear_stash():
     delete_count = len(current_guess_string)
     while delete_count > 0:
         delete_letter()
         delete_count -= 1
-
 
 def replace(command):
     global current_guess_string
@@ -817,12 +764,11 @@ def replace(command):
     else:
         say("You must replace one letter in your stashed guess at a time.", languages[current_language])
 
-
 def read_guess(guess_number):
     if guess_number > guesses_count:
         say("You dont have a guess number " + str(guess_number) + " yet.", languages[current_language])
     else:
-        say_and_confirm_by_char(guesses_str[guess_number - 1], CORRECT_WORD.upper(), languages[current_language])
+        say_and_confirm_by_char(guesses_str[guess_number - 1], correct_word.upper(), languages[current_language])
 
 def handsfree():
     global current_guess_string, activate, audio_interface_enabled
@@ -973,7 +919,7 @@ def delete():
 def submit():
     global current_guess_string, current_guess
     if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
-        say_and_confirm_by_char(current_guess_string, CORRECT_WORD.upper(), languages[current_language])
+        say_and_confirm_by_char(current_guess_string, correct_word.upper(), languages[current_language])
         check_guess(current_guess)
     else:
         say("your stash must contain a real five letter word, try again!", languages[current_language])
@@ -1013,48 +959,11 @@ def start_the_game() -> None:
     start_game = 1
 
     SCREEN.fill(WHITE)
-    print(CORRECT_WORD)
+    print(correct_word)
 
     draw_keyboard()
     draw_color_key()
     draw_nav_bar()
-
-    # make keyboard areas - so click on screen activates letter
-    q_area = pygame.Rect(125, 500, 57, 70)
-    w_area = pygame.Rect(185, 500, 57, 70)
-    e_area = pygame.Rect(245, 500, 57, 70)
-    r_area = pygame.Rect(305, 500, 57, 70)
-    t_area = pygame.Rect(365, 500, 57, 70)
-    y_area = pygame.Rect(425, 500, 57, 70)
-    u_area = pygame.Rect(485, 500, 57, 70)
-    i_area = pygame.Rect(545, 500, 57, 70)
-    o_area = pygame.Rect(605, 500, 57, 70)
-    p_area = pygame.Rect(665, 500, 57, 70)
-    a_area = pygame.Rect(160, 585, 57, 70)
-    s_area = pygame.Rect(220, 585, 57, 70)
-    d_area = pygame.Rect(280, 585, 57, 70)
-    f_area = pygame.Rect(340, 585, 57, 70)
-    g_area = pygame.Rect(400, 585, 57, 70)
-    h_area = pygame.Rect(460, 585, 57, 70)
-    j_area = pygame.Rect(520, 585, 57, 70)
-    k_area = pygame.Rect(580, 585, 57, 70)
-    l_area = pygame.Rect(640, 585, 57, 70)
-    z_area = pygame.Rect(210, 670, 57, 70)
-    x_area = pygame.Rect(270, 670, 57, 70)
-    c_area = pygame.Rect(330, 670, 57, 70)
-    v_area = pygame.Rect(390, 670, 57, 70)
-    b_area = pygame.Rect(450, 670, 57, 70)
-    n_area = pygame.Rect(510, 670, 57, 70)
-    m_area = pygame.Rect(570, 670, 57, 70)
-    enter_area = pygame.Rect(635, 670, 125, 70)
-    de_area = pygame.Rect(100, 670, 102, 70)
-
-    menu_area = pygame.Rect(10, 10, 30, 30)
-    font_sel_area = pygame.Rect(WIDTH - 40, 10, 30, 30)
-
-    correct_color_area = pygame.Rect(WIDTH - 155, 130, 130, 30)
-    semi_color_area = pygame.Rect(WIDTH - 155, 180, 130, 30)
-    worng_color_area = pygame.Rect(WIDTH - 155, 235, 130, 30)
 
     while True:
         # how program should run when audio interface is not enabled
@@ -1094,133 +1003,133 @@ def start_the_game() -> None:
                                 create_new_letter()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        if q_area.collidepoint(event.pos):
+                        if Q_AREA.collidepoint(event.pos):
                             key_pressed = "Q"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if w_area.collidepoint(event.pos):
+                        if W_AREA.collidepoint(event.pos):
                             key_pressed = "W"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if e_area.collidepoint(event.pos):
+                        if E_AREA.collidepoint(event.pos):
                             key_pressed = "E"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if r_area.collidepoint(event.pos):
+                        if R_AREA.collidepoint(event.pos):
                             key_pressed = "R"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if t_area.collidepoint(event.pos):
+                        if T_AREA.collidepoint(event.pos):
                             key_pressed = "T"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if y_area.collidepoint(event.pos):
+                        if Y_AREA.collidepoint(event.pos):
                             key_pressed = "Y"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if u_area.collidepoint(event.pos):
+                        if U_AREA.collidepoint(event.pos):
                             key_pressed = "U"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if i_area.collidepoint(event.pos):
+                        if I_AREA.collidepoint(event.pos):
                             key_pressed = "I"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if o_area.collidepoint(event.pos):
+                        if O_AREA.collidepoint(event.pos):
                             key_pressed = "O"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if p_area.collidepoint(event.pos):
+                        if P_AREA.collidepoint(event.pos):
                             key_pressed = "P"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if a_area.collidepoint(event.pos):
+                        if A_AREA.collidepoint(event.pos):
                             key_pressed = "A"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if s_area.collidepoint(event.pos):
+                        if S_AREA.collidepoint(event.pos):
                             key_pressed = "S"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if d_area.collidepoint(event.pos):
+                        if D_AREA.collidepoint(event.pos):
                             key_pressed = "D"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if f_area.collidepoint(event.pos):
+                        if F_AREA.collidepoint(event.pos):
                             key_pressed = "F"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if g_area.collidepoint(event.pos):
+                        if G_AREA.collidepoint(event.pos):
                             key_pressed = "G"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if h_area.collidepoint(event.pos):
+                        if H_AREA.collidepoint(event.pos):
                             key_pressed = "H"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if j_area.collidepoint(event.pos):
+                        if J_AREA.collidepoint(event.pos):
                             key_pressed = "J"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if k_area.collidepoint(event.pos):
+                        if K_AREA.collidepoint(event.pos):
                             key_pressed = "K"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if l_area.collidepoint(event.pos):
+                        if L_AREA.collidepoint(event.pos):
                             key_pressed = "L"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if z_area.collidepoint(event.pos):
+                        if Z_AREA.collidepoint(event.pos):
                             key_pressed = "Z"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if x_area.collidepoint(event.pos):
+                        if X_AREA.collidepoint(event.pos):
                             key_pressed = "X"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if c_area.collidepoint(event.pos):
+                        if C_AREA.collidepoint(event.pos):
                             key_pressed = "C"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if v_area.collidepoint(event.pos):
+                        if V_AREA.collidepoint(event.pos):
                             key_pressed = "V"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if b_area.collidepoint(event.pos):
+                        if B_AREA.collidepoint(event.pos):
                             key_pressed = "B"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if n_area.collidepoint(event.pos):
+                        if N_AREA.collidepoint(event.pos):
                             key_pressed = "N"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if m_area.collidepoint(event.pos):
+                        if M_AREA.collidepoint(event.pos):
                             key_pressed = "M"
                             if len(current_guess_string) < 5:
                                 create_new_letter()
-                        if enter_area.collidepoint(event.pos):
+                        if ENTER_AREA.collidepoint(event.pos):
                             if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
                                 check_guess(current_guess)
-                        if de_area.collidepoint(event.pos):
+                        if DEL_AREA.collidepoint(event.pos):
                             if len(current_guess_string) > 0:
                                 delete_letter()
-                        if menu_area.collidepoint(event.pos):
+                        if MENU_AREA.collidepoint(event.pos):
                             start_game = 0
                             menu()
-                        if font_sel_area.collidepoint(event.pos):
+                        if FONT_SEL_AREA.collidepoint(event.pos):
                             chosen_font = draw_font_screen()
                             set_font(chosen_font)
                             reset_screen()
-                        if correct_color_area.collidepoint(event.pos):
-                            chosen_color = draw_color_screen(CORRECT_COLOR)
+                        if CORRECT_COLOR_AREA.collidepoint(event.pos):
+                            chosen_color = draw_color_screen(correct_color)
                             set_correct_color(chosen_color)
                             reset_screen()
-                        if semi_color_area.collidepoint(event.pos):
-                            chosen_color = draw_color_screen(SEMI_COLOR)
+                        if SEMI_COLOR_AREA.collidepoint(event.pos):
+                            chosen_color = draw_color_screen(semi_color)
                             set_semi_color(chosen_color)
                             reset_screen()
-                        if worng_color_area.collidepoint(event.pos):
-                            chosen_color = draw_color_screen(WRONG_COLOR)
+                        if WRONG_COLOR_AREA.collidepoint(event.pos):
+                            chosen_color = draw_color_screen(wrong_color)
                             set_wrong_color(chosen_color)
                             reset_screen()
 
@@ -1238,13 +1147,13 @@ def start_the_game() -> None:
                 # Comment out below for windows
                 # mixer.music.pause()
                 playsound('sound_effects/no_more_guesses_trimmed.wav')
-                say("You have run out of guesses. The word was " + CORRECT_WORD + " say play again to start over with "
+                say("You have run out of guesses. The word was " + correct_word + " say play again to start over with "
                     "a new word!", languages[current_language])
                 lose_play_again()
             if game_result == "W":
                 say("correct", languages[current_language])
                 playsound('sound_effects/correct_word_trimmed.mp3')
-                say("the word was: " + CORRECT_WORD + ". say play again to get "
+                say("the word was: " + correct_word + ". say play again to get "
                                                       "a new word.", languages[current_language])
                 correct_play_again()
             if rendered:
@@ -1283,37 +1192,37 @@ def start_the_game() -> None:
 # SETTERS
 
 def set_language(selected: Tuple[Any, int], value: str) -> None:
-    global lang, CORRECT_WORD
+    global lang, correct_word
 
     lang = value
 
     if lang == "sp":
-        CORRECT_WORD = words2.WORDS2[random.randint(0, len(words2.WORDS2) - 1)]
+        correct_word = words2.WORDS2[random.randint(0, len(words2.WORDS2) - 1)]
     elif lang == "ger":
-        CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+        correct_word = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
     elif lang == "fr":
-        CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+        correct_word = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
     elif lang == "kid":
-        CORRECT_WORD = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+        correct_word = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
 
 def set_correct_color(value):
-    global CORRECT_COLOR
-    CORRECT_COLOR = value
+    global correct_color
+    correct_color = value
 
 def set_semi_color(value):
-    global SEMI_COLOR
-    SEMI_COLOR = value
+    global semi_color
+    semi_color = value
 
 def set_wrong_color(value):
-    global WRONG_COLOR
-    WRONG_COLOR = value
+    global wrong_color
+    wrong_color = value
 
 def set_font(value):
-    global FONT, FONT_MED, FONT_SM, FONT_XSM
-    FONT = pygame.font.Font(value, 40)
-    FONT_MED = pygame.font.Font(value, 30)
-    FONT_SM = pygame.font.Font(value, 20)
-    FONT_XSM = pygame.font.Font(value, 15)
+    global my_font, my_font_med, my_font_sm, my_font_xsm
+    my_font = pygame.font.Font(value, 40)
+    my_font_med = pygame.font.Font(value, 30)
+    my_font_sm = pygame.font.Font(value, 20)
+    my_font_xsm = pygame.font.Font(value, 15)
 
 # MENU
 
