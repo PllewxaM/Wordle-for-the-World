@@ -79,7 +79,12 @@ ENTER_AREA = pygame.Rect(635, 670, 125, 70)
 DEL_AREA = pygame.Rect(100, 670, 102, 70)
 
 MENU_AREA = pygame.Rect(10, 10, 30, 30)
-FONT_SEL_AREA = pygame.Rect(WIDTH - 40, 10, 30, 30)
+FONT_SEL_AREA = pygame.Rect(WIDTH - 55, 10, 30, 35)
+COLOR_SEL_AREA = pygame.Rect(WIDTH - 105, 10, 30, 30)
+# PICK_ONE_AREA = pygame.Rect()
+# PICK_TWO_AREA = pygame.Rect()
+# PICK_THREE_AREA = pygame.Rect()
+DARK_SEL_AREA = pygame.Rect(WIDTH - 155, 10, 30, 30)
 
 CORRECT_COLOR_AREA = pygame.Rect(WIDTH - 155, 130, 130, 30)
 SEMI_COLOR_AREA = pygame.Rect(WIDTH - 155, 180, 130, 30)
