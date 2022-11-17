@@ -9,10 +9,10 @@ import speech_recognition as sr
 import os
 from playsound import playsound
 import time
-import words
-from words import *
-import words2
-from words2 import *
+import englishwords
+from englishwords import *
+import spanishwords
+from spanishwords import *
 from messages import *
 from constants import *
 
@@ -41,9 +41,10 @@ current_language = 0
 
 # select which file to get the word from based on user selection
 lang = "en"
+word_list = EN_WORDS
 
 # default
-correct_word = WORDS[random.randint(0, len(WORDS) - 1)]
+correct_word = EN_WORDS[random.randint(0, len(EN_WORDS) - 1)]
 
 # DEFAULT COLORS
 correct_color = GREEN
@@ -515,7 +516,7 @@ def correct_play_again():
 def reset():
     # Resets all global variables to their default states.
     global guesses_count, correct_word, guesses, current_guess, current_guess_string, game_result, lang, \
-        semi_correct_guesses, correct_guesses, incorrect_guesses
+        semi_correct_guesses, correct_guesses, incorrect_guesses, word_list
     SCREEN.fill(WHITE)
 
     guesses_count = 0
@@ -528,15 +529,17 @@ def reset():
     semi_correct_guesses = []
 
     if lang == "en":
-        correct_word = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+        word_list = EN_WORDS
+        correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
     elif lang == "sp":
-        correct_word = words2.WORDS2[random.randint(0, len(words2.WORDS2) - 1)]
+        word_list = SP_WORDS
+        correct_word = spanishwords.SP_WORDS[random.randint(0, len(spanishwords.SP_WORDS) - 1)]
     elif lang == "ger":
-        correct_word = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+        correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
     elif lang == "fr":
-        correct_word = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+        correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
     elif lang == "kid":
-        correct_word = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+        correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
 
     for key in keys:
         key.bg_color = LT_GREY
@@ -918,7 +921,7 @@ def delete():
 # submit for hands-free version
 def submit():
     global current_guess_string, current_guess
-    if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
+    if len(current_guess_string) == 5 and current_guess_string.lower() in word_list:
         say_and_confirm_by_char(current_guess_string, correct_word.upper(), languages[current_language])
         check_guess(current_guess)
     else:
@@ -985,7 +988,7 @@ def start_the_game() -> None:
                             reset()
                         else:
                             # THIS NEEDS TO BE ADJUSTED FOR DIFFERENT LANGUAGES
-                            if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
+                            if len(current_guess_string) == 5 and current_guess_string.lower() in word_list:
                                 check_guess(current_guess)
                     elif event.key == pygame.K_BACKSPACE:
                         if len(current_guess_string) > 0:
@@ -1108,7 +1111,7 @@ def start_the_game() -> None:
                             if len(current_guess_string) < 5:
                                 create_new_letter()
                         if ENTER_AREA.collidepoint(event.pos):
-                            if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
+                            if len(current_guess_string) == 5 and current_guess_string.lower() in word_list:
                                 check_guess(current_guess)
                         if DEL_AREA.collidepoint(event.pos):
                             if len(current_guess_string) > 0:
@@ -1174,7 +1177,7 @@ def start_the_game() -> None:
                             reset()
                         else:
                             # THIS NEEDS TO BE ADJUSTED FOR DIFFERENT LANGUAGES!!!!!
-                            if len(current_guess_string) == 5 and current_guess_string.lower() in WORDS:
+                            if len(current_guess_string) == 5 and current_guess_string.lower() in word_list:
                                 check_guess(current_guess)
                     elif event.key == pygame.K_BACKSPACE:
                         if len(current_guess_string) > 0:
@@ -1192,18 +1195,19 @@ def start_the_game() -> None:
 # SETTERS
 
 def set_language(selected: Tuple[Any, int], value: str) -> None:
-    global lang, correct_word
+    global lang, correct_word, word_list
 
     lang = value
 
     if lang == "sp":
-        correct_word = words2.WORDS2[random.randint(0, len(words2.WORDS2) - 1)]
+        word_list = SP_WORDS
+        correct_word = spanishwords.SP_WORDS[random.randint(0, len(spanishwords.SP_WORDS) - 1)]
     elif lang == "ger":
-        correct_word = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+        correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
     elif lang == "fr":
-        correct_word = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+        correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
     elif lang == "kid":
-        correct_word = words.WORDS[random.randint(0, len(words.WORDS) - 1)]
+        correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
 
 def set_correct_color(value):
     global correct_color

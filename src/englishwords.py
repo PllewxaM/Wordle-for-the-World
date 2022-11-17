@@ -1,4 +1,4 @@
-WORDS = [
+EN_WORDS = [
 "cigar",
 "rebut",
 "sissy",
