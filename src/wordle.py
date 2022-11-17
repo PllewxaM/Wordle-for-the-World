@@ -9,10 +9,10 @@ import speech_recognition as sr
 import os
 from playsound import playsound
 import time
-import englishwords
-from englishwords import *
-import spanishwords
-from spanishwords import *
+import word_files.englishwords as englishwords
+from word_files.englishwords import *
+import word_files.spanishwords as spanishwords
+from word_files.spanishwords import *
 from messages import *
 from constants import *
 
@@ -342,6 +342,76 @@ def draw_color_screen(current):
                         pygame.display.update()
     
     return(value)
+
+# draw screen where you select which color to change
+def draw_select_color():
+    round, fill = 4, 100
+    done = 0
+    # width and height of the color menu
+    mini_width = WIDTH * 0.7
+    mini_height = HEIGHT * 0.85
+
+    # draw background screen
+    pygame.draw.rect(SCREEN, GREY, ((WIDTH - mini_width)/2, (HEIGHT - mini_height)/2, \
+        mini_width, mini_height), fill, round)
+    # draw front screen
+    pygame.draw.rect(SCREEN, main_color, ((WIDTH - mini_width)/2 + 3, (HEIGHT - mini_height)/2 + 3, \
+        mini_width - 6, mini_height - 6), fill * 3, round)
+    # draw menu title
+    color_text = my_font.render("SELECT COLOR", True, sub_color)
+    color_rect = color_text.get_rect(center=(WIDTH/2, (HEIGHT - mini_height)/2 + 45))
+    SCREEN.blit(color_text, color_rect)
+    color2_text = my_font.render("TO CHANGE", True, sub_color)
+    color2_rect = color2_text.get_rect(center=(WIDTH/2, (HEIGHT - mini_height)/2 + 90))
+    SCREEN.blit(color2_text, color2_rect)
+
+    # draw correct select button
+    pygame.draw.rect(SCREEN, correct_color, (PICK_ONE_AREA), 50, round)
+    c_text = my_font.render("CORRECT COLOR", True, BLACK)
+    c_rect = c_text.get_rect(center=(WIDTH/ 2, HEIGHT - 500))
+    SCREEN.blit(c_text, c_rect)
+
+    # draw semi correct select button
+    pygame.draw.rect(SCREEN, semi_color, (PICK_TWO_AREA), 50, round)
+    s_text = my_font.render("SEMI CORRECT COLOR", True, BLACK)
+    s_rect = s_text.get_rect(center=(WIDTH/ 2, HEIGHT - 350))
+    SCREEN.blit(s_text, s_rect)
+
+    # draw wrong select button
+    pygame.draw.rect(SCREEN, wrong_color, (PICK_THREE_AREA), 50, round)
+    w_text = my_font.render("WRONG COLOR", True, BLACK)
+    w_rect = w_text.get_rect(center=(WIDTH/ 2, HEIGHT - 200))
+    SCREEN.blit(w_text, w_rect)
+
+    # draw cancel button
+    pygame.draw.rect(SCREEN, sub_color2, (CANCEL_AREA), 25, round)
+    can_text = my_font_med.render("CANCEL", True, WHITE)
+    can_rect = can_text.get_rect(center=(WIDTH/ 2, HEIGHT - 100))
+    SCREEN.blit(can_text, can_rect)
+
+    pygame.display.update()
+    
+    while not done:
+        for event in pygame.event.get():
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        if PICK_ONE_AREA.collidepoint(event.pos):
+                            reset_screen()
+                            chosen_color = draw_color_screen(correct_color)
+                            set_correct_color(chosen_color)
+                            done = 1
+                        if PICK_TWO_AREA.collidepoint(event.pos):
+                            reset_screen()
+                            chosen_color = draw_color_screen(semi_color)
+                            set_semi_color(chosen_color)
+                            done = 1
+                        if PICK_THREE_AREA.collidepoint(event.pos):
+                            reset_screen()
+                            chosen_color = draw_color_screen(wrong_color)
+                            set_wrong_color(chosen_color)
+                            done = 1
+                        if CANCEL_AREA.collidepoint(event.pos):
+                            done = 1
 
 # draws letters on the board as user enters them
 class Letter:
@@ -984,6 +1054,7 @@ def start_the_game() -> None:
     global start_game, audio_interface_enabled, started, game_result, activate, current_guess_string, \
         key_pressed, rendered
     start_game = 1
+    wait = 0
 
     SCREEN.fill(main_color)
     print(correct_word)
@@ -1149,23 +1220,7 @@ def start_the_game() -> None:
                             reset_screen()
                         if COLOR_SEL_AREA.collidepoint(event.pos):
                             draw_select_color()
-                            wait = 1
-                            while wait :
-                                if PICK_ONE_AREA.collidepoint(event.pos):
-                                    chosen_color = draw_color_screen(correct_color)
-                                    set_correct_color(chosen_color)
-                                    reset_screen()
-                                    wait = 0
-                                if PICK_TWO_AREA.collidepoint(event.pos):
-                                    chosen_color = draw_color_screen(semi_color)
-                                    set_semi_color(chosen_color)
-                                    reset_screen()
-                                    wait = 0
-                                if PICK_THREE_AREA.collidepoint(event.pos):
-                                    chosen_color = draw_color_screen(wrong_color)
-                                    set_wrong_color(chosen_color)
-                                    reset_screen()
-                                    wait = 0
+                            reset_screen()
                         if DARK_SEL_AREA.collidepoint(event.pos):
                             set_dark_mode()
                             reset_screen()
