@@ -1,4 +1,5 @@
-SP_WORDS = ["ábaco",
+SP_WORDS = [
+"ábaco",
 "abren",
 "acaso",
 "acata",

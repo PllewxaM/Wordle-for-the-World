@@ -13,6 +13,10 @@ import word_files.englishwords as englishwords
 from word_files.englishwords import *
 import word_files.spanishwords as spanishwords
 from word_files.spanishwords import *
+import word_files.frenchwords as frenchwords
+from word_files.frenchwords import *
+import word_files.germanwords as germanwords
+from word_files.germanwords import *
 from messages import *
 from constants import *
 
@@ -659,10 +663,13 @@ def reset():
         word_list = SP_WORDS
         correct_word = spanishwords.SP_WORDS[random.randint(0, len(spanishwords.SP_WORDS) - 1)]
     elif lang == "ger":
-        correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
+        word_list = GER_WORDS
+        correct_word = germanwords.GER_WORDS[random.randint(0, len(germanwords.GER_WORDS) - 1)]
     elif lang == "fr":
-        correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
+        word_list = FR_WORDS
+        correct_word = frenchwords.FR_WORDS[random.randint(0, len(frenchwords.FR_WORDS) - 1)]
     elif lang == "kid":
+        word_list = EN_WORDS
         correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
 
     for key in keys:
@@ -1397,10 +1404,16 @@ def set_language(selected: Tuple[Any, int], value: str) -> None:
         word_list = SP_WORDS
         correct_word = spanishwords.SP_WORDS[random.randint(0, len(spanishwords.SP_WORDS) - 1)]
     elif lang == "ger":
-        correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
+        word_list = GER_WORDS
+        correct_word = germanwords.GER_WORDS[random.randint(0, len(germanwords.GER_WORDS) - 1)]
     elif lang == "fr":
-        correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
+        word_list = FR_WORDS
+        correct_word = frenchwords.FR_WORDS[random.randint(0, len(frenchwords.FR_WORDS) - 1)]
     elif lang == "kid":
+        word_list = EN_WORDS
+        correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
+    else :
+        word_list = EN_WORDS
         correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
 
 
