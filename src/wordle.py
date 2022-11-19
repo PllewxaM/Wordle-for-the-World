@@ -169,8 +169,12 @@ def draw_nav_bar():
 
     # actual nav bar
     pygame.draw.rect(SCREEN, sub_color2, [0, 0, WIDTH, 50], 0)
-    # menu placeholder - change to something else
-    pygame.draw.rect(SCREEN, BLACK, [10, 10, size, size], 0)
+    # hamburger menu
+    menu_image = pygame.image.load('assets/menu.png')
+    menu_image = pygame.transform.scale(menu_image, (30, 30))
+    rec4 = menu_image.get_rect()
+    rec4.center = (WIDTH - 825), 25
+    SCREEN.blit(menu_image, rec4)
 
     # font selector icon
     font_image = pygame.image.load('assets/font-icon.png')
