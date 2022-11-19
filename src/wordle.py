@@ -17,6 +17,8 @@ import word_files.frenchwords as frenchwords
 from word_files.frenchwords import *
 import word_files.germanwords as germanwords
 from word_files.germanwords import *
+import word_files.kidwords as kidwords
+from word_files.kidwords import *
 from messages import *
 from constants import *
 
@@ -669,8 +671,8 @@ def reset():
         word_list = FR_WORDS
         correct_word = frenchwords.FR_WORDS[random.randint(0, len(frenchwords.FR_WORDS) - 1)]
     elif lang == "kid":
-        word_list = EN_WORDS
-        correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
+        word_list = KID_WORDS
+        correct_word = kidwords.KID_WORDS[random.randint(0, len(kidwords.KID_WORDS) - 1)]
 
     for key in keys:
         key.bg_color = sub_color2
@@ -1410,8 +1412,8 @@ def set_language(selected: Tuple[Any, int], value: str) -> None:
         word_list = FR_WORDS
         correct_word = frenchwords.FR_WORDS[random.randint(0, len(frenchwords.FR_WORDS) - 1)]
     elif lang == "kid":
-        word_list = EN_WORDS
-        correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
+        word_list = KID_WORDS
+        correct_word = kidwords.KID_WORDS[random.randint(0, len(kidwords.KID_WORDS) - 1)]
     else :
         word_list = EN_WORDS
         correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
