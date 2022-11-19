@@ -17,6 +17,8 @@ import word_files.frenchwords as frenchwords
 from word_files.frenchwords import *
 import word_files.germanwords as germanwords
 from word_files.germanwords import *
+import word_files.kidwords as kidwords
+from word_files.kidwords import *
 from messages import *
 from constants import *
 
@@ -37,16 +39,16 @@ threshold_initialized = 0
 
 has_warned = 0
 
-current_background_music = 1
-background_music = ['sound_effects/background_music/traditional.ogg',
-                    'sound_effects/background_music/happy_beat_drop.mp3',
-                    'sound_effects/background_music/bops.mp3',
-                    'sound_effects/background_music/guru_meditation.mp3',
-                    'sound_effects/background_music/chill_electro_sax.mp3']
+current_background_music = 4
+background_music = ['sound/background_music/traditional.ogg',
+                    'sound/background_music/happy_beat_drop.mp3',
+                    'sound/background_music/bops.mp3',
+                    'sound/background_music/guru_meditation.mp3',
+                    'sound/background_music/chill_electro_sax.mp3']
 
 try:
     mixer.init()
-    mixer.music.load(background_music[current_background_music])
+    mixer.music.load('sound/background_music/the_trail_instruments_trimmed.mp3')
     mixer.music.set_volume(0.1)
 except Exception as e:
     print(str(e) + " Gotta debug this for windows")
@@ -683,8 +685,8 @@ def reset():
         word_list = FR_WORDS
         correct_word = frenchwords.FR_WORDS[random.randint(0, len(frenchwords.FR_WORDS) - 1)]
     elif lang == "kid":
-        word_list = EN_WORDS
-        correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
+        word_list = KID_WORDS
+        correct_word = kidwords.KID_WORDS[random.randint(0, len(kidwords.KID_WORDS) - 1)]
 
     for key in keys:
         key.bg_color = sub_color2
@@ -790,11 +792,14 @@ def say_and_confirm_by_char(guess, correct, language):
         time.sleep(0.025)
         try:
             if c == correct[correct_index]:
-                playsound('sound_effects/correct_char_trimmed.mp3')
+                print("correct")
+                playsound('sound/effects/correct_char_trimmed.mp3')
             elif c in correct:
-                playsound('sound_effects/semi_correct_char_trimmed.wav')
+                print("semi")
+                playsound('sound/effects/semi_correct_char_trimmed.wav')
             else:
-                playsound('sound_effects/incorrect_char_trimmed.wav')
+                print("wrong")
+                playsound('sound/effects/incorrect_char_trimmed.wav')
         except Exception as e:
             print(str(e)+ "NOT WORKING :)")
         correct_index = correct_index + 1
@@ -874,14 +879,14 @@ def eog_sound(current_game_result):
         if current_game_result == "W":
             pause_background_music()
             try:
-                playsound('sound_effects/correct_word_trimmed.mp3')
+                playsound('sound/effects/correct_word_trimmed.mp3')
             except Exception as e:
                 print(str(e) + "NOT WORKING :)")
             eog_sound_allowed = 0
         elif current_game_result == "L":
             pause_background_music()
             try:
-                playsound('sound_effects/no_more_guesses_trimmed.wav')
+                playsound('sound/effects/no_more_guesses_trimmed.wav')
             except Exception as e:
                 print(str(e) + "NOT WORKING :)")
             eog_sound_allowed = 0
@@ -1056,6 +1061,7 @@ def handsfree():
 
     waiting_for_command = 1
     while waiting_for_command:
+        draw()
         try:
             time.sleep(0.05)
             command = listen()
@@ -1092,6 +1098,8 @@ def handsfree():
             elif "clear" in command:
                 say("you said: " + command, languages[current_language])
                 clear_stash()
+                draw()
+                pygame.display.flip()
                 waiting_for_command = 0
             elif "disable" in command:
                 say("Disabling audio, press space bar twice to re-enable.", languages[current_language])
@@ -1151,6 +1159,8 @@ def handsfree():
                     say("invalid command", languages[current_language])
             else:
                 say("invalid command", languages[current_language])
+
+            pygame.display.flip()
 
         except Exception as e:
             print("exception: " + repr(e))
@@ -1267,17 +1277,20 @@ def start_the_game() -> None:
     draw_color_key()
     draw_nav_bar()
 
+    mixer.music.pause()
+    mixer.music.load(background_music[current_background_music])
+    mixer.music.play(-1)
+
     while True:
         # how program should run when audio interface is not enabled
         while not audio_interface_enabled and start_game:
             draw()
             if game_result == "L":
-                # NO need to comment sound anymore
-                # eog_sound(game_result)
                 lose_play_again()
+                eog_sound(game_result)
             if game_result == "W":
-                # eog_sound(game_result)
                 correct_play_again()
+                eog_sound(game_result)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -1512,9 +1525,9 @@ def set_language(selected: Tuple[Any, int], value: str) -> None:
         word_list = FR_WORDS
         correct_word = frenchwords.FR_WORDS[random.randint(0, len(frenchwords.FR_WORDS) - 1)]
     elif lang == "kid":
-        word_list = EN_WORDS
-        correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
-    else:
+        word_list = KID_WORDS
+        correct_word = kidwords.KID_WORDS[random.randint(0, len(kidwords.KID_WORDS) - 1)]
+    else :
         word_list = EN_WORDS
         correct_word = englishwords.EN_WORDS[random.randint(0, len(englishwords.EN_WORDS) - 1)]
 
