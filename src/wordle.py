@@ -792,10 +792,13 @@ def say_and_confirm_by_char(guess, correct, language):
         time.sleep(0.025)
         try:
             if c == correct[correct_index]:
+                print("correct")
                 playsound('sound_effects/correct_char_trimmed.mp3')
             elif c in correct:
+                print("semi")
                 playsound('sound_effects/semi_correct_char_trimmed.wav')
             else:
+                print("wrong")
                 playsound('sound_effects/incorrect_char_trimmed.wav')
         except Exception as e:
             print(str(e)+ "NOT WORKING :)")
@@ -1058,6 +1061,7 @@ def handsfree():
 
     waiting_for_command = 1
     while waiting_for_command:
+        draw()
         try:
             time.sleep(0.05)
             command = listen()
@@ -1094,6 +1098,8 @@ def handsfree():
             elif "clear" in command:
                 say("you said: " + command, languages[current_language])
                 clear_stash()
+                draw()
+                pygame.display.flip()
                 waiting_for_command = 0
             elif "disable" in command:
                 say("Disabling audio, press space bar twice to re-enable.", languages[current_language])
@@ -1153,6 +1159,8 @@ def handsfree():
                     say("invalid command", languages[current_language])
             else:
                 say("invalid command", languages[current_language])
+
+            pygame.display.flip()
 
         except Exception as e:
             print("exception: " + repr(e))
@@ -1274,12 +1282,11 @@ def start_the_game() -> None:
         while not audio_interface_enabled and start_game:
             draw()
             if game_result == "L":
-                # NO need to comment sound anymore
-                # eog_sound(game_result)
                 lose_play_again()
+                eog_sound(game_result)
             if game_result == "W":
-                # eog_sound(game_result)
                 correct_play_again()
+                eog_sound(game_result)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
