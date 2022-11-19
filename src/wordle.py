@@ -39,16 +39,16 @@ threshold_initialized = 0
 
 has_warned = 0
 
-current_background_music = 1
-background_music = ['sound_effects/background_music/traditional.ogg',
-                    'sound_effects/background_music/happy_beat_drop.mp3',
-                    'sound_effects/background_music/bops.mp3',
-                    'sound_effects/background_music/guru_meditation.mp3',
-                    'sound_effects/background_music/chill_electro_sax.mp3']
+current_background_music = 4
+background_music = ['sound/background_music/traditional.ogg',
+                    'sound/background_music/happy_beat_drop.mp3',
+                    'sound/background_music/bops.mp3',
+                    'sound/background_music/guru_meditation.mp3',
+                    'sound/background_music/chill_electro_sax.mp3']
 
 try:
     mixer.init()
-    mixer.music.load(background_music[current_background_music])
+    mixer.music.load('sound/background_music/the_trail_instruments_trimmed.mp3')
     mixer.music.set_volume(0.1)
 except Exception as e:
     print(str(e) + " Gotta debug this for windows")
@@ -793,13 +793,13 @@ def say_and_confirm_by_char(guess, correct, language):
         try:
             if c == correct[correct_index]:
                 print("correct")
-                playsound('sound_effects/trimmed/correct_char_trimmed.mp3')
+                playsound('sound/effects/correct_char_trimmed.mp3')
             elif c in correct:
                 print("semi")
-                playsound('sound_effects/trimmed/semi_correct_char_trimmed.wav')
+                playsound('sound/effects/semi_correct_char_trimmed.wav')
             else:
                 print("wrong")
-                playsound('sound_effects/trimmed/incorrect_char_trimmed.wav')
+                playsound('sound/effects/incorrect_char_trimmed.wav')
         except Exception as e:
             print(str(e)+ "NOT WORKING :)")
         correct_index = correct_index + 1
@@ -879,14 +879,14 @@ def eog_sound(current_game_result):
         if current_game_result == "W":
             pause_background_music()
             try:
-                playsound('sound_effects/trimmed/correct_word_trimmed.mp3')
+                playsound('sound/effects/correct_word_trimmed.mp3')
             except Exception as e:
                 print(str(e) + "NOT WORKING :)")
             eog_sound_allowed = 0
         elif current_game_result == "L":
             pause_background_music()
             try:
-                playsound('sound_effects/trimmed/no_more_guesses_trimmed.wav')
+                playsound('sound/effects/no_more_guesses_trimmed.wav')
             except Exception as e:
                 print(str(e) + "NOT WORKING :)")
             eog_sound_allowed = 0
@@ -1276,6 +1276,10 @@ def start_the_game() -> None:
     draw_keyboard()
     draw_color_key()
     draw_nav_bar()
+
+    mixer.music.pause()
+    mixer.music.load(background_music[current_background_music])
+    mixer.music.play(-1)
 
     while True:
         # how program should run when audio interface is not enabled
