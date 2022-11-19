@@ -35,6 +35,8 @@ threshold_initialized = 0
 # MUSIC
 # must debug for windows
 
+has_warned = 0
+
 current_background_music = 1
 background_music = ['sound_effects/background_music/traditional.ogg',
                     'sound_effects/background_music/happy_beat_drop.mp3',
@@ -1046,7 +1048,7 @@ def return_keyword_index(keyword, command):
 
 # Listens for user command, validates the command, and calls the correct function to execute user command.
 def handsfree():
-    global current_guess_string, activate, audio_interface_enabled
+    global current_guess_string, activate, audio_interface_enabled, has_warned
 
     waiting_for_command = 1
     while waiting_for_command:
@@ -1094,8 +1096,12 @@ def handsfree():
                 set_background_music_volume(0.1)
                 waiting_for_command = 0
             elif "volume" in command:
-                say("Adjusting volume.", languages[current_language])
-                volume_handler(command)
+                if has_warned or not audio_interface_enabled:
+                    say("Adjusting volume.", languages[current_language])
+                    volume_handler(command)
+                else:
+                    say(volume_warning, languages[current_language])
+                    has_warned = 1
                 waiting_for_command = 0
             elif "song" in command:
                 say("Changing background song", languages[current_language])
@@ -1458,7 +1464,6 @@ def start_the_game() -> None:
             else:
                 pygame.display.flip()
                 say(ACTIVATED, languages[current_language])
-                time.sleep(0.1)
                 set_background_music_volume(0.025)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
