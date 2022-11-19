@@ -84,3 +84,6 @@ CLEAR_TUTORIAL = "The command clear will delete all the letters in your current 
 READ_TUTORIAL = "Insert read tutorial/example here"
 REPLACE_TUTORIAL = "Insert replace tutorial/example here"
 SUBMIT_TUTORIAL = "Insert submit tutorial/example here"
+
+volume_warning = "handsfree mode hears best with low background noise. If you're wearing headphones, repeat " \
+                 "your volume command to confirm."
