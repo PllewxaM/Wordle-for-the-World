@@ -35,7 +35,7 @@ threshold_initialized = 0
 # MUSIC
 # must debug for windows
 
-current_background_music = 0
+current_background_music = 1
 background_music = ['sound_effects/background_music/traditional.ogg',
                     'sound_effects/background_music/happy_beat_drop.mp3',
                     'sound_effects/background_music/bops.mp3',
@@ -44,7 +44,7 @@ background_music = ['sound_effects/background_music/traditional.ogg',
 
 try:
     mixer.init()
-    mixer.music.load('sound_effects/background_music/traditional.ogg')
+    mixer.music.load(background_music[current_background_music])
     mixer.music.set_volume(0.1)
 except Exception as e:
     print(str(e) + " Gotta debug this for windows")
