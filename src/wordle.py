@@ -171,6 +171,7 @@ def draw_nav_bar():
 
     # actual nav bar
     pygame.draw.rect(SCREEN, sub_color2, [0, 0, WIDTH, 50], 0)
+    
     # hamburger menu
     menu_image = pygame.image.load('assets/menu.png')
     menu_image = pygame.transform.scale(menu_image, (30, 30))
@@ -1506,6 +1507,11 @@ def start_the_game() -> None:
 
 # SETTERS
 
+def set_background_music(selected: Tuple[Any, int], value: int) -> None:
+    global current_background_music
+
+    current_background_music = value
+
 def set_language(selected: Tuple[Any, int], value: str) -> None:
     global lang, correct_word, word_list
 
@@ -1633,7 +1639,6 @@ def menu():
     )
 
     # COLOR MENU PAGE   
-
     for m in COLOR_INSTRUCTIONS:
         color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
 
@@ -1662,7 +1667,6 @@ def menu():
         about_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
 
     # INSTRUCTIONS MENU PAGE
-
     for m in INSTRUCTIONS:
         inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
 
@@ -1693,6 +1697,8 @@ def menu():
     menu.add.button('Play', start_the_game)
     menu.add.selector('Language: ', [("English", "en"), ("Spanish", "sp"), ("German", "ger"),
                                      ("French", "fr"), ("Kid Friendly", "kid")], onchange=set_language, default=0)
+    menu.add.selector('Background Music: ', [("Traditional", 0), ("Happy Beat", 1), ("Bop", 2),
+                                     ("Meditation", 3), ("Electric Chill", 4)], onchange=set_background_music, default=0)
     menu.add.button('Instructions', inst_menu)
     menu.add.button('Set Colors', color_menu)
     menu.add.button('About', about_menu)
