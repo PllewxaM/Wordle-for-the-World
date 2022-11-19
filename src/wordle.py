@@ -793,13 +793,13 @@ def say_and_confirm_by_char(guess, correct, language):
         try:
             if c == correct[correct_index]:
                 print("correct")
-                playsound('sound_effects/correct_char_trimmed.mp3')
+                playsound('sound_effects/trimmed/correct_char_trimmed.mp3')
             elif c in correct:
                 print("semi")
-                playsound('sound_effects/semi_correct_char_trimmed.wav')
+                playsound('sound_effects/trimmed/semi_correct_char_trimmed.wav')
             else:
                 print("wrong")
-                playsound('sound_effects/incorrect_char_trimmed.wav')
+                playsound('sound_effects/trimmed/incorrect_char_trimmed.wav')
         except Exception as e:
             print(str(e)+ "NOT WORKING :)")
         correct_index = correct_index + 1
@@ -879,14 +879,14 @@ def eog_sound(current_game_result):
         if current_game_result == "W":
             pause_background_music()
             try:
-                playsound('sound_effects/correct_word_trimmed.mp3')
+                playsound('sound_effects/trimmed/correct_word_trimmed.mp3')
             except Exception as e:
                 print(str(e) + "NOT WORKING :)")
             eog_sound_allowed = 0
         elif current_game_result == "L":
             pause_background_music()
             try:
-                playsound('sound_effects/no_more_guesses_trimmed.wav')
+                playsound('sound_effects/trimmed/no_more_guesses_trimmed.wav')
             except Exception as e:
                 print(str(e) + "NOT WORKING :)")
             eog_sound_allowed = 0
