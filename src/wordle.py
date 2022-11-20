@@ -183,35 +183,35 @@ def draw_nav_bar():
 
 # Draws font options on the font menu 
 def draw_font_options():
-    pygame.draw.rect(SCREEN, LT_GREY, FONT_ONE_AREA, 0, ROUND)
+    pygame.draw.rect(SCREEN, LT_BLUE, FONT_ONE_AREA, 0, ROUND)
     draw_text(pygame.font.Font('assets/fonts/FreeSans.otf', 30), "Free Sans Font", BLACK, (WIDTH / 2, HEIGHT - 570))
 
-    pygame.draw.rect(SCREEN, LT_GREY, FONT_TWO_AREA, 0, ROUND)
+    pygame.draw.rect(SCREEN, LT_BLUE, FONT_TWO_AREA, 0, ROUND)
     draw_text(pygame.font.Font('assets/fonts/ComicSans.ttf', 30), "Comic Sans", BLACK, (WIDTH / 2, HEIGHT - 510))
 
-    pygame.draw.rect(SCREEN, LT_GREY, FONT_THREE_AREA, 0, ROUND)
+    pygame.draw.rect(SCREEN, LT_BLUE, FONT_THREE_AREA, 0, ROUND)
     draw_text(pygame.font.Font('assets/fonts/GFSDidotBold.otf', 30), "GFS Didot Bold", BLACK, (WIDTH / 2, HEIGHT - 450))
 
-    pygame.draw.rect(SCREEN, LT_GREY, FONT_FOUR_AREA, 0, ROUND)
+    pygame.draw.rect(SCREEN, LT_BLUE, FONT_FOUR_AREA, 0, ROUND)
     draw_text(pygame.font.Font('assets/fonts/LilGrotesk.otf', 30), "Lil Grotesk", BLACK, (WIDTH / 2, HEIGHT - 390))
 
-    pygame.draw.rect(SCREEN, LT_GREY, FONT_FIVE_AREA, 0, ROUND)
+    pygame.draw.rect(SCREEN, LT_BLUE, FONT_FIVE_AREA, 0, ROUND)
     draw_text(pygame.font.Font('assets/fonts/WignersFriendRoman.ttf', 30), "Wigners Friend", BLACK, (WIDTH / 2, HEIGHT - 330))
 
-    pygame.draw.rect(SCREEN, LT_GREY, FONT_SIX_AREA, 0, ROUND)
+    pygame.draw.rect(SCREEN, LT_BLUE, FONT_SIX_AREA, 0, ROUND)
     draw_text(pygame.font.Font('assets/fonts/FirstCoffee.otf', 30), "First Coffee", BLACK, (WIDTH / 2, HEIGHT - 265))
 
     # draw bold options
     pygame.draw.rect(SCREEN, sub_color2, BOLD_AREA, 0, ROUND)
-    draw_text(my_font, "BOLD", WHITE, (WIDTH / 2, HEIGHT - 195))
+    draw_text(pygame.font.Font('assets/fonts/FreeSansBold.otf', 30), "BOLD", WHITE, (WIDTH / 2, HEIGHT - 195))
 
 
 # Draws the increase and decrease buttons on the font menu
 def draw_font_size_adjust():
-    pygame.draw.rect(SCREEN, sub_color2, PLUS_AREA, 0, ROUND)
+    pygame.draw.rect(SCREEN, GREY, PLUS_AREA, 0, ROUND)
     draw_text(my_font, "+", WHITE, ((WIDTH / 2) - 175, HEIGHT - 195))
 
-    pygame.draw.rect(SCREEN, sub_color2, SUB_AREA, 0, ROUND)
+    pygame.draw.rect(SCREEN, GREY, SUB_AREA, 0, ROUND)
     draw_text(my_font, "-", WHITE, ((WIDTH / 2) + 175, HEIGHT - 195))
 
 
