@@ -120,7 +120,7 @@ def draw_text(font_size, text, text_color, position):
     SCREEN.blit(text, rect)
 
 
-# Template for drawing icons on the navagation bar 
+# Template for drawing icons on the navagation bar
 def draw_icon(path, size, position):
     icon_image = pygame.image.load(path)
     icon_image = pygame.transform.scale(icon_image, size)
@@ -170,7 +170,7 @@ def draw_color_key():
 def draw_nav_bar():
     # actual nav bar
     pygame.draw.rect(SCREEN, sub_color2, [0, 0, WIDTH, 50], 0)
-    
+
     # hamburger menu
     draw_icon('assets/menu.png', (30, 30), ((WIDTH - 825), 25))
 
@@ -191,7 +191,7 @@ def draw_nav_bar():
 
 # FONT MENU
 
-# Draws font options on the font menu 
+# Draws font options on the font menu
 def draw_font_options():
     pygame.draw.rect(SCREEN, LT_BLUE, FONT_ONE_AREA, 0, ROUND)
     draw_text(pygame.font.Font('assets/fonts/FreeSans.otf', 30), "Free Sans Font", BLACK, (WIDTH / 2, HEIGHT - 570))
@@ -233,13 +233,13 @@ def draw_font_screen(current):
     # draw background and front mini menu screens
     pygame.draw.rect(SCREEN, GREY, SM_MENU_AREA_BACK, 0, ROUND)
     pygame.draw.rect(SCREEN, main_color, SM_MENU_AREA_FRONT, 0, ROUND)
-    
+
     # draw menu title
     draw_text(my_font, "Change Font", sub_color, (WIDTH / 2, (HEIGHT - (HEIGHT * 0.8)) / 2 + 45))
 
     # draw font options
     draw_font_options()
-    
+
     # draw size increase / decrease buttons
     draw_font_size_adjust()
 
@@ -323,7 +323,7 @@ def draw_color_screen(current):
     pygame.draw.rect(SCREEN, GREY, SM_MENU_AREA_BACK, 0, ROUND)
     # draw front screen
     pygame.draw.rect(SCREEN, main_color, SM_MENU_AREA_FRONT, 0, ROUND)
-    
+
     # draw menu title
     draw_text(my_font, "Change Color", sub_color, (WIDTH / 2, (HEIGHT - (HEIGHT * 0.8)) / 2 + 45))
 
@@ -348,14 +348,14 @@ def draw_color_screen(current):
                                 pygame.draw.rect(SCREEN, sub_color, area, 3, ROUND)
                     if DONE_AREA.collidepoint(event.pos):
                         done = 1
-                    pygame.display.update()                 
+                    pygame.display.update()
     return value
 
 
 # draw screen where you select which color to change
 def draw_select_color():
     done = 0
-    
+
     # draw background screen and front ground screen
     pygame.draw.rect(SCREEN, GREY, SM_MENU_AREA_BACK, 0, ROUND)
     pygame.draw.rect(SCREEN, main_color, SM_MENU_AREA_FRONT, 0, ROUND)
@@ -605,7 +605,7 @@ def reset():
     # Resets all global variables to their default states.
     global guesses_count, correct_word, guesses, current_guess, current_guess_string, game_result, lang, \
         semi_correct_guesses, correct_guesses, incorrect_guesses, word_list, eog_sound_allowed
-    
+
     SCREEN.fill(main_color)
 
     guesses_count = 0
@@ -628,7 +628,7 @@ def reset():
         word_list = KID_WORDS
     else:
         word_list = EN_WORDS
-        
+
     correct_word = word_list[random.randint(0, len(word_list) - 1)]
 
     for key in keys:
@@ -986,7 +986,7 @@ def handsfree():
     while waiting_for_command:
         draw()
         try:
-            time.sleep(0.05)
+            # time.sleep(0.05)
             command = listen()
             # Comment above for debugging, allows typing of command; comment below for handsfree use;
             # command = input("Type a command: ")
@@ -1101,7 +1101,7 @@ def stash(response):
     while not found:
         try:
             if response_split[index] == "stash" or response_split[index] == "dash":
-                guess = response_split[index + 1]
+                guess = fix_char(response_split[index + 1])
                 found = 1
             else:
                 index += 1
@@ -1478,7 +1478,7 @@ def menu():
         width=WIDTH - screen_difference
     )
 
-    # COLOR MENU PAGE   
+    # COLOR MENU PAGE
     for m in COLOR_INSTRUCTIONS:
         color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
 
@@ -1533,9 +1533,9 @@ def menu():
                                      ("French", "fr"), ("Kid Friendly", "kid")], onchange=set_language, default=0)
     menu.add.selector('Background Music: ', [("Traditional", 0), ("Happy Beat", 1), ("Bop", 2),
                                      ("Meditation", 3), ("Electric Chill", 4)], onchange=set_background_music, default=0)
-    menu.add.selector('Change Font: ', [("Free Sans", 'assets/fonts/FreeSans.otf'), ("Comic Sans", 'assets/fonts/ComicSans.ttf'), 
-                                        ("Lil Grotesk", 'assets/fonts/LilGrotesk.otf'), ("GFS Didot", 'assets/fonts/GFSDidotBold.oft'), 
-                                        ("First Coffee", 'assets/fonts/FirstCoffee.otf'), ("Wigners Friend", 'assets/fonts/WignersFriendRoman.ttf')], 
+    menu.add.selector('Change Font: ', [("Free Sans", 'assets/fonts/FreeSans.otf'), ("Comic Sans", 'assets/fonts/ComicSans.ttf'),
+                                        ("Lil Grotesk", 'assets/fonts/LilGrotesk.otf'), ("GFS Didot", 'assets/fonts/GFSDidotBold.oft'),
+                                        ("First Coffee", 'assets/fonts/FirstCoffee.otf'), ("Wigners Friend", 'assets/fonts/WignersFriendRoman.ttf')],
                                         onchange=menu_set_font, default=0)
     menu.add.button('Set Colors', color_menu)
     menu.add.button('Instructions', inst_menu)
@@ -1547,7 +1547,7 @@ def menu():
 
 
 def instructions():
-    global start_game 
+    global start_game
     start_game = 0
     screen_difference = 50
 
