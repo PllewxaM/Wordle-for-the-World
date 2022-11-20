@@ -50,6 +50,7 @@ current_language = 0
 # default
 lang = "en"
 word_list = EN_WORDS
+check_list = EN_WORDS
 correct_word = word_list[random.randint(0, len(word_list) - 1)]
 
 # DEFAULT COLORS
@@ -193,23 +194,23 @@ def draw_nav_bar():
 
 # Draws font options on the font menu
 def draw_font_options():
-    pygame.draw.rect(SCREEN, LT_BLUE, FONT_ONE_AREA, 0, ROUND)
+    pygame.draw.rect(SCREEN, LT_GREY, FONT_ONE_AREA, 0, ROUND)
     draw_text(pygame.font.Font('assets/fonts/FreeSans.otf', 30), "Free Sans Font", BLACK, (WIDTH / 2, HEIGHT - 570))
 
-    pygame.draw.rect(SCREEN, LT_BLUE, FONT_TWO_AREA, 0, ROUND)
+    pygame.draw.rect(SCREEN, LT_GREY, FONT_TWO_AREA, 0, ROUND)
     draw_text(pygame.font.Font('assets/fonts/ComicSans.ttf', 30), "Comic Sans", BLACK, (WIDTH / 2, HEIGHT - 510))
 
-    pygame.draw.rect(SCREEN, LT_BLUE, FONT_THREE_AREA, 0, ROUND)
+    pygame.draw.rect(SCREEN, LT_GREY, FONT_THREE_AREA, 0, ROUND)
     draw_text(pygame.font.Font('assets/fonts/GFSDidotBold.otf', 30), "GFS Didot Bold", BLACK, (WIDTH / 2, HEIGHT - 450))
 
-    pygame.draw.rect(SCREEN, LT_BLUE, FONT_FOUR_AREA, 0, ROUND)
+    pygame.draw.rect(SCREEN, LT_GREY, FONT_FOUR_AREA, 0, ROUND)
     draw_text(pygame.font.Font('assets/fonts/LilGrotesk.otf', 30), "Lil Grotesk", BLACK, (WIDTH / 2, HEIGHT - 390))
 
-    pygame.draw.rect(SCREEN, LT_BLUE, FONT_FIVE_AREA, 0, ROUND)
+    pygame.draw.rect(SCREEN, LT_GREY, FONT_FIVE_AREA, 0, ROUND)
     draw_text(pygame.font.Font('assets/fonts/WignersFriendRoman.ttf', 30), "Wigners Friend", BLACK,
               (WIDTH / 2, HEIGHT - 330))
 
-    pygame.draw.rect(SCREEN, LT_BLUE, FONT_SIX_AREA, 0, ROUND)
+    pygame.draw.rect(SCREEN, LT_GREY, FONT_SIX_AREA, 0, ROUND)
     draw_text(pygame.font.Font('assets/fonts/FirstCoffee.otf', 30), "First Coffee", BLACK, (WIDTH / 2, HEIGHT - 265))
 
     # draw bold options
@@ -608,7 +609,7 @@ def correct_play_again():
 def reset():
     # Resets all global variables to their default states.
     global guesses_count, correct_word, guesses, current_guess, current_guess_string, game_result, lang, \
-        semi_correct_guesses, correct_guesses, incorrect_guesses, word_list, eog_sound_allowed
+        semi_correct_guesses, correct_guesses, incorrect_guesses, word_list, check_list, eog_sound_allowed
 
     SCREEN.fill(main_color)
 
@@ -624,14 +625,19 @@ def reset():
 
     if lang == "sp":
         word_list = SP_WORDS
+        check_list = word_list
     elif lang == "ger":
         word_list = GER_WORDS
+        check_list = word_list
     elif lang == "fr":
         word_list = FR_WORDS
+        check_list = word_list
     elif lang == "kid":
         word_list = KID_WORDS
+        check_list = EN_WORDS
     else:
         word_list = EN_WORDS
+        check_list = word_list
 
     correct_word = word_list[random.randint(0, len(word_list) - 1)]
 
@@ -1156,7 +1162,7 @@ def delete():
 # Submit command handler for handsfree()
 def submit():
     global current_guess_string, current_guess
-    if len(current_guess_string) == 5 and current_guess_string.lower() in word_list:
+    if len(current_guess_string) == 5 and current_guess_string.lower() in check_list:
         say_and_confirm_by_char(current_guess_string, correct_word.upper(), languages[current_language])
         check_guess(current_guess)
     else:
@@ -1230,8 +1236,7 @@ def start_the_game() -> None:
                         if game_result != "":
                             reset()
                         else:
-                            # THIS NEEDS TO BE ADJUSTED FOR DIFFERENT LANGUAGES
-                            if len(current_guess_string) == 5 and current_guess_string.lower() in word_list:
+                            if len(current_guess_string) == 5 and current_guess_string.lower() in check_list:
                                 check_guess(current_guess)
                     elif event.key == pygame.K_BACKSPACE:
                         if len(current_guess_string) > 0:
@@ -1257,7 +1262,7 @@ def start_the_game() -> None:
                                     if len(current_guess_string) < 5:
                                         create_new_letter()
                         if ENTER_AREA.collidepoint(event.pos):
-                            if len(current_guess_string) == 5 and current_guess_string.lower() in word_list:
+                            if len(current_guess_string) == 5 and current_guess_string.lower() in check_list:
                                 check_guess(current_guess)
                         if DEL_AREA.collidepoint(event.pos):
                             if len(current_guess_string) > 0:
@@ -1344,20 +1349,25 @@ def set_background_music(selected: Tuple[Any, int], value: int) -> None:
 
 
 def set_language(selected: Tuple[Any, int], value: str) -> None:
-    global lang, correct_word, word_list
+    global lang, correct_word, word_list, check_list
 
     lang = value
 
     if lang == "sp":
         word_list = SP_WORDS
+        check_list = word_list
     elif lang == "ger":
         word_list = GER_WORDS
+        check_list = word_list
     elif lang == "fr":
         word_list = FR_WORDS
+        check_list = word_list
     elif lang == "kid":
         word_list = KID_WORDS
+        check_list = EN_WORDS
     else:
         word_list = EN_WORDS
+        check_list = word_list
 
     correct_word = word_list[random.randint(0, len(word_list) - 1)]
 
