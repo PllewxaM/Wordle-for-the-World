@@ -1546,7 +1546,7 @@ def menu():
                                              (" Meditation ", 3),
                                              ("Electro Chill", 4),
                                              ("    Escape   ", 5),
-                                             ("      80's     ", 6)],
+                                             ("      Synth     ", 6)],
                       onchange=set_background_music, default=0)
     menu.add.selector('Change Font: ',
                       [("Free Sans", 'assets/fonts/FreeSans.otf'), ("Comic Sans", 'assets/fonts/ComicSans.ttf'),
