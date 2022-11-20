@@ -1,6 +1,7 @@
 import pygame
 
 #  COLORS
+DK_RED = "#c70606"
 RED = "#d90000"
 REDORANGE = "#ff6100"
 ORANGE = "#ff8600"
@@ -120,6 +121,8 @@ CANCEL_AREA = pygame.Rect((WIDTH - 200)/ 2, HEIGHT - 125, 200, 50)
 CORRECT_COLOR_AREA = pygame.Rect(WIDTH - 155, 130, 130, 30)
 SEMI_COLOR_AREA = pygame.Rect(WIDTH - 155, 180, 130, 30)
 WRONG_COLOR_AREA = pygame.Rect(WIDTH - 155, 235, 130, 30)
+RESET_COLORS = pygame.Rect(WIDTH - 170, 300, 155, 30)
+RESET_GAME = pygame.Rect(WIDTH - 170, 350, 155, 30)
 
 # ADDITIONAL MENU AREAS
 DONE_AREA = pygame.Rect((WIDTH - 200) / 2, HEIGHT - 150, 200, 50)

@@ -156,6 +156,13 @@ def draw_color_key():
     pygame.draw.rect(SCREEN, wrong_color, [color_x, color_y + 105, size, size], 0, shape)
     draw_text(my_font_xsm, "WRONG", sub_color, (text_x, color_y + 120))
 
+    # draw reset colors button
+    pygame.draw.rect(SCREEN, LT_GREY, RESET_COLORS, 0, ROUND)
+    draw_text(my_font_sm, "Reset Colors", BLACK, (title_x, color_y + 185))
+
+    pygame.draw.rect(SCREEN, LT_GREY, RESET_GAME, 0, ROUND)
+    draw_text(my_font_sm, "Reset Game", BLACK, (title_x, color_y + 235))
+
     pygame.display.update()
 
 
@@ -577,7 +584,7 @@ def check_guess(guess_to_check):
 def lose_play_again():
     # Puts the play again text on the screen.
     SCREEN.fill(WHITE)
-    pygame.draw.rect(SCREEN, RED, END_GAME_SCREEN_AREA, 0, ROUND)
+    pygame.draw.rect(SCREEN, DK_RED, END_GAME_SCREEN_AREA, 0, ROUND)
     draw_text(my_font, "Press ENTER to Play Again!", WHITE, (WIDTH / 2, 320))
     draw_text(my_font, f"Sorry, the word was {correct_word}!", WHITE, (WIDTH / 2, 250))
     pygame.display.update()
@@ -1250,6 +1257,9 @@ def start_the_game() -> None:
                         if MENU_AREA.collidepoint(event.pos):
                             start_game = 0
                             menu()
+                        if INFO_SEL_AREA.collidepoint(event.pos):
+                            start_game = 0
+                            instructions()
                         if FONT_SEL_AREA.collidepoint(event.pos):
                             chosen_font = draw_font_screen(font)
                             set_font(chosen_font)
@@ -1260,9 +1270,11 @@ def start_the_game() -> None:
                         if DARK_SEL_AREA.collidepoint(event.pos):
                             set_dark_mode()
                             reset_screen()
-                        if INFO_SEL_AREA.collidepoint(event.pos):
-                            start_game = 0
-                            instructions()
+                        if RESET_COLORS.collidepoint(event.pos):
+                            set_correct_color(GREEN)
+                            set_semi_color(YELLOW)
+                            set_wrong_color(GREY)
+                            reset_screen()
                         if CORRECT_COLOR_AREA.collidepoint(event.pos):
                             chosen_color = draw_color_screen(correct_color)
                             set_correct_color(chosen_color)
@@ -1275,6 +1287,8 @@ def start_the_game() -> None:
                             chosen_color = draw_color_screen(wrong_color)
                             set_wrong_color(chosen_color)
                             reset_screen()
+                        if RESET_GAME.collidepoint(event.pos):
+                            reset()
 
             pygame.display.flip()
 
@@ -1337,6 +1351,15 @@ def set_language(selected: Tuple[Any, int], value: str) -> None:
         word_list = EN_WORDS
 
     correct_word = word_list[random.randint(0, len(word_list) - 1)]
+
+
+def menu_set_font(selected: Tuple[Any, int], value):
+    global font, my_font, my_font_med, my_font_sm, my_font_xsm
+    font = value
+    my_font = pygame.font.Font(font, font_size)
+    my_font_med = pygame.font.Font(font, font_size - 10)
+    my_font_sm = pygame.font.Font(font, font_size - 20)
+    my_font_xsm = pygame.font.Font(font, font_size - 25)
 
 
 def set_correct_color(value):
@@ -1510,14 +1533,19 @@ def menu():
                                      ("French", "fr"), ("Kid Friendly", "kid")], onchange=set_language, default=0)
     menu.add.selector('Background Music: ', [("Traditional", 0), ("Happy Beat", 1), ("Bop", 2),
                                      ("Meditation", 3), ("Electric Chill", 4)], onchange=set_background_music, default=0)
-    menu.add.button('Instructions', inst_menu)
+    menu.add.selector('Change Font: ', [("Free Sans", 'assets/fonts/FreeSans.otf'), ("Comic Sans", 'assets/fonts/ComicSans.ttf'), 
+                                        ("Lil Grotesk", 'assets/fonts/LilGrotesk.otf'), ("GFS Didot", 'assets/fonts/GFSDidotBold.oft'), 
+                                        ("First Coffee", 'assets/fonts/FirstCoffee.otf'), ("Wigners Friend", 'assets/fonts/WignersFriendRoman.ttf')], 
+                                        onchange=menu_set_font, default=0)
     menu.add.button('Set Colors', color_menu)
+    menu.add.button('Instructions', inst_menu)
     menu.add.button('About', about_menu)
     menu.add.button('Quit', pygame_menu.events.EXIT)
 
     if not start_game:
         menu.mainloop(SCREEN, background)
-        
+
+
 def instructions():
     global start_game 
     start_game = 0
@@ -1562,6 +1590,7 @@ def instructions():
 
     if not start_game:
         inst_menu.mainloop(SCREEN, background)
+
 
 def main():
     play_background_music()
