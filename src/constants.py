@@ -51,11 +51,15 @@ ALPHABET = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"]
 
 BACKGROUND_MUSIC = ['sound/background_music/traditional.ogg',
                     'sound/background_music/happy_beat_drop.mp3',
-                    'sound/background_music/bops.mp3',
+                    'sound/background_music/bops.mp3',  # 2
                     'sound/background_music/guru_meditation.mp3',
-                    'sound/background_music/chill_electro_sax.mp3',
+                    'sound/background_music/chill_electro_sax.mp3',  # 4
                     'sound/background_music/escaping.mp3',
-                    'sound/background_music/80s.mp3']
+                    'sound/background_music/Synth.mp3',  # 6
+                    'sound/background_music/nature_drizzle.mp3',
+                    'sound/background_music/nature_fire.mp3',  # 8
+                    'sound/background_music/nature_river.mp3',
+                    'sound/background_music/nature_waves.mp3']  # 10
 
 # SCREEN SIZE
 WIDTH, HEIGHT = 850, 750

@@ -903,6 +903,9 @@ def clear_stash():
     while delete_count > 0:
         delete_letter()
         delete_count -= 1
+    time.sleep(0.025)
+    draw()
+    pygame.display.flip()
 
 
 # This function replaces a letter in the current guess string with another letter. Replace command handler
@@ -1026,8 +1029,6 @@ def handsfree():
             elif "clear" in command:
                 say("you said: " + command, languages[current_language])
                 clear_stash()
-                draw()
-                pygame.display.flip()
                 waiting_for_command = 0
             elif "disable" in command:
                 say("Disabling audio, press space bar twice to re-enable.", languages[current_language])
