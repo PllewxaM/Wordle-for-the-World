@@ -103,6 +103,7 @@ MENU_AREA = pygame.Rect(10, 10, 30, 30)
 FONT_SEL_AREA = pygame.Rect(WIDTH - 55, 10, 30, 35)
 COLOR_SEL_AREA = pygame.Rect(WIDTH - 105, 10, 30, 30)
 DARK_SEL_AREA = pygame.Rect(WIDTH - 155, 10, 30, 30)
+INFO_SEL_AREA = pygame.Rect(WIDTH - 205, 10, 30, 30)
 
 # FONT AND COLOR MENU AREAS
 SM_MENU_AREA_BACK = pygame.Rect((WIDTH - (WIDTH * 0.6))/ 2, (HEIGHT - (HEIGHT * 0.8)) / 2, WIDTH * 0.6, HEIGHT * 0.8)

@@ -176,6 +176,9 @@ def draw_nav_bar():
     # dark mode icon 
     draw_icon('assets/dark.png', (30, 30), ((WIDTH - 140), 25))
 
+    # instructions icon
+    draw_icon('assets/instructions.png', (30, 30), ((WIDTH - 190), 25))
+
     # Draws title of the application
     draw_text(my_font, "WORLD-LE", main_color, (WIDTH / 2, 25))
 
@@ -1257,6 +1260,9 @@ def start_the_game() -> None:
                         if DARK_SEL_AREA.collidepoint(event.pos):
                             set_dark_mode()
                             reset_screen()
+                        if INFO_SEL_AREA.collidepoint(event.pos):
+                            start_game = 0
+                            instructions()
                         if CORRECT_COLOR_AREA.collidepoint(event.pos):
                             chosen_color = draw_color_screen(correct_color)
                             set_correct_color(chosen_color)
@@ -1414,7 +1420,6 @@ def menu():
     color_theme.widget_selection_effect = pygame_menu.widgets.NoneSelection()
 
     about_theme = color_theme.copy()
-    # about_theme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
     about_theme.background_color = WHITE
     about_theme.title_font = font
 
@@ -1494,12 +1499,6 @@ def menu():
     for m in INSTRUCTIONS3:
         inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
 
-    for m in AUDIO_INSTRUCTIONS:
-        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-
-    for m in SPACES:
-        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-
     inst_menu.add.button("Back", pygame_menu.events.BACK)
 
     for m in SPACES:
@@ -1518,7 +1517,51 @@ def menu():
 
     if not start_game:
         menu.mainloop(SCREEN, background)
+        
+def instructions():
+    global start_game 
+    start_game = 0
+    screen_difference = 50
 
+    mytheme = pygame_menu.themes.THEME_GREEN.copy()
+    mytheme.background_color = WHITE
+    mytheme.title_font_color = WHITE
+    mytheme.title_font = font
+    mytheme.widget_font_color = BLACK
+    mytheme.widget_selection_effect = pygame_menu.widgets.NoneSelection()
+
+    inst_menu = pygame_menu.Menu(
+        height=HEIGHT - screen_difference,
+        theme=mytheme,
+        title='Game Instructions',
+        width=WIDTH - screen_difference
+    )
+
+    # INSTRUCTIONS MENU PAGE
+    inst_menu.add.button("Back to Game", start_the_game)
+
+    for m in INSTRUCTIONS:
+        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
+
+    image_path_correct = pygame_menu.baseimage.BaseImage("assets/correct.jpg")
+    inst_menu.add.image(image_path_correct, align=pygame_menu.locals.ALIGN_LEFT)
+
+    for m in INSTRUCTIONS2:
+        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
+
+    image_path_semicorrect = pygame_menu.baseimage.BaseImage("assets/semicorrect.jpg")
+    inst_menu.add.image(image_path_semicorrect, align=pygame_menu.locals.ALIGN_LEFT)
+
+    for m in INSTRUCTIONS3:
+        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
+
+    inst_menu.add.button("Back to Game", start_the_game)
+
+    for m in SPACES:
+        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
+
+    if not start_game:
+        inst_menu.mainloop(SCREEN, background)
 
 def main():
     play_background_music()
