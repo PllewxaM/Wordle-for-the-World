@@ -1540,8 +1540,13 @@ def menu():
     menu.add.button('Play', start_the_game)
     menu.add.selector('Language: ', [("English", "en"), ("Spanish", "sp"), ("German", "ger"),
                                      ("French", "fr"), ("Kid Friendly", "kid")], onchange=set_language, default=0)
-    menu.add.selector('Background Music: ', [("Traditional", 0), ("Happy Beat", 1), ("Bop", 2),
-                                             ("Meditation", 3), ("Electric Chill", 4), ("Escape", 5), ("80's", 6)],
+    menu.add.selector('Background Music: ', [("Traditional", 0),
+                                             ("Happy Beat", 1),
+                                             ("     Bop      ", 2),
+                                             (" Meditation ", 3),
+                                             ("Electro Chill", 4),
+                                             ("    Escape   ", 5),
+                                             ("      80's     ", 6)],
                       onchange=set_background_music, default=0)
     menu.add.selector('Change Font: ',
                       [("Free Sans", 'assets/fonts/FreeSans.otf'), ("Comic Sans", 'assets/fonts/ComicSans.ttf'),
