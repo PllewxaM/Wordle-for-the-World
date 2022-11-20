@@ -31,13 +31,7 @@ threshold_initialized = 0
 
 # MUSIC
 has_warned = 0
-
 current_background_music = 0
-background_music = ['sound/background_music/traditional.ogg',
-                    'sound/background_music/happy_beat_drop.mp3',
-                    'sound/background_music/bops.mp3',
-                    'sound/background_music/guru_meditation.mp3',
-                    'sound/background_music/chill_electro_sax.mp3']
 
 try:
     mixer.init()
@@ -185,6 +179,7 @@ def draw_nav_bar():
     # Draws title of the application
     draw_text(my_font, "WORLD-LE", main_color, (WIDTH / 2, 25))
 
+# FONT MENU
 
 # Draws font options on the font menu 
 def draw_font_options():
@@ -290,6 +285,7 @@ def draw_font_screen(current):
 
     return value
 
+# COLOR MENU
 
 # draw the color squares on the color menu
 def draw_color_squrs():
@@ -735,10 +731,10 @@ def song_switch_handler(command):
     keyword_index = return_keyword_index("song", command)
     value_index = keyword_index + 1
     value = word_to_int(command_split[value_index])
-    if int(value) <= len(background_music):
+    if int(value) <= len(BACKGROUND_MUSIC):
         load_new_background_music(int(value) - 1)
     else:
-        say("You must say a song number " + str(len(background_music)) +
+        say("You must say a song number " + str(len(BACKGROUND_MUSIC)) +
             " or lower", languages[current_language])
 
 
@@ -747,7 +743,7 @@ def load_new_background_music(music_index):
     try:
         current_background_music = music_index
         mixer.music.pause()
-        mixer.music.load(background_music[current_background_music])
+        mixer.music.load(BACKGROUND_MUSIC[current_background_music])
         mixer.music.play(-1)
     except Exception as e:
         print(str(e) + "Something went wrong")
@@ -1194,7 +1190,7 @@ def start_the_game() -> None:
     draw_nav_bar()
 
     mixer.music.pause()
-    mixer.music.load(background_music[current_background_music])
+    mixer.music.load(BACKGROUND_MUSIC[current_background_music])
     mixer.music.play(-1)
 
     while True:
