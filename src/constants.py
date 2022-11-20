@@ -53,7 +53,9 @@ BACKGROUND_MUSIC = ['sound/background_music/traditional.ogg',
                     'sound/background_music/happy_beat_drop.mp3',
                     'sound/background_music/bops.mp3',
                     'sound/background_music/guru_meditation.mp3',
-                    'sound/background_music/chill_electro_sax.mp3']
+                    'sound/background_music/chill_electro_sax.mp3',
+                    'sound/background_music/escaping.mp3',
+                    'sound/background_music/80s.mp3']
 
 # SCREEN SIZE
 WIDTH, HEIGHT = 850, 750

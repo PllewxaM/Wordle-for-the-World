@@ -97,11 +97,10 @@ current_letter_bg_x = WIDTH / 3.25
 
 game_result = ""
 
-
 """FUNCTIONS"""
 
-
 """GAME BOARD"""
+
 
 # Draws the game board gird on the screen
 def draw():
@@ -189,6 +188,7 @@ def draw_nav_bar():
     # Draws title of the application
     draw_text(my_font, "WORLD-LE", main_color, (WIDTH / 2, 25))
 
+
 # FONT MENU
 
 # Draws font options on the font menu
@@ -206,7 +206,8 @@ def draw_font_options():
     draw_text(pygame.font.Font('assets/fonts/LilGrotesk.otf', 30), "Lil Grotesk", BLACK, (WIDTH / 2, HEIGHT - 390))
 
     pygame.draw.rect(SCREEN, LT_BLUE, FONT_FIVE_AREA, 0, ROUND)
-    draw_text(pygame.font.Font('assets/fonts/WignersFriendRoman.ttf', 30), "Wigners Friend", BLACK, (WIDTH / 2, HEIGHT - 330))
+    draw_text(pygame.font.Font('assets/fonts/WignersFriendRoman.ttf', 30), "Wigners Friend", BLACK,
+              (WIDTH / 2, HEIGHT - 330))
 
     pygame.draw.rect(SCREEN, LT_BLUE, FONT_SIX_AREA, 0, ROUND)
     draw_text(pygame.font.Font('assets/fonts/FirstCoffee.otf', 30), "First Coffee", BLACK, (WIDTH / 2, HEIGHT - 265))
@@ -294,6 +295,7 @@ def draw_font_screen(current):
         pygame.display.update()
 
     return value
+
 
 # COLOR MENU
 
@@ -446,6 +448,7 @@ class Letter:
 
 """KEYBOARD"""
 
+
 # draw and handle keyboard buttons
 class KeyButton:
     def __init__(self, x, y, letter):
@@ -510,6 +513,7 @@ def draw_keyboard():
 
 
 """GENERAL GAME CONTROLS"""
+
 
 def add_semi(char):
     global semi_correct_guesses
@@ -678,6 +682,7 @@ def reset_screen():
 
 """AUDIO CONTROL"""
 
+
 # Uses gTTS to say the string 'response' in language 'language'
 def say(response, language):
     obj = gTTS(text=response, lang=language, slow=False)
@@ -732,7 +737,7 @@ def say_and_confirm_by_char(guess, correct, language):
             else:
                 playsound('sound/effects/incorrect_char_trimmed.wav')
         except Exception as e:
-            print(str(e)+ "Something went wrong")
+            print(str(e) + "Something went wrong")
         correct_index = correct_index + 1
 
 
@@ -1159,6 +1164,7 @@ def submit():
 
 """TRADITIONAL PLAY CONTROL"""
 
+
 # for traditional version of the game
 def create_new_letter():
     # Creates a new letter and adds it to the guess.
@@ -1186,6 +1192,7 @@ def delete_letter():
 
 
 """APPLICATION CONTROL"""
+
 
 def start_the_game() -> None:
     global start_game, audio_interface_enabled, started, game_result, activate, current_guess_string, \
@@ -1328,6 +1335,7 @@ def start_the_game() -> None:
 
 """SETTERS"""
 
+
 def set_background_music(selected: Tuple[Any, int], value: int) -> None:
     global current_background_music
 
@@ -1347,7 +1355,7 @@ def set_language(selected: Tuple[Any, int], value: str) -> None:
         word_list = FR_WORDS
     elif lang == "kid":
         word_list = KID_WORDS
-    else :
+    else:
         word_list = EN_WORDS
 
     correct_word = word_list[random.randint(0, len(word_list) - 1)]
@@ -1411,6 +1419,7 @@ def increase_font_size():
 
 
 """MENU"""
+
 
 def background():
     SCREEN.fill(WHITE)
@@ -1532,11 +1541,14 @@ def menu():
     menu.add.selector('Language: ', [("English", "en"), ("Spanish", "sp"), ("German", "ger"),
                                      ("French", "fr"), ("Kid Friendly", "kid")], onchange=set_language, default=0)
     menu.add.selector('Background Music: ', [("Traditional", 0), ("Happy Beat", 1), ("Bop", 2),
-                                     ("Meditation", 3), ("Electric Chill", 4)], onchange=set_background_music, default=0)
-    menu.add.selector('Change Font: ', [("Free Sans", 'assets/fonts/FreeSans.otf'), ("Comic Sans", 'assets/fonts/ComicSans.ttf'),
-                                        ("Lil Grotesk", 'assets/fonts/LilGrotesk.otf'), ("GFS Didot", 'assets/fonts/GFSDidotBold.oft'),
-                                        ("First Coffee", 'assets/fonts/FirstCoffee.otf'), ("Wigners Friend", 'assets/fonts/WignersFriendRoman.ttf')],
-                                        onchange=menu_set_font, default=0)
+                                             ("Meditation", 3), ("Electric Chill", 4), ("Escape", 5), ("80's", 6)],
+                      onchange=set_background_music, default=0)
+    menu.add.selector('Change Font: ',
+                      [("Free Sans", 'assets/fonts/FreeSans.otf'), ("Comic Sans", 'assets/fonts/ComicSans.ttf'),
+                       ("Lil Grotesk", 'assets/fonts/LilGrotesk.otf'), ("GFS Didot", 'assets/fonts/GFSDidotBold.oft'),
+                       ("First Coffee", 'assets/fonts/FirstCoffee.otf'),
+                       ("Wigners Friend", 'assets/fonts/WignersFriendRoman.ttf')],
+                      onchange=menu_set_font, default=0)
     menu.add.button('Set Colors', color_menu)
     menu.add.button('Instructions', inst_menu)
     menu.add.button('About', about_menu)
