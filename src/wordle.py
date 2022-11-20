@@ -1551,7 +1551,7 @@ def menu():
                       onchange=set_background_music, default=0)
     menu.add.selector('Change Font: ',
                       [("Free Sans", 'assets/fonts/FreeSans.otf'), ("Comic Sans", 'assets/fonts/ComicSans.ttf'),
-                       ("Lil Grotesk", 'assets/fonts/LilGrotesk.otf'), ("GFS Didot", 'assets/fonts/GFSDidotBold.oft'),
+                       ("Lil Grotesk", 'assets/fonts/LilGrotesk.otf'), ("GFS Didot", 'assets/fonts/GFSDidotBold.otf'),
                        ("First Coffee", 'assets/fonts/FirstCoffee.otf'),
                        ("Wigners Friend", 'assets/fonts/WignersFriendRoman.ttf')],
                       onchange=menu_set_font, default=0)
