@@ -9,6 +9,14 @@ At the start of our process, we noticed that a number of Wordle’s qualities we
 With these shortcomings in mind, we set out to make Wordle accessible to the visually and physically impaired communities, as well as non-English speakers. We have done this by implementing a hands-free option for users to play using only their voice, as well as a language option for players to choose which language they would like play in. In addition to our accessibility features, we also added a color picker to allow users customize their gaming experience. With these implementations, we hope that this version of our World-le can truly be “Wordle for the world.”
 <br>
 
+## Table of Contents
+
+* Accessibility Features
+* Important Links
+* Handsfree Instructions
+* File Organization
+* Credits
+
 ## Accessibility Features
 
 * High contrast mode
