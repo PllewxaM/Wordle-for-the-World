@@ -64,7 +64,7 @@ With these shortcomings in mind, we set out to make Wordle accessible to the vis
 
 ## Credits <div id='credits'/>
 
-This project was developed by Summer Martin, Max Perrone, Kyla Ramos, and Caroline Francesconi. 
+This project was developed by [Summer Martin](https://github.com/martis36), [Max Perrone](https://github.com/PllewxaM), [Kyla Ramos](https://github.com/kyla0509), and [Caroline Francesconi](https://github.com/CarolineFrancesconi). 
 
 Some resources that were helpful in developing this project include: 
 
