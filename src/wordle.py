@@ -384,7 +384,7 @@ def draw_select_color():
 
     # draw cancel button
     pygame.draw.rect(SCREEN, sub_color2, CANCEL_AREA, 0, ROUND)
-    draw_text(my_font_sm, "CANCEL", WHITE, (WIDTH / 2, HEIGHT - 100))
+    draw_text(my_font_sm, "CANCEL", WHITE, (WIDTH / 2, HEIGHT - 105))
 
     pygame.display.update()
 
