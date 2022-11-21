@@ -100,13 +100,12 @@ To change the background music to find your favorite of the 5 different options,
 <details>
   <summary>Click to see all files</summary> 
 <p>
-The main file of this program is wordle.py. It houses all of the game functions and 
+  
 1. wordle.py - main file that contains game functions:
    - Audio interface
    - Text interface
    - Drawing Elements of the UI
    - Menu functionality
-
 2. mpg123.exe - supports the audio interface functionality
    - Used for windows versions
 3. messages.py - defines the large chunks of text used in the Instructions and Menus
