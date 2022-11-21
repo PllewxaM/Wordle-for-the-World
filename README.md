@@ -19,11 +19,10 @@ With these shortcomings in mind, we set out to make Wordle accessible to the vis
 
 ## Accessibility Features
 
-* High contrast mode
-* Customizable colors, font/font size
-* Language selection
-* Screen reader
-* Speech interpreter
+* High contrast mode: Our application offers a high contrast mode with a specific color scheme to accomodate those who are color blind. 
+* Customization: Worldle allows the user to customoze their gaming experience by choosing their color scheme, as well as the font style and size. This aids older users who are visually impaired, but also benefits all users who wish to add a bit of their personality to the interface.
+* Language selection: Our application allows the user to choose to play the game in English, Spanish, German, or French in order to accomodate more than just English speakers. Additionally, our kid-friendly option is conducive to younger users that are just starting to learn how to read and write. 
+* Screen Reader and Speech Interpreter - Worldle uses Google Text to Speech to implement an audio interface, so that users can play with their voice. This allows Blind and physically impaired users to play the game.
 
 ## Important links:
 
@@ -100,12 +99,13 @@ To change the background music to find your favorite of the 5 different options,
 <details>
   <summary>Click to see all files</summary> 
 <p>
-  
+The main file of this program is wordle.py. It houses all of the game functions and 
 1. wordle.py - main file that contains game functions:
    - Audio interface
    - Text interface
    - Drawing Elements of the UI
    - Menu functionality
+
 2. mpg123.exe - supports the audio interface functionality
    - Used for windows versions
 3. messages.py - defines the large chunks of text used in the Instructions and Menus
