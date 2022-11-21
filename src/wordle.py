@@ -1354,6 +1354,10 @@ def set_background_music(selected: Tuple[Any, int], value: int) -> None:
 
     current_background_music = value
 
+    mixer.music.pause()
+    mixer.music.load(BACKGROUND_MUSIC[current_background_music])
+    mixer.music.play(-1)
+
 
 def set_language(selected: Tuple[Any, int], value: str) -> None:
     global lang, correct_word, word_list, check_list, About, lang_index
