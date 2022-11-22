@@ -48,71 +48,71 @@ With these shortcomings in mind, we set out to make Wordle accessible to the vis
 ### Activate and Disable
 
 To activate hands-free mode, press the spacebar twice. <br />To disable hand-free mode, say 
-> "*Disable*"
+> "**Disable**"
 
 ***
 ### Stash
 To spell a word, either stash five individual letters, or stash a five-letter word. Below are two ways to stash the word "START":
->“*Stash* S"<br />"*Stash* T"<br />"*Stash*  A"<br />"*Stash* R"<br />"*Stash* T”
->“*Stash* START” 
+>“**Stash** S"<br />"**Stash** T"<br />"**Stash**  A"<br />"**Stash** R"<br />"**Stash** T”
+
+>“**Stash** START” 
 
 ***
 ### Replace
 Replace command allows the player to exchange one letter in the word for another. 
->"*Replace* x *with* y"
+>"**Replace** x **with** y"
 
 For example, the following command could turn the word “PAILS” to “TAILS”.
->“*Replace* P *with* T” 
+>“**Replace** P **with** T” 
 
 The player can also replace a letter at a certain index. For example, the following command could turn "APPLE" to "AMPLE"
->"*Replace* 2 *with* M"
+>"**Replace** 2 **with** M"
 
 ***
 ### Delete and Clear
 
 The following command deletes the most recently stashed letter:
->"*Delete*"
+>"**Delete**"
 
 The following command clears all letters from the stash:
->"*Clear*"
+>"**Clear**"
 
 ***
 ### Read
 To hear the letters in your current stash, say
->"*Read Guess*"
+>"**Read Guess**"
 
 To hear previous guesses:
->"*Read Guess **(1-5)***"
+>"**Read Guess** (1-5)"
 
 For example, the following command will read out your first guessed word.
->“*Read Guess 1*” 
+>“**Read Guess** 1” 
 
 The following command will read out all letters guessed that are in the correct word, but not in the correct place in one of your guesses:
-> "*Read Semi*"
+> "**Read Semi**"
 
 This command will read out all letters guessed that are not in the correct word.
-> "*Read Wrong*"
+> "**Read Wrong**"
 
 ***
 ### Submit
 To submit a stashed guess, say
->"*Submit*"
+>"**Submit**"
 
 ***
 ### Play Again
 Command used to restart the game after game is complete:
->“*Play Again.*”
+>“**Play Again.**”
 
 ***
 ### Music Control
 
 To change the volume of the background music, say "volume", followed by a number between 0 and 10.
->"*Volume **(1-10)***"
+>"**Volume** (1-10)"
 
 To change the background music to find your favorite of the 10 different options, use the following command:
->"*Song **(1-10)***"
+>"**Song** (1-10)"
 
-</details>
 </details>
 
 ## File Organization <div id='files'/>
@@ -134,7 +134,8 @@ To change the background music to find your favorite of the 10 different options
 
 ## Credits <div id='credits'/>
 
-This project was developed by [Summer Martin](https://github.com/martis36), [Max Perrone](https://github.com/PllewxaM), [Kyla Ramos](https://github.com/kyla0509), and [Caroline Francesconi](https://github.com/CarolineFrancesconi). 
+This project was developed by [Summer Martin](https://github.com/martis36), [Maxwell Parrone](https://github.com/PllewxaM),
+[Kyla Ramos](https://github.com/kyla0509), and [Caroline Francesconi](https://github.com/CarolineFrancesconi). 
 
 Some resources that were helpful in developing this project include: 
 
