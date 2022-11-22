@@ -52,6 +52,8 @@ lang = "en"
 word_list = EN_WORDS
 check_list = EN_WORDS
 correct_word = word_list[random.randint(0, len(word_list) - 1)]
+About = ABOUT_ENGLISH
+lang_index = 0
 
 # DEFAULT COLORS
 correct_color = GREEN
@@ -626,18 +628,23 @@ def reset():
     if lang == "sp":
         word_list = SP_WORDS
         check_list = word_list
+        
     elif lang == "ger":
         word_list = GER_WORDS
         check_list = word_list
+        
     elif lang == "fr":
         word_list = FR_WORDS
         check_list = word_list
+        
     elif lang == "kid":
         word_list = KID_WORDS
         check_list = EN_WORDS
+        
     else:
         word_list = EN_WORDS
         check_list = word_list
+        
 
     correct_word = word_list[random.randint(0, len(word_list) - 1)]
 
@@ -1347,29 +1354,44 @@ def set_background_music(selected: Tuple[Any, int], value: int) -> None:
 
     current_background_music = value
 
+    mixer.music.pause()
+    mixer.music.load(BACKGROUND_MUSIC[current_background_music])
+    mixer.music.play(-1)
+
 
 def set_language(selected: Tuple[Any, int], value: str) -> None:
-    global lang, correct_word, word_list, check_list
+    global lang, correct_word, word_list, check_list, About, lang_index
 
     lang = value
 
     if lang == "sp":
         word_list = SP_WORDS
         check_list = word_list
+        About = ABOUT_SPANISH
+        lang_index = 1
     elif lang == "ger":
         word_list = GER_WORDS
         check_list = word_list
+        About = ABOUT_GERMAN
+        lang_index = 2
     elif lang == "fr":
         word_list = FR_WORDS
         check_list = word_list
+        #About = ABOUT_FRENCH
+        lang_index = 3
     elif lang == "kid":
         word_list = KID_WORDS
         check_list = EN_WORDS
+        About = ABOUT_ENGLISH
+        lang_index = 4
     else:
         word_list = EN_WORDS
         check_list = word_list
+        About = ABOUT_ENGLISH
+        lang_index = 0
 
     correct_word = word_list[random.randint(0, len(word_list) - 1)]
+    #menu()
 
 
 def menu_set_font(selected: Tuple[Any, int], value):
@@ -1515,7 +1537,9 @@ def menu():
         color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
 
     # ABOUT MENU PAGE
-    for m in ABOUT:
+    #if lang == 'es':
+        #About = ABOUT_SPANISH
+    for m in About:
         about_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
 
     for m in SPACES:
@@ -1550,7 +1574,7 @@ def menu():
     # MAIN MENU PAGE
     menu.add.button('Play', start_the_game)
     menu.add.selector('Language: ', [("English", "en"), ("Spanish", "sp"), ("German", "ger"),
-                                     ("French", "fr"), ("Kid Friendly", "kid")], onchange=set_language, default=0)
+                                     ("French", "fr"), ("Kid Friendly", "kid")], onchange=set_language, default=lang_index)
     menu.add.selector('Background Music: ', [("Traditional", 0),
                                              ("Happy Beat", 1),
                                              ("     Bop      ", 2),
