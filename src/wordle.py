@@ -382,11 +382,11 @@ def draw_select_color():
     draw_text(my_font_med, "Change Wrong Color", BLACK, (WIDTH / 2, HEIGHT - 310))
 
     pygame.draw.rect(SCREEN, HIGH_CONTRAST_2, PICK_FOUR_AREA, 0, ROUND)
-    draw_text(my_font_med, "Activate High Contrast Mode", BLACK, (WIDTH / 2, HEIGHT - 185))
+    draw_text(my_font_med, "Activate High Contrast Mode", BLACK, (WIDTH / 2, HEIGHT - 210))
 
     # draw cancel button
     pygame.draw.rect(SCREEN, sub_color2, CANCEL_AREA, 0, ROUND)
-    draw_text(my_font_sm, "CANCEL", WHITE, (WIDTH / 2, HEIGHT - 105))
+    draw_text(my_font_sm, "CANCEL", WHITE, (WIDTH / 2, HEIGHT - 115))
 
     pygame.display.update()
 
@@ -658,6 +658,7 @@ def reset():
     play_background_music()
 
     print(correct_word)
+    print(lang)
     pygame.display.update()
 
 
@@ -1215,6 +1216,7 @@ def start_the_game() -> None:
 
     SCREEN.fill(main_color)
     print(correct_word)
+    print(lang)
 
     draw_keyboard()
     draw_color_key()
@@ -1377,7 +1379,7 @@ def set_language(selected: Tuple[Any, int], value: str) -> None:
     elif lang == "fr":
         word_list = FR_WORDS
         check_list = word_list
-        #About = ABOUT_FRENCH
+        About = ABOUT_ENGLISH
         lang_index = 3
     elif lang == "kid":
         word_list = KID_WORDS
@@ -1592,7 +1594,7 @@ def menu():
                        ("Lil Grotesk", 'assets/fonts/LilGrotesk.otf'), ("GFS Didot", 'assets/fonts/GFSDidotBold.otf'),
                        ("First Coffee", 'assets/fonts/FirstCoffee.otf'),
                        ("Wigners Friend", 'assets/fonts/WignersFriendRoman.ttf')],
-                      onchange=menu_set_font, default=0)
+                      onchange=menu_set_font, default=lang_index)
     menu.add.button('Set Colors', color_menu)
     menu.add.button('Instructions', inst_menu)
     menu.add.button('About', about_menu)
