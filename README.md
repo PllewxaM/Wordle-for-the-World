@@ -52,7 +52,7 @@ To activate hands-free mode, press the spacebar twice. <br />To disable hand-fre
 
 ***
 ### Stash
-To spell a word, either stash five individual letters, or stash a five-letter word. Below are two ways to stash the word "start":
+To spell a word, either stash five individual letters, or stash a five-letter word. Below are two ways to stash the word "START":
 >“*Stash* S"<br />"*Stash* T"<br />"*Stash*  A"<br />"*Stash* R"<br />"*Stash* T”
 >“*Stash* START” 
 
@@ -61,7 +61,7 @@ To spell a word, either stash five individual letters, or stash a five-letter wo
 Replace command allows the player to exchange one letter in the word for another. 
 >"*Replace* x *with* y"
 
-For example, the following command could turn the word “pails” to “tails”.
+For example, the following command could turn the word “PAILS” to “TAILS”.
 >“*Replace* P *with* T” 
 
 The player can also replace a letter at a certain index. For example, the following command could turn "APPLE" to "AMPLE"
@@ -82,10 +82,10 @@ To hear the letters in your current stash, say
 >"*Read Guess*"
 
 To hear previous guesses:
->"*Read Guess* x"
+>"*Read Guess **(1-5)***"
 
 For example, the following command will read out your first guessed word.
->“*Read Guess **(1-5)***” 
+>“*Read Guess 1*” 
 
 The following command will read out all letters guessed that are in the correct word, but not in the correct place in one of your guesses:
 > "*Read Semi*"
