@@ -37,12 +37,82 @@ With these shortcomings in mind, we set out to make Wordle accessible to the vis
 
 * [Shared Google Drive](https://drive.google.com/drive/folders/0ABLGOc9WOIvZUk9PVA?ths=true)
 
-## Handsfree Game Instructions <div id='handsfree'/>
+<div id='handsfree'/>
+
+## Handsfree Game Instructions
 <details>
   <summary>Click to see how to use our Handsfree Wordle Interface </summary> 
 <p>
-	@@ -95,17 +100,16 @@ To change the background music to find your favorite of the 5 different options,
->"*Song **(1-5)***"
+
+***
+### Activate and Disable
+
+To activate hands-free mode, press the spacebar twice. <br />To disable hand-free mode, say 
+> "*Disable*"
+
+***
+### Stash
+To spell a word, either stash five individual letters, or stash a five-letter word. Below are two ways to stash the word "start":
+>“*Stash* S"<br />"*Stash* T"<br />"*Stash*  A"<br />"*Stash* R"<br />"*Stash* T”
+>“*Stash* START” 
+
+***
+### Replace
+Replace command allows the player to exchange one letter in the word for another. 
+>"*Replace* x *with* y"
+
+For example, the following command could turn the word “pails” to “tails”.
+>“*Replace* P *with* T” 
+
+The player can also replace a letter at a certain index. For example, the following command could turn "APPLE" to "AMPLE"
+>"*Replace* 2 *with* M"
+
+***
+### Delete and Clear
+
+The following command deletes the most recently stashed letter:
+>"*Delete*"
+
+The following command clears all letters from the stash:
+>"*Clear*"
+
+***
+### Read
+To hear the letters in your current stash, say
+>"*Read Guess*"
+
+To hear previous guesses:
+>"*Read Guess* x"
+
+For example, the following command will read out your first guessed word.
+>“*Read Guess **(1-5)***” 
+
+The following command will read out all letters guessed that are in the correct word, but not in the correct place in one of your guesses:
+> "*Read Semi*"
+
+This command will read out all letters guessed that are not in the correct word.
+> "*Read Wrong*"
+
+***
+### Submit
+To submit a stashed guess, say
+>"*Submit*"
+
+***
+### Play Again
+Command used to restart the game after game is complete:
+>“*Play Again.*”
+
+***
+### Music Control
+
+To change the volume of the background music, say "volume", followed by a number between 0 and 10.
+>"*Volume **(1-10)***"
+
+To change the background music to find your favorite of the 10 different options, use the following command:
+>"*Song **(1-10)***"
+
+</details>
 </details>
 
 ## File Organization <div id='files'/>
