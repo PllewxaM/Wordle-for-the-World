@@ -52,7 +52,11 @@ lang = "en"
 word_list = EN_WORDS
 check_list = EN_WORDS
 correct_word = word_list[random.randint(0, len(word_list) - 1)]
-About = ABOUT_ENGLISH
+about_display = ABOUT_ENGLISH
+instructions1_display = INSTRUCTIONS1_ENGLISH
+instructions2_display = INSTRUCTIONS2_ENGLISH
+instructions3_display = INSTRUCTIONS3_ENGLISH
+color_instructions_display = COLOR_INSTRUCTIONS_ENGLISH
 lang_index = 0
 
 # DEFAULT COLORS
@@ -628,23 +632,18 @@ def reset():
     if lang == "sp":
         word_list = SP_WORDS
         check_list = word_list
-        
     elif lang == "ger":
         word_list = GER_WORDS
         check_list = word_list
-        
     elif lang == "fr":
         word_list = FR_WORDS
         check_list = word_list
-        
     elif lang == "kid":
         word_list = KID_WORDS
         check_list = EN_WORDS
-        
     else:
         word_list = EN_WORDS
         check_list = word_list
-        
 
     correct_word = word_list[random.randint(0, len(word_list) - 1)]
 
@@ -1362,38 +1361,58 @@ def set_background_music(selected: Tuple[Any, int], value: int) -> None:
 
 
 def set_language(selected: Tuple[Any, int], value: str) -> None:
-    global lang, correct_word, word_list, check_list, About, lang_index
+    global lang, correct_word, word_list, check_list, about_display, lang_index, instructions1_display, instructions2_display, \
+    instructions3_display, color_instructions_display
 
     lang = value
 
     if lang == "sp":
         word_list = SP_WORDS
         check_list = word_list
-        About = ABOUT_SPANISH
+        about_display = ABOUT_SPANISH
+        instructions1_display = INSTRUCTIONS1_SPANISH
+        instructions2_display = INSTRUCTIONS2_SPANISH
+        instructions3_display = INSTRUCTIONS3_SPANISH
+        color_instructions_display = COLOR_INSTRUCTIONS_SPANISH
         lang_index = 1
     elif lang == "ger":
         word_list = GER_WORDS
         check_list = word_list
-        About = ABOUT_GERMAN
+        about_display = ABOUT_GERMAN
+        instructions1_display = INSTRUCTIONS1_GERMAN
+        instructions2_display = INSTRUCTIONS2_GERMAN
+        instructions3_display = INSTRUCTIONS3_GERMAN
+        color_instructions_display = COLOR_INSTRUCTIONS_GERMAN
         lang_index = 2
     elif lang == "fr":
         word_list = FR_WORDS
         check_list = word_list
-        About = ABOUT_ENGLISH
+        about_display = ABOUT_FRENCH
+        instructions1_display = INSTRUCTIONS1_FRENCH
+        instructions2_display = INSTRUCTIONS2_FRENCH
+        instructions3_display = INSTRUCTIONS3_FRENCH
+        color_instructions_display = COLOR_INSTRUCTIONS_FRENCH
         lang_index = 3
     elif lang == "kid":
         word_list = KID_WORDS
         check_list = EN_WORDS
-        About = ABOUT_ENGLISH
+        about_display = ABOUT_ENGLISH
+        instructions1_display = INSTRUCTIONS1_ENGLISH
+        instructions2_display = INSTRUCTIONS2_ENGLISH
+        instructions3_display = INSTRUCTIONS3_ENGLISH
+        color_instructions_display = COLOR_INSTRUCTIONS_ENGLISH
         lang_index = 4
     else:
         word_list = EN_WORDS
         check_list = word_list
-        About = ABOUT_ENGLISH
+        about_display = ABOUT_ENGLISH
+        instructions1_display = INSTRUCTIONS1_ENGLISH
+        instructions2_display = INSTRUCTIONS2_ENGLISH
+        instructions3_display = INSTRUCTIONS3_ENGLISH
+        color_instructions_display = COLOR_INSTRUCTIONS_ENGLISH
         lang_index = 0
 
     correct_word = word_list[random.randint(0, len(word_list) - 1)]
-    #menu()
 
 
 def menu_set_font(selected: Tuple[Any, int], value):
@@ -1523,7 +1542,7 @@ def menu():
     )
 
     # COLOR MENU PAGE
-    for m in COLOR_INSTRUCTIONS:
+    for m in color_instructions_display:
         color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
 
     color_menu.add.color_input("Correct Letter Color  ", color_type='hex', onchange=set_correct_color, default=GREEN)
@@ -1539,9 +1558,7 @@ def menu():
         color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
 
     # ABOUT MENU PAGE
-    #if lang == 'es':
-        #About = ABOUT_SPANISH
-    for m in About:
+    for m in about_display:
         about_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
 
     for m in SPACES:
@@ -1553,19 +1570,19 @@ def menu():
         about_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
 
     # INSTRUCTIONS MENU PAGE
-    for m in INSTRUCTIONS:
+    for m in instructions1_display: 
         inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
 
     image_path_correct = pygame_menu.baseimage.BaseImage("assets/correct.jpg")
     inst_menu.add.image(image_path_correct, align=pygame_menu.locals.ALIGN_LEFT)
 
-    for m in INSTRUCTIONS2:
+    for m in instructions2_display: 
         inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
 
     image_path_semicorrect = pygame_menu.baseimage.BaseImage("assets/semicorrect.jpg")
     inst_menu.add.image(image_path_semicorrect, align=pygame_menu.locals.ALIGN_LEFT)
 
-    for m in INSTRUCTIONS3:
+    for m in instructions3_display:
         inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
 
     inst_menu.add.button("Back", pygame_menu.events.BACK)
@@ -1626,19 +1643,19 @@ def instructions():
     # INSTRUCTIONS MENU PAGE
     inst_menu.add.button("Back to Game", start_the_game)
 
-    for m in INSTRUCTIONS:
+    for m in instructions1_display:
         inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
 
     image_path_correct = pygame_menu.baseimage.BaseImage("assets/correct.jpg")
     inst_menu.add.image(image_path_correct, align=pygame_menu.locals.ALIGN_LEFT)
 
-    for m in INSTRUCTIONS2:
+    for m in instructions2_display:
         inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
 
     image_path_semicorrect = pygame_menu.baseimage.BaseImage("assets/semicorrect.jpg")
     inst_menu.add.image(image_path_semicorrect, align=pygame_menu.locals.ALIGN_LEFT)
 
-    for m in INSTRUCTIONS3:
+    for m in instructions3_display:
         inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
 
     inst_menu.add.button("Back to Game", start_the_game)

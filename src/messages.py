@@ -45,58 +45,6 @@ ABOUT_ENGLISH = ["",
          "team’s final project engages individuals with differing abilities in a", 
          "positive way. Caroline’s favorite five-letter word is “pasta.”"]
 
-INSTRUCTIONS = ["How to Play Using a Keyboard:",
-                "- Using your computer’s keyboard or the one on the screen, guess a five letter word.",
-                "- Press the delete key to remove a letter.",
-                "- Press the enter key to submit a guess.",
-                "- Letters in the correct position will appear green, as show here:"] 
-
-INSTRUCTIONS2 = ["- Letters in the word, but in the incorrect position will appear yellow, as shown here:"]
-                
-INSTRUCTIONS3 = ["- Incorrect letters will appear gray, as shown above." ,
-                 "- You have six attempts to guess the secret word.",
-                 " ",
-                 "How to Play Hands-Free:",
-                 "- To activate hands-free mode, say <command>.",
-                 "- To disable hand-free mode, say “disable.”",
-                 "- To spell a word, you can either stash five individual letters,", 
-                 "  or stash a five-letter word. For example, “stash s, stash t, stash a,",
-                 "  stash r, stash t” and “stash start” both stash the word, start.",
-                 "- To submit a stashed word, say “submit.”",
-                 "- To delete the most recently stashed letter, say “delete.”",
-                 "- To clear your stash, say “clear.”",
-                 "- To replace a letter, say “replace,” followed by the character you want to replace,",
-                 "  the word “with,” and the new character. For example, “replace p with t” would turn",
-                 "  the word “pails” to “tails”.",
-                 "- To hear a particular guessed word, say “read guess” followed by the number of the",
-                 "  guessed word. For example, “read guess one” will read out your first guessed word.",
-                 "- To hear your semi-correct letters, say “read semi.”",
-                 "- To hear your previous wrong guessed words, say “read wrong.”",
-                 "- To play again after finishing a game, say “play again.”"," ", " "]    
-
-COLOR_INSTRUCTIONS = ["On this screen you can input colors using their hexidecimal code.", 
-                    "Don't worry if you're not sure how to do this, you can also change the colors from",  
-                    "the main game screem by clicking on the color key.", 
-                    "From there you can pick from assorted pre-set colors and themes.", "", "", ""]
-
-SPACES = [" ", " "]
-
-# Long sections of text used for instructing hands-free user
-STARTUP = "Welcome to wordle for the world, to activate the hands free version of the program, press " \
-          "the space bar twice"
-ACTIVATED = "Audio interface activated, if you need help with playing the game, say: tutorial. " \
-            "To disable audio mode say disable."
-WORDLE_TUTORIAL = "Insert wordle tutorial here"
-HANDSFREE_TUTORIAL = "Insert handsfree tutorial here"
-STASH_TUTORIAL = "Insert stash tutorial/example here"
-CLEAR_TUTORIAL = "The command clear will delete all the letters in your current guess stash"
-READ_TUTORIAL = "Insert read tutorial/example here"
-REPLACE_TUTORIAL = "Insert replace tutorial/example here"
-SUBMIT_TUTORIAL = "Insert submit tutorial/example here"
-
-volume_warning = "handsfree mode hears best with low background noise. If you're wearing headphones, repeat " \
-                 "your volume command to confirm."
-
 ABOUT_SPANISH = ["",
                  "Sobre",
                  "Bienvenido a World-le: la versión accesible de S3N1OR SQU4D del popular",
@@ -113,7 +61,9 @@ ABOUT_SPANISH = ["",
                  "daltónica; la función de alto contraste es incluso insuficiente. Además, no",
                  "hay forma de que jueguen los miembros de la comunidad de ciegos. Finalmente,",
                  "los impedimentos físicos disuaden a aquellos que no pueden usar sus manos de",
-                 "jugar el juego. Con estas deficiencias en mente, nos propusimos hacer que",
+                 "jugar el juego.",
+                 " ",
+                 "Con estas deficiencias en mente, nos propusimos hacer que",
                  "Wordle fuera accesible para las comunidades con discapacidad visual y física,", 
                  "así como para las personas que no hablan inglés. Lo hemos hecho implementando",
                  "una opción de manos libres para que los usuarios jueguen usando solo su voz,",
@@ -161,49 +111,192 @@ ABOUT_GERMAN = ["",
                 "ist das Farbschema für die farbenblinde Gemeinschaft unzugänglich; die hohe",
                 "Kontrasteigenschaft ist sogar unzureichend. Darüber hinaus gibt es für Mitglieder der",
                 "Blinden-Community keine Möglichkeit zu spielen. Schließlich halten körperliche",
-                "Beeinträchtigungen diejenigen, die ihre Hände nicht benutzen können, davon ab, das Spiel",
-                "zu spielen. Angesichts dieser Mängel haben wir uns vorgenommen, Wordle für seh- und",
+                "Beeinträchtigungen diejenigen, die ihre Hände nicht benutzen können, davon ab, das",
+                "Spiel zu spielen.",
+                " ",
+                "Angesichts dieser Mängel haben wir uns vorgenommen, Wordle für seh- und",
                 "körperlich eingeschränkte Gemeinschaften sowie für nicht-englischsprachige Personen",
                 "zugänglich zu machen. Wir haben dies erreicht, indem wir eine Freisprechoption",
                 "implementiert haben, mit der Benutzer nur mit ihrer Stimme spielen können, sowie eine",
                 "Sprachoption, mit der Spieler auswählen können, in welcher Sprache sie spielen möchten.",
-                "Zusätzlich zu unseren Barrierefreiheitsfunktionen haben wir auch eine hinzugefügt Farbwähler,", 
-                "mit dem Benutzer ihr Spielerlebnis anpassen können. Mit diesen Implementierungen hoffen wir,",
-                "dass diese Version unseres World-le wirklich “Wort für die Welt” sein kann.",
+                "Zusätzlich zu unseren Barrierefreiheitsfunktionen haben wir auch eine hinzugefügt", 
+                "Farbwähler, mit dem Benutzer ihr Spielerlebnis anpassen können. Mit diesen ",
+                "Implementierungen hoffen wir, dass diese Version unseres World-le wirklich “Wort für",
+                "die Welt” sein kann.",
                 " ",
                 "den S3N1OR SQU4D Treffe",
                 "Summer Martin ist Senior am College of New Jersey mit Schwerpunkt Informatik und",
-                "Betriebswirtschaftslehre als Nebenfach. Sie interessiert sich besonders für Software Engineering",
-                "und hofft, nach dem Abschluss eine Kombination aus Backend- und Frontend-Softwareentwicklung zu",
-                "machen. Sie glaubt an inklusives Design für die Programmierung und für alle Lebensbereiche.",
-                "Summers Lieblingswort mit fünf Buchstaben ist “Magie”.",
+                "Betriebswirtschaftslehre als Nebenfach. Sie interessiert sich besonders für Software",
+                "Engineering und hofft, nach dem Abschluss eine Kombination aus Backend- und",
+                "Frontend-Softwareentwicklung zu machen. Sie glaubt an inklusives Design für die",
+                "Programmierung und für alle Lebensbereiche. Summers Lieblingswort mit fünf",
+                "Buchstaben ist “Magie”.",
                 " ",
-                "Max Perrone is a ",
+                "Max Perrone",
                 " ",
-                "Kyla Ramos ist Seniorin am College of New Jersey und studiert Informatik mit Nebenfach Interactive",
-                "Multimedia. Sie findet Barrierefreiheit insgesamt und besonders beim Gaming wichtig. Ihr längster",
-                "Wordle-Streak war 350 Tage lang. Kylas Lieblingswort mit fünf Buchstaben ist “albern”.",
+                "Kyla Ramos ist Seniorin am College of New Jersey und studiert Informatik mit Nebenfach",
+                "Interactive Multimedia. Sie findet Barrierefreiheit insgesamt und besonders beim",
+                "Gaming wichtig. Ihr längster Wordle-Streak war 350 Tage lang. Kylas Lieblingswort mit",
+                "fünf Buchstaben ist “albern”.",
                 " ",
-                "Caroline Francesconi ist Seniorin am College of New Jersey mit Hauptfach Statistik und Nebenfach",
-                "Frauen-, Geschlechter- und Sexualitätsstudien. Sie hat es wirklich genossen, etwas über",
-                "barrierefreies Design in HCI zu lernen, und hofft, dass das Abschlussprojekt ihres Teams Personen",
-                "mit unterschiedlichen Fähigkeiten auf positive Weise einbezieht. Carolines Lieblingswort mit fünf",
-                "Buchstaben ist “Pasta.”"]
+                "Caroline Francesconi ist Seniorin am College of New Jersey mit Hauptfach Statistik und",
+                "Nebenfach Frauen-, Geschlechter- und Sexualitätsstudien. Sie hat es wirklich genossen,",
+                "etwas über barrierefreies Design in HCI zu lernen, und hofft, dass das Abschlussprojekt",
+                "ihres Teams Personen mit unterschiedlichen Fähigkeiten auf positive Weise einbezieht.",
+                "Carolines Lieblingswort mit fünf Buchstaben ist “Pasta.”"]
 
-#ABOUT_FRENCH = ["",
- #               "À Propos De",
-  #              "Bienvenue dans World-le : la version accessible du S3N1OR SQU4D du célèbre jeu de devinettes du New",
-   #             "York Times. Ce jeu a été développé à l'automne 2022 pour notre projet final CSC 355: Interactions",
-    #            "Homme-Machine.",
-     #           "Notre Mission",
-      #          "Au début de notre processus, nous avons remarqué qu'un certain nombre de qualités de Wordle étaient",
-       #         "inaccessibles. Premièrement, alors que des versions de Wordle existent dans des langues autres que",
-        #        "l'anglais en ligne, le jeu du New York Times n'est disponible qu'en anglais, excluant ainsi les",
-         #       "non-anglophones. Deuxièmement, la palette de couleurs est inaccessible à la communauté daltonienne;",
-          #      "la fonction de contraste élevé est même insuffisante. De plus, les membres de la communauté aveugle n'ont aucun moyen de jouer. Enfin, les handicaps physiques dissuadent ceux qui ne peuvent pas utiliser leurs mains de jouer au jeu.
-           #     Avec ces lacunes à l'esprit, nous avons décidé de rendre Wordle accessible aux communautés malvoyantes et physiques, ainsi qu'aux non-anglophones. Pour ce faire, nous avons mis en place une option mains libres permettant aux utilisateurs de jouer en utilisant uniquement leur voix, ainsi qu'une option de langue permettant aux joueurs de choisir la langue dans laquelle ils souhaitent jouer. En plus de nos fonctionnalités d'accessibilité, nous avons également ajouté un sélecteur de couleurs pour permettre aux utilisateurs de personnaliser leur expérience de jeu. Avec ces implémentations, nous espérons que cette version de notre World-le pourra vraiment être "Wordle pour le monde".
-            #    Rencontrer S3N1OR SQU4D
-             #   Summer Martin est un senior au College of New Jersey avec une spécialisation en informatique avec une mineure en gestion d'entreprise. Elle s'intéresse particulièrement au génie logiciel et espère faire une combinaison de développement de logiciels backend et front end après l'obtention de son diplôme. Elle croit en une conception inclusive pour la programmation et pour tous les domaines de la vie. Le mot de cinq lettres préféré de Summer est "magique".
-              #  Kyla Ramos est une étudiante senior au College of New Jersey qui étudie l'informatique et une mineure en multimédia interactif. Elle pense que l'accessibilité en général, et en particulier dans les jeux, est importante. Sa plus longue séquence Wordle a duré 350 jours. Le mot de cinq lettres préféré de Kyla est "idiot".
-               # Caroline Francesconi est une senior au College of New Jersey avec une spécialisation en statistiques et une mineure en études sur les femmes, le genre et la sexualité. Elle a vraiment aimé en apprendre davantage sur la conception accessible dans HCI et espère que le projet final de son équipe engagera des personnes aux capacités différentes de manière positive. Le mot de cinq lettres préféré de Caroline est "pasta".
-                #"]
+ABOUT_FRENCH = ["",
+                "À Propos De",
+                "Bienvenue dans World-le : la version accessible du S3N1OR SQU4D du célèbre jeu de",
+                "devinettes du New York Times. Ce jeu a été développé à l'automne 2022 pour notre",
+                "projet final CSC 355: Interactions Homme-Machine.",
+                " ",
+                "Notre Mission",
+                "Au début de notre processus, nous avons remarqué qu'un certain nombre de qualités",
+                "de Wordle étaient inaccessibles. Premièrement, alors que des versions de Wordle",
+                "existent dans des langues autres que l'anglais en ligne, le jeu du New York Times",
+                "n'est disponible qu'en anglais, excluant ainsi les non-anglophones. Deuxièmement,",
+                "la palette de couleurs est inaccessible à la communauté daltonienne; la fonction", 
+                "de contraste élevé est même insuffisante. De plus, les membres de la communauté",
+                "aveugle n'ont aucun moyen de jouer.",
+                " ",
+                "Enfin, les handicaps physiques dissuadent ceux qui ne peuvent pas utiliser leurs", 
+                "mains de jouer au jeu. Avec ces lacunes à l'esprit, nous avons décidé de rendre",
+                "Wordle accessible aux communautés malvoyantes et physiques, ainsi qu'aux",
+                "non-anglophones. Pour ce faire, nous avons mis en place une option mains libres", 
+                "permettant aux utilisateurs de jouer en utilisant uniquement leur voix, ainsi",
+                "qu'une option de langue permettant aux joueurs de choisir la langue dans laquelle",
+                "nous avons également ajouté un sélecteur de couleurs pour permettre aux utilisateurs",
+                "de ils souhaitent jouer. En plus de nos fonctionnalités d'accessibilité, personnaliser",
+                "leur expérience de jeu. Avec ces implémentations, nous espérons que cette version",
+                "de notre World-le pourra vraiment être “Wordle pour le monde.”",
+                " ",
+                "Rencontrer S3N1OR SQU4D",
+                "Summer Martin est un senior au College of New Jersey avec une spécialisation en",
+                "informatique avec une mineure en gestion d'entreprise. Elle s'intéresse",
+                "particulièrement au génie logiciel et espère faire une combinaison de",
+                "développement de logiciels backend et front end après l'obtention de son diplôme.",
+                "Elle croit en une conception inclusive pour la programmation et pour tous les domaines",
+                "de la vie. Le mot de cinq lettres préféré de Summer est “magique.”",
+                " ",
+                "Kyla Ramos est une étudiante senior au College of New Jersey qui étudie l'informatique",
+                "et une mineure en multimédia interactif. Elle pense que l'accessibilité en général,",
+                " et en particulier dans les jeux, est importante. Sa plus longue séquence Wordle a", 
+                "duré 350 jours. Le mot de cinq lettres préféré de Kyla est “idiot.”",
+                " ",
+                "Caroline Francesconi est une senior au College of New Jersey avec une spécialisation",
+                "en statistiques et une mineure en études sur les femmes, le genre et la sexualité.", 
+                "Elle a vraiment aimé en apprendre davantage sur la conception accessible dans HCI", 
+                "et espère que le projet final de son équipe engagera des personnes aux capacités", 
+                "différentes de manière positive. Le mot de cinq lettres préféré de Caroline est",
+                "“pasta.”"]
+
+INSTRUCTIONS1_ENGLISH = ["How to Play Using a Keyboard:",
+                         "- Using your computer’s keyboard or the one on the screen, guess a five letter word.",
+                         "- Press the delete key to remove a letter.",
+                         "- Press the enter key to submit a guess.",
+                         "- Letters in the correct position will appear green, as show here:"] 
+
+INSTRUCTIONS2_ENGLISH = ["- Letters in the word, but in the incorrect position will appear yellow, as shown here:"]
+                
+INSTRUCTIONS3_ENGLISH = ["- Incorrect letters will appear gray, as shown above." ,
+                         "- You have six attempts to guess the secret word.",
+                         " ",
+                         "How to Play Hands-Free:",
+                         "- To activate hands-free mode, press the space bar twice.",
+                         "- To disable hand-free mode, say “disable.”",
+                         "- To spell a word, you can either stash five individual letters,", 
+                         "  or stash a five-letter word. For example, “stash s, stash t, stash a,",
+                         "  stash r, stash t” and “stash start” both stash the word, start.",
+                         "- To submit a stashed word, say “submit.”",
+                         "- To delete the most recently stashed letter, say “delete.”",
+                         "- To clear your stash, say “clear.”",
+                         "- To replace a letter, say “replace,” followed by the character you want to replace,",
+                         "  the word “with,” and the new character. For example, “replace p with t” would turn",
+                         "  the word “pails” to “tails”.",
+                         "- To hear a particular guessed word, say “read guess” followed by the number of the",
+                         "  guessed word. For example, “read guess one” will read out your first guessed word.",
+                         "- To hear your semi-correct letters, say “read semi.”",
+                         "- To hear your previous wrong guessed words, say “read wrong.”",
+                         "- To play again after finishing a game, say “play again.”"," ", " "]    
+
+INSTRUCTIONS1_SPANISH = ["Cómo jugar usando un teclado:",
+                         "- Usando el teclado de su computadora o el que está en la pantalla, adivine una", 
+                         "  palabra de cinco letras.",
+                         "- Presione la tecla Eliminar para eliminar una letra.",
+                         "- Pulse la tecla Intro para enviar una conjetura.",
+                         "- Las letras en la posición correcta aparecerán en verde, como se muestra a."
+                         "  continuación"]
+
+INSTRUCTIONS2_SPANISH = ["- Las letras de la palabra, pero en la posición incorrecta, aparecerán de color rosa,",
+                         "  como se muestra a continuación."]
+
+INSTRUCTIONS3_SPANISH = ["- Las letras incorrectas aparecerán en violeta, como se muestra arriba.",
+                         "- Tienes seis intentos para adivinar la palabra secreta."]
+
+INSTRUCTIONS1_GERMAN = ["Wie man mit einer Tastatur spielt:",
+                        "- Errate mit der Tastatur deines Computers oder der auf dem Bildschirm ein Wort mit",
+                        "  fünf Buchstaben.",
+                        "- Drücken Sie die Löschtaste, um einen Buchstaben zu entfernen.",
+                        "- Drücken Sie die Eingabetaste, um einen Tipp abzugeben.",
+                        "- Buchstaben an der richtigen Position erscheinen grün, wie unten gezeigt."]
+
+INSTRUCTIONS2_GERMAN = ["- Buchstaben im Wort, aber an der falschen Position, erscheinen rosa, wie unten gezeigt. "] 
+
+INSTRUCTIONS3_GERMAN = ["- Falsche Buchstaben werden wie oben gezeigt violett angezeigt.", 
+                        "- Sie haben sechs Versuche, das geheime Wort zu erraten."]
+
+INSTRUCTIONS1_FRENCH = ["Comment jouer avec un clavier:",
+                        "- À l'aide du clavier de votre ordinateur ou de celui de l'écran, devinez",
+                        "  un mot de cinq lettres.",
+                        "- Appuyez sur la touche de suppression pour supprimer une lettre.",
+                        "- Appuyez sur la touche Entrée pour soumettre une estimation.",
+                        "- Les lettres dans la bonne position apparaîtront en vert, comme illustré ci-dessous."]
+
+INSTRUCTIONS2_FRENCH = ["- Les lettres du mot, mais dans la position incorrecte, apparaîtront en rose, comme",
+                        "  indiqué ci-dessous."]
+
+INSTRUCTIONS3_FRENCH = ["- Les lettres incorrectes apparaîtront en violet, comme indiqué ci-dessus.",
+                        "- Vous avez six tentatives pour deviner le mot secret."]
+
+COLOR_INSTRUCTIONS_ENGLISH = ["On this screen you can input colors using their hexadecimal code.", 
+                              "Don't worry if you're not sure how to do this, you can also change the colors from",  
+                              "the main game screen by clicking on the color key.", 
+                              "From there you can pick from assorted pre-set colors and themes.", "", "", ""]
+
+COLOR_INSTRUCTIONS_SPANISH = ["En esta pantalla puede ingresar colores usando su código hexadecimal. No te",
+                              "preocupes si no estás seguro de cómo hacerlo, también puedes cambiar los",
+                              "colores desde la pantalla principal del juego haciendo clic en la tecla de", 
+                              "color. Desde allí, puede elegir entre una variedad de colores y temas",
+                              "preestablecidos.", "", "", ""]
+
+COLOR_INSTRUCTIONS_GERMAN = ["Auf diesem Bildschirm können Sie Farben mit ihrem Hexadezimalcode eingeben. Machen",
+                             "Sie sich keine Sorgen, wenn Sie sich nicht sicher sind, wie das geht. Sie können",
+                             "die Farben auch vom Hauptspielbildschirm aus ändern, indem Sie auf die Farbtaste",
+                             "klicken. Von dort aus können Sie aus verschiedenen voreingestellten Farben und", 
+                             "Themen auswählen.", "", "", ""]
+
+COLOR_INSTRUCTIONS_FRENCH = ["Sur cet écran, vous pouvez saisir les couleurs en utilisant leur code hexadécimal.",
+                             "Ne vous inquiétez pas si vous ne savez pas comment procéder, vous pouvez également",
+                             "modifier les couleurs à partir de l'écran principal du jeu en cliquant sur la",
+                             "touche de couleur. À partir de là, vous pouvez choisir parmi un assortiment de",
+                             "couleurs et de thèmes prédéfinis.", "", "", ""]
+
+SPACES = [" ", " "]
+
+# Long sections of text used for instructing hands-free user
+STARTUP = "Welcome to wordle for the world, to activate the hands free version of the program, press " \
+          "the space bar twice"
+ACTIVATED = "Audio interface activated, if you need help with playing the game, say: tutorial. " \
+            "To disable audio mode say disable."
+WORDLE_TUTORIAL = "Insert wordle tutorial here"
+HANDSFREE_TUTORIAL = "Insert handsfree tutorial here"
+STASH_TUTORIAL = "Insert stash tutorial/example here"
+CLEAR_TUTORIAL = "The command clear will delete all the letters in your current guess stash"
+READ_TUTORIAL = "Insert read tutorial/example here"
+REPLACE_TUTORIAL = "Insert replace tutorial/example here"
+SUBMIT_TUTORIAL = "Insert submit tutorial/example here"
+
+volume_warning = "handsfree mode hears best with low background noise. If you're wearing headphones, repeat " \
+                 "your volume command to confirm."
+
