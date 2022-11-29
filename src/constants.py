@@ -47,6 +47,9 @@ BOARD = [[" ", " ", " ", " ", " "],
 # KEYBOARD
 ALPHABET = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"]
 
+#LANGUAGE
+LANGUAGES = ['en', 'es', 'fr']
+
 # MUSIC
 
 BACKGROUND_MUSIC = ['sound/background_music/traditional.ogg',
@@ -60,6 +63,14 @@ BACKGROUND_MUSIC = ['sound/background_music/traditional.ogg',
                     'sound/background_music/nature_fire.mp3',  # 8
                     'sound/background_music/nature_river.mp3',
                     'sound/background_music/nature_waves.mp3']  # 10
+
+FONTS = ['assets/fonts/FreeSans.otf', 
+        'assets/fonts/ComicSans.ttf',
+        'assets/fonts/LilGrotesk.otf',
+        'assets/fonts/GFSDidotBold.otf',
+        'assets/fonts/FirstCoffee.otf',
+        'assets/fonts/WignersFriendRoman.ttf',
+        'assets/fonts/FreeSansBold.otf']
 
 # SCREEN SIZE
 WIDTH, HEIGHT = 850, 750

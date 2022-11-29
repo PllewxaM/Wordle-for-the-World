@@ -43,8 +43,6 @@ except Exception as e:
 eog_sound_allowed = 1
 
 # LANGUAGE
-# Text-to-speech languages: English, Spanish, French
-languages = ['en', 'es', 'fr']
 current_language = 0
 
 # default
@@ -69,12 +67,13 @@ sub_color = BLACK
 sub_color2 = LT_GREY
 
 # FONT DEFAULTS
-font = "assets/fonts/FreeSans.otf"
 font_size = 40
-my_font = pygame.font.Font(font, font_size)
-my_font_med = pygame.font.Font(font, font_size - 10)
-my_font_sm = pygame.font.Font(font, font_size - 20)
-my_font_xsm = pygame.font.Font(font, font_size - 25)
+font_index = 0
+my_font = pygame.font.Font(FONTS[font_index], font_size)
+my_font_med = pygame.font.Font(FONTS[font_index], font_size - 10)
+my_font_sm = pygame.font.Font(FONTS[font_index], font_size - 20)
+my_font_xsm = pygame.font.Font(FONTS[font_index], font_size - 25)
+
 
 # SCREEN
 pygame.display.set_caption("World-le")
@@ -201,27 +200,27 @@ def draw_nav_bar():
 # Draws font options on the font menu
 def draw_font_options():
     pygame.draw.rect(SCREEN, LT_GREY, FONT_ONE_AREA, 0, ROUND)
-    draw_text(pygame.font.Font('assets/fonts/FreeSans.otf', 30), "Free Sans Font", BLACK, (WIDTH / 2, HEIGHT - 570))
+    draw_text(pygame.font.Font(FONTS[0], 30), "Free Sans Font", BLACK, (WIDTH / 2, HEIGHT - 570))
 
     pygame.draw.rect(SCREEN, LT_GREY, FONT_TWO_AREA, 0, ROUND)
-    draw_text(pygame.font.Font('assets/fonts/ComicSans.ttf', 30), "Comic Sans", BLACK, (WIDTH / 2, HEIGHT - 510))
+    draw_text(pygame.font.Font(FONTS[1], 30), "Comic Sans", BLACK, (WIDTH / 2, HEIGHT - 510))
 
     pygame.draw.rect(SCREEN, LT_GREY, FONT_THREE_AREA, 0, ROUND)
-    draw_text(pygame.font.Font('assets/fonts/GFSDidotBold.otf', 30), "GFS Didot Bold", BLACK, (WIDTH / 2, HEIGHT - 450))
+    draw_text(pygame.font.Font(FONTS[3], 30), "GFS Didot Bold", BLACK, (WIDTH / 2, HEIGHT - 450))
 
     pygame.draw.rect(SCREEN, LT_GREY, FONT_FOUR_AREA, 0, ROUND)
-    draw_text(pygame.font.Font('assets/fonts/LilGrotesk.otf', 30), "Lil Grotesk", BLACK, (WIDTH / 2, HEIGHT - 390))
+    draw_text(pygame.font.Font(FONTS[2], 30), "Lil Grotesk", BLACK, (WIDTH / 2, HEIGHT - 390))
 
     pygame.draw.rect(SCREEN, LT_GREY, FONT_FIVE_AREA, 0, ROUND)
-    draw_text(pygame.font.Font('assets/fonts/WignersFriendRoman.ttf', 30), "Wigners Friend", BLACK,
+    draw_text(pygame.font.Font(FONTS[5], 30), "Wigners Friend", BLACK,
               (WIDTH / 2, HEIGHT - 330))
 
     pygame.draw.rect(SCREEN, LT_GREY, FONT_SIX_AREA, 0, ROUND)
-    draw_text(pygame.font.Font('assets/fonts/FirstCoffee.otf', 30), "First Coffee", BLACK, (WIDTH / 2, HEIGHT - 265))
+    draw_text(pygame.font.Font(FONTS[4], 30), "First Coffee", BLACK, (WIDTH / 2, HEIGHT - 265))
 
     # draw bold options
     pygame.draw.rect(SCREEN, sub_color2, BOLD_AREA, 0, ROUND)
-    draw_text(pygame.font.Font('assets/fonts/FreeSansBold.otf', 30), "BOLD", WHITE, (WIDTH / 2, HEIGHT - 195))
+    draw_text(pygame.font.Font(FONTS[6], 30), "BOLD", WHITE, (WIDTH / 2, HEIGHT - 195))
 
 
 # Draws the increase and decrease buttons on the font menu
@@ -262,31 +261,31 @@ def draw_font_screen(current):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if FONT_ONE_AREA.collidepoint(event.pos):
-                        value = 'assets/fonts/FreeSans.otf'
+                        value = 0
                         draw_font_options()
                         pygame.draw.rect(SCREEN, BLACK, FONT_ONE_AREA, 3, ROUND)
                     if FONT_TWO_AREA.collidepoint(event.pos):
-                        value = 'assets/fonts/ComicSans.ttf'
+                        value = 1
                         draw_font_options()
                         pygame.draw.rect(SCREEN, BLACK, FONT_TWO_AREA, 3, ROUND)
                     if FONT_THREE_AREA.collidepoint(event.pos):
-                        value = 'assets/fonts/GFSDidotBold.otf'
+                        value = 3
                         draw_font_options()
                         pygame.draw.rect(SCREEN, BLACK, FONT_THREE_AREA, 3, ROUND)
                     if FONT_FOUR_AREA.collidepoint(event.pos):
-                        value = 'assets/fonts/LilGrotesk.otf'
+                        value = 2
                         draw_font_options()
                         pygame.draw.rect(SCREEN, BLACK, FONT_FOUR_AREA, 3, ROUND)
                     if FONT_FIVE_AREA.collidepoint(event.pos):
-                        value = 'assets/fonts/WignersFriendRoman.ttf'
+                        value = 5
                         draw_font_options()
                         pygame.draw.rect(SCREEN, BLACK, FONT_FIVE_AREA, 3, ROUND)
                     if FONT_SIX_AREA.collidepoint(event.pos):
-                        value = 'assets/fonts/FirstCoffee.otf'
+                        value = 4
                         draw_font_options()
                         pygame.draw.rect(SCREEN, BLACK, FONT_SIX_AREA, 3, ROUND)
                     if BOLD_AREA.collidepoint(event.pos):
-                        value = 'assets/fonts/FreeSansBold.otf'
+                        value = 6
                         draw_font_options()
                         pygame.draw.rect(SCREEN, BLACK, BOLD_AREA, 3, ROUND)
                     if PLUS_AREA.collidepoint(event.pos):
@@ -570,7 +569,7 @@ def check_guess(guess_to_check):
                 game_result = ""
                 game_decided = True
         else:
-            guess_to_check[i].bg_color = GREY
+            guess_to_check[i].bg_color = wrong_color
             add_incorrect(lowercase_letter)
             for key in keys:
                 if key.text == lowercase_letter.upper():
@@ -688,6 +687,9 @@ def reset_screen():
             for l in semi_correct_guesses:
                 if letter.text == l.upper():
                     letter.bg_color = semi_color
+            for l in incorrect_guesses:
+                if letter.text == l.upper():
+                    letter.bg_color = wrong_color
             letter.draw()
 
     pygame.display.update()
@@ -763,7 +765,7 @@ def song_switch_handler(command):
         load_new_background_music(int(value) - 1)
     else:
         say("You must say a song number " + str(len(BACKGROUND_MUSIC)) +
-            " or lower", languages[current_language])
+            " or lower", LANGUAGES[current_language])
 
 
 def load_new_background_music(music_index):
@@ -814,7 +816,7 @@ def volume_handler(command):
         if value_to_set <= 10:
             set_background_music_volume(value_to_set / 100)
         else:
-            say("You can only set volume between 0 and 10.", languages[current_language])
+            say("You can only set volume between 0 and 10.", LANGUAGES[current_language])
 
     except Exception as e:
         print(str(e) + "Something went wrong")
@@ -956,7 +958,7 @@ def replace(command):
 
     elif not current_guess_string.count(char_to_replace.upper()) == 1:
         say("there are more than one of the letter to replace in your stash. "
-            "Please specify which one by using stash index feature.", languages[current_language])
+            "Please specify which one by using stash index feature.", LANGUAGES[current_language])
         return
 
     elif len(char_to_replace) == 1:
@@ -975,14 +977,14 @@ def replace(command):
         stash("stash " + new_guess_string)
 
     else:
-        say("You must replace one letter in your stashed guess at a time.", languages[current_language])
+        say("You must replace one letter in your stashed guess at a time.", LANGUAGES[current_language])
 
 
 def read_guess(guess_number):
     if guess_number > guesses_count:
-        say("You dont have a guess number " + str(guess_number) + " yet.", languages[current_language])
+        say("You dont have a guess number " + str(guess_number) + " yet.", LANGUAGES[current_language])
     else:
-        say_and_confirm_by_char(guesses_str[guess_number - 1], correct_word.upper(), languages[current_language])
+        say_and_confirm_by_char(guesses_str[guess_number - 1], correct_word.upper(), LANGUAGES[current_language])
 
 
 def return_keyword_index(keyword, command):
@@ -1016,49 +1018,49 @@ def handsfree():
             print(command)
 
             if "tutorial" in command:  # Starts tutorial
-                say("say word for wordle tutorial, say free for handsfree tutorial", languages[current_language])
+                say("say word for wordle tutorial, say free for handsfree tutorial", LANGUAGES[current_language])
                 response = listen()
                 if "word" in response:
-                    say(WORDLE_TUTORIAL, languages[current_language])
+                    say(WORDLE_TUTORIAL, LANGUAGES[current_language])
                 elif "free" in response:
-                    say(HANDSFREE_TUTORIAL, languages[current_language])
+                    say(HANDSFREE_TUTORIAL, LANGUAGES[current_language])
                 waiting_for_command = 0
             elif "replace" in command:
-                say("you said: " + command, languages[current_language])
+                say("you said: " + command, LANGUAGES[current_language])
                 replace(command)
                 waiting_for_command = 0
             elif "stash" in command or "dash" in command:  # Places character(s) into current guess
-                say("you said: " + command, languages[current_language])
+                say("you said: " + command, LANGUAGES[current_language])
                 stash(command)
                 waiting_for_command = 0
             elif "delete" in command:  # Deletes all characters from stash
-                say("You said: delete", languages[current_language])
+                say("You said: delete", LANGUAGES[current_language])
                 delete()
                 waiting_for_command = 0
             elif "submit" in command:
-                say("you said: submit", languages[current_language])
+                say("you said: submit", LANGUAGES[current_language])
                 submit()
                 waiting_for_command = 0
             elif "clear" in command:
-                say("you said: " + command, languages[current_language])
+                say("you said: " + command, LANGUAGES[current_language])
                 clear_stash()
                 waiting_for_command = 0
             elif "disable" in command:
-                say("Disabling audio, press space bar twice to re-enable.", languages[current_language])
+                say("Disabling audio, press space bar twice to re-enable.", LANGUAGES[current_language])
                 activate = 0
                 audio_interface_enabled = 0
                 set_background_music_volume(0.1)
                 waiting_for_command = 0
             elif "volume" in command:
                 if has_warned or not audio_interface_enabled:
-                    say("Adjusting volume.", languages[current_language])
+                    say("Adjusting volume.", LANGUAGES[current_language])
                     volume_handler(command)
                 else:
-                    say(volume_warning, languages[current_language])
+                    say(volume_warning, LANGUAGES[current_language])
                     has_warned = 1
                 waiting_for_command = 0
             elif "song" in command:
-                say("Changing background song", languages[current_language])
+                say("Changing background song", LANGUAGES[current_language])
                 song_switch_handler(command)
                 waiting_for_command = 0
             elif "play again" in command:
@@ -1066,41 +1068,41 @@ def handsfree():
             elif "read" in command:
                 if "guess" in command or "gas" in command or "guest" in command:
                     if "one" in command or "won" in command or "1" in command:
-                        say("read guess one", languages[current_language])
+                        say("read guess one", LANGUAGES[current_language])
                         read_guess(1)
                         waiting_for_command = 0
                     elif "two" in command or "to" in command or "2" in command or "too" in command:
-                        say("read guess two", languages[current_language])
+                        say("read guess two", LANGUAGES[current_language])
                         read_guess(2)
                         waiting_for_command = 0
                     elif "three" in command or "3" in command:
-                        say("read guess three", languages[current_language])
+                        say("read guess three", LANGUAGES[current_language])
                         read_guess(3)
                         waiting_for_command = 0
                     elif "four" in command or "for" in command or "4" in command:
-                        say("read guess four", languages[current_language])
+                        say("read guess four", LANGUAGES[current_language])
                         read_guess(4)
                         waiting_for_command = 0
                     elif "five" in command or "5" in command:
-                        say("read guess five", languages[current_language])
+                        say("read guess five", LANGUAGES[current_language])
                         read_guess(5)
                         waiting_for_command = 0
                     else:
-                        say("read current guess", languages[current_language])
-                        say_by_char(current_guess_string, languages[current_language])
+                        say("read current guess", LANGUAGES[current_language])
+                        say_by_char(current_guess_string, LANGUAGES[current_language])
                         waiting_for_command = 0
                 elif "semi" in command:
-                    say("read semi correct guesses", languages[current_language])
-                    say_by_char(semi_correct_guesses, languages[current_language])
+                    say("read semi correct guesses", LANGUAGES[current_language])
+                    say_by_char(semi_correct_guesses, LANGUAGES[current_language])
                     waiting_for_command = 0
                 elif "wrong" in command:
-                    say("read incorrect guesses", languages[current_language])
-                    say_by_char(incorrect_guesses, languages[current_language])
+                    say("read incorrect guesses", LANGUAGES[current_language])
+                    say_by_char(incorrect_guesses, LANGUAGES[current_language])
                     waiting_for_command = 0
                 else:
-                    say("invalid command", languages[current_language])
+                    say("invalid command", LANGUAGES[current_language])
             else:
-                say("invalid command", languages[current_language])
+                say("invalid command", LANGUAGES[current_language])
 
             pygame.display.flip()
 
@@ -1125,7 +1127,7 @@ def stash(response):
             else:
                 index += 1
         except Exception as e:
-            say("Remember to say a letter or five letter word after stash command.", languages[current_language])
+            say("Remember to say a letter or five letter word after stash command.", LANGUAGES[current_language])
             print(str(e))
             return
 
@@ -1134,14 +1136,14 @@ def stash(response):
         stash_char(guess)
     elif len(guess) == 5:
         if len(current_guess_string) != 0:
-            say("your stash is full! submit or delete to guess more letters.", languages[current_language])
+            say("your stash is full! submit or delete to guess more letters.", LANGUAGES[current_language])
             return
         print("Five letter word")
         for each_letter in guess:
             print(each_letter)
             stash_char(each_letter)
     else:
-        say("You can only stash individual letters, or five letter words. Try again!", languages[current_language])
+        say("You can only stash individual letters, or five letter words. Try again!", LANGUAGES[current_language])
 
 
 # Takes stash command as an input and places new letter on the screen. Stash handler helper function.
@@ -1152,7 +1154,7 @@ def stash_char(char_to_stash):
         if len(current_guess_string) < 5:
             create_new_letter()
         else:
-            say("your stash is full! submit or delete to guess more letters.", languages[current_language])
+            say("your stash is full! submit or delete to guess more letters.", LANGUAGES[current_language])
 
 
 # Delete command handler for handsfree().
@@ -1160,20 +1162,20 @@ def delete():
     global current_guess_string
     if len(current_guess_string) > 0:
         letter_to_delete = current_guess_string[len(current_guess_string) - 1]
-        say("Deleting " + letter_to_delete, languages[current_language])
+        say("Deleting " + letter_to_delete, LANGUAGES[current_language])
         delete_letter()
     else:
-        say("You dont have any letters to delete!", languages[current_language])
+        say("You dont have any letters to delete!", LANGUAGES[current_language])
 
 
 # Submit command handler for handsfree()
 def submit():
     global current_guess_string, current_guess
     if len(current_guess_string) == 5 and current_guess_string.lower() in check_list:
-        say_and_confirm_by_char(current_guess_string, correct_word.upper(), languages[current_language])
+        say_and_confirm_by_char(current_guess_string, correct_word.upper(), LANGUAGES[current_language])
         check_guess(current_guess)
     else:
-        say("your stash must contain a real five letter word, try again!", languages[current_language])
+        say("your stash must contain a real five letter word, try again!", LANGUAGES[current_language])
 
 
 """TRADITIONAL PLAY CONTROL"""
@@ -1282,7 +1284,7 @@ def start_the_game() -> None:
                             start_game = 0
                             instructions()
                         if FONT_SEL_AREA.collidepoint(event.pos):
-                            chosen_font = draw_font_screen(font)
+                            chosen_font = draw_font_screen(font_index)
                             set_font(chosen_font)
                             reset_screen()
                         if COLOR_SEL_AREA.collidepoint(event.pos):
@@ -1314,7 +1316,7 @@ def start_the_game() -> None:
             pygame.display.flip()
 
             if not started:
-                say("STARTUP", languages[current_language])
+                say("STARTUP", LANGUAGES[current_language])
                 started = 1
 
         # how program should run when audio interface is enabled
@@ -1324,18 +1326,18 @@ def start_the_game() -> None:
                 eog_sound(game_result)
                 say("You have run out of guesses. The word was " + correct_word + " say play again to start over with "
                                                                                   "a new word!",
-                    languages[current_language])
+                    LANGUAGES[current_language])
                 lose_play_again()
             if game_result == "W":
                 eog_sound(game_result)
                 say("Correct, the word was: " + correct_word + ". say play again to get "
-                                                               "a new word.", languages[current_language])
+                                                               "a new word.", LANGUAGES[current_language])
                 correct_play_again()
             if rendered:
                 handsfree()
             else:
                 pygame.display.flip()
-                say(ACTIVATED, languages[current_language])
+                say(ACTIVATED, LANGUAGES[current_language])
                 set_background_music_volume(0.025)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -1416,12 +1418,12 @@ def set_language(selected: Tuple[Any, int], value: str) -> None:
 
 
 def menu_set_font(selected: Tuple[Any, int], value):
-    global font, my_font, my_font_med, my_font_sm, my_font_xsm
-    font = value
-    my_font = pygame.font.Font(font, font_size)
-    my_font_med = pygame.font.Font(font, font_size - 10)
-    my_font_sm = pygame.font.Font(font, font_size - 20)
-    my_font_xsm = pygame.font.Font(font, font_size - 25)
+    global font_index, my_font, my_font_med, my_font_sm, my_font_xsm
+    font_index = value
+    my_font = pygame.font.Font(FONTS[font_index], font_size)
+    my_font_med = pygame.font.Font(FONTS[font_index], font_size - 10)
+    my_font_sm = pygame.font.Font(FONTS[font_index], font_size - 20)
+    my_font_xsm = pygame.font.Font(FONTS[font_index], font_size - 25)
 
 
 def set_correct_color(value):
@@ -1452,12 +1454,12 @@ def set_dark_mode():
 
 
 def set_font(value):
-    global font, my_font, my_font_med, my_font_sm, my_font_xsm
-    font = value
-    my_font = pygame.font.Font(font, font_size)
-    my_font_med = pygame.font.Font(font, font_size - 10)
-    my_font_sm = pygame.font.Font(font, font_size - 20)
-    my_font_xsm = pygame.font.Font(font, font_size - 25)
+    global font_index, my_font, my_font_med, my_font_sm, my_font_xsm
+    font_index = value
+    my_font = pygame.font.Font(FONTS[font_index], font_size)
+    my_font_med = pygame.font.Font(FONTS[font_index], font_size - 10)
+    my_font_sm = pygame.font.Font(FONTS[font_index], font_size - 20)
+    my_font_xsm = pygame.font.Font(FONTS[font_index], font_size - 25)
 
 
 def decrese_font_size():
@@ -1468,8 +1470,8 @@ def decrese_font_size():
 
 def increase_font_size():
     global font_size
-    if font_size < 50:
-        font_size += 2
+    if font_size < 47:
+        font_size += 1
 
 
 """MENU"""
@@ -1487,7 +1489,7 @@ def menu():
     mytheme = pygame_menu.themes.THEME_DARK.copy()
     # mytheme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
     mytheme.background_color = GREY
-    mytheme.title_font = font
+    mytheme.title_font = FONTS[font_index]
     mytheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
     mytheme.title_offset = (WIDTH / 2 - 140, padding * 8)
     mytheme.title_font_color = WHITE
@@ -1495,7 +1497,7 @@ def menu():
 
     mytheme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
     mytheme.widget_font_color = WHITE
-    mytheme.widget_font = font
+    mytheme.widget_font = FONTS[font_index]
     mytheme.widget_padding = padding
     mytheme.widget_margin = (0, 3)
 
@@ -1507,7 +1509,7 @@ def menu():
 
     about_theme = color_theme.copy()
     about_theme.background_color = WHITE
-    about_theme.title_font = font
+    about_theme.title_font = FONTS[font_index]
 
     inst_theme = about_theme
 
@@ -1545,9 +1547,9 @@ def menu():
     for m in color_instructions_display:
         color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
 
-    color_menu.add.color_input("Correct Letter Color  ", color_type='hex', onchange=set_correct_color, default=GREEN)
-    color_menu.add.color_input("Semi Correct Letter Color  ", color_type='hex', onchange=set_semi_color, default=YELLOW)
-    color_menu.add.color_input("Wrong Letter Color  ", color_type='hex', onchange=set_wrong_color, default=GREY)
+    color_menu.add.color_input("Correct Letter Color  ", color_type='hex', onchange=set_correct_color, default=correct_color)
+    color_menu.add.color_input("Semi Correct Letter Color  ", color_type='hex', onchange=set_semi_color, default=semi_color)
+    color_menu.add.color_input("Wrong Letter Color  ", color_type='hex', onchange=set_wrong_color, default=wrong_color)
 
     for m in SPACES:
         color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
@@ -1605,13 +1607,12 @@ def menu():
                                              (" Nature 2 ", 8),
                                              (" Nature 3 ", 9),
                                              (" Nature 4 ", 10)],
-                      onchange=set_background_music, default=0)
+                      onchange=set_background_music, default=current_background_music)
     menu.add.selector('Change Font: ',
-                      [("Free Sans", 'assets/fonts/FreeSans.otf'), ("Comic Sans", 'assets/fonts/ComicSans.ttf'),
-                       ("Lil Grotesk", 'assets/fonts/LilGrotesk.otf'), ("GFS Didot", 'assets/fonts/GFSDidotBold.otf'),
-                       ("First Coffee", 'assets/fonts/FirstCoffee.otf'),
-                       ("Wigners Friend", 'assets/fonts/WignersFriendRoman.ttf')],
-                      onchange=menu_set_font, default=lang_index)
+                      [("Free Sans", 0), ("Comic Sans", 1),
+                       ("Lil Grotesk", 2), ("GFS Didot", 3),
+                       ("First Coffee", 4), ("Wigners Friend", 5)],
+                      onchange=menu_set_font, default=font_index)
     menu.add.button('Set Colors', color_menu)
     menu.add.button('Instructions', inst_menu)
     menu.add.button('About', about_menu)
@@ -1629,7 +1630,7 @@ def instructions():
     mytheme = pygame_menu.themes.THEME_GREEN.copy()
     mytheme.background_color = WHITE
     mytheme.title_font_color = WHITE
-    mytheme.title_font = font
+    mytheme.title_font = FONTS[font_index]
     mytheme.widget_font_color = BLACK
     mytheme.widget_selection_effect = pygame_menu.widgets.NoneSelection()
 
