@@ -2,7 +2,8 @@ import pygame
 from constants import *
 from classes import *
 
-# DRAW GAME BOARD
+# DRAW GAME BOARD #
+
 
 # Draws the game board gird on the screen
 def draw(sub_color):
@@ -30,48 +31,7 @@ def draw_icon(path, size, position):
     SCREEN.blit(icon_image, rec)
 
 
-# DRAW COLOR KEY
-
-# draws the color key to show the user what colors are selected and what they mean
-def draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm):
-    # function variables
-    key_width, key_height = 155, 225
-    block_x, block_y = WIDTH - 170, 70
-    title_x, title_y = WIDTH - 185 / 2, 95
-    color_x, color_y = WIDTH - 155, 130
-    size, shape = 30, 100
-    text_x = WIDTH - 70
-
-    # Draws the color key outline and title of area
-    pygame.draw.rect(SCREEN, sub_color, [block_x, block_y, key_width, key_height], 1, ROUND)
-    draw_text(my_font_sm, "Color Key", sub_color, (title_x, title_y))
-
-    # draws the correct color circle and lable of color
-    pygame.draw.rect(SCREEN, correct_color, [color_x, color_y, size, size], 0, shape)
-    draw_text(my_font_xsm, "CORRECT", sub_color, (text_x, color_y + 15))
-
-    # draws the semi correct color circle and lable of color
-    pygame.draw.rect(SCREEN, semi_color, [color_x, color_y + 50, size, size], 0, shape)
-    draw_text(my_font_xsm, "SEMI", sub_color, (text_x, color_y + 55))
-    draw_text(my_font_xsm, "CORRECT", sub_color, (text_x, color_y + 75))
-
-    # draws the wrong color circle and lable of color
-    pygame.draw.rect(SCREEN, wrong_color, [color_x, color_y + 105, size, size], 0, shape)
-    draw_text(my_font_xsm, "WRONG", sub_color, (text_x, color_y + 120))
-
-    # draw reset colors button
-    pygame.draw.rect(SCREEN, LT_GREY, RESET_COLORS, 0, ROUND)
-    draw_text(my_font_sm, "Reset Colors", BLACK, (title_x, color_y + 185))
-
-    pygame.draw.rect(SCREEN, LT_GREY, RESET_GAME, 0, ROUND)
-    draw_text(my_font_sm, "Reset Game", BLACK, (title_x, color_y + 235))
-
-    pygame.display.update()
-
-
-# DRAW NAV BAR
-
-# draws the navagation bar at the top of the screen and the contents on the bar
+# Draws the navagation bar at the top of the screen and the contents on the bar
 def draw_nav_bar(main_color, sub_color2, my_font):
     # actual nav bar
     pygame.draw.rect(SCREEN, sub_color2, [0, 0, WIDTH, 50], 0)
@@ -95,7 +55,8 @@ def draw_nav_bar(main_color, sub_color2, my_font):
     draw_text(my_font, "WORLD-LE", main_color, (WIDTH / 2, 25))
 
 
-# DRAW FONT MENU
+# DRAW FONT MENU #
+
 
 def draw_font_menu(main_color, sub_color, sub_color2, my_font) :
     # draw background and front mini menu screens
@@ -151,10 +112,47 @@ def draw_font_size_adjust(my_font):
     draw_text(my_font, "-", WHITE, ((WIDTH / 2) + 175, HEIGHT - 195))
 
 
-# DRAW COLOR MENU
+# DRAW COLOR MENU #
 
 
-# draw the color squares on the color menu
+# Draws the color key to show the user what colors are selected and what they mean
+def draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm):
+    # function variables
+    key_width, key_height = 155, 225
+    block_x, block_y = WIDTH - 170, 70
+    title_x, title_y = WIDTH - 185 / 2, 95
+    color_x, color_y = WIDTH - 155, 130
+    size, shape = 30, 100
+    text_x = WIDTH - 70
+
+    # Draws the color key outline and title of area
+    pygame.draw.rect(SCREEN, sub_color, [block_x, block_y, key_width, key_height], 1, ROUND)
+    draw_text(my_font_sm, "Color Key", sub_color, (title_x, title_y))
+
+    # draws the correct color circle and lable of color
+    pygame.draw.rect(SCREEN, correct_color, [color_x, color_y, size, size], 0, shape)
+    draw_text(my_font_xsm, "CORRECT", sub_color, (text_x, color_y + 15))
+
+    # draws the semi correct color circle and lable of color
+    pygame.draw.rect(SCREEN, semi_color, [color_x, color_y + 50, size, size], 0, shape)
+    draw_text(my_font_xsm, "SEMI", sub_color, (text_x, color_y + 55))
+    draw_text(my_font_xsm, "CORRECT", sub_color, (text_x, color_y + 75))
+
+    # draws the wrong color circle and lable of color
+    pygame.draw.rect(SCREEN, wrong_color, [color_x, color_y + 105, size, size], 0, shape)
+    draw_text(my_font_xsm, "WRONG", sub_color, (text_x, color_y + 120))
+
+    # draw reset colors button
+    pygame.draw.rect(SCREEN, LT_GREY, RESET_COLORS, 0, ROUND)
+    draw_text(my_font_sm, "Reset Colors", BLACK, (title_x, color_y + 185))
+
+    pygame.draw.rect(SCREEN, LT_GREY, RESET_GAME, 0, ROUND)
+    draw_text(my_font_sm, "Reset Game", BLACK, (title_x, color_y + 235))
+
+    pygame.display.update()
+
+
+# Draw the color squares on the color menu
 def draw_color_squrs():
     size = 75
     c_x = ((WIDTH - WIDTH * 0.6) / 2 + 70)
@@ -171,7 +169,7 @@ def draw_color_squrs():
     pygame.display.update()
 
 
-# draws the color menu and controls the menu functionality, returns selected color
+# Draws the color menu and controls the menu functionality, returns selected color
 def draw_color_screen(current, main_color, sub_color, sub_color2, my_font):
     value = current
     done = 0
@@ -239,7 +237,8 @@ def draw_color_select_menu(main_color, sub_color, sub_color2, correct_color, sem
     draw_text(my_font_sm, "CANCEL", WHITE, (WIDTH / 2, HEIGHT - 115))
 
 
-# DRAW KEYBOARD
+# DRAW KEYBOARD #
+
 
 def draw_keyboard(main_color, sub_color2, my_font, my_font_med, keys):
     # starting keyboard location
