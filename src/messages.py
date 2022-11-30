@@ -1,4 +1,3 @@
-
 ABOUT_ENGLISH = ["", 
          "Welcome to World-le: the S3N1OR SQU4D’s accessible version of the",
          "popular New York Times’s word-guessing game. This game was developed",
@@ -303,6 +302,6 @@ READ_TUTORIAL = "Insert read tutorial/example here"
 REPLACE_TUTORIAL = "Insert replace tutorial/example here"
 SUBMIT_TUTORIAL = "Insert submit tutorial/example here"
 
-volume_warning = "handsfree mode hears best with low background noise. If you're wearing headphones, repeat " \
+VOLUME_WARNING = "handsfree mode hears best with low background noise. If you're wearing headphones, repeat " \
                  "your volume command to confirm."
 
