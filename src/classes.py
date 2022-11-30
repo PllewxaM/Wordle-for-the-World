@@ -1,4 +1,3 @@
-import pygame
 from constants import *
 
 """Letter Class"""

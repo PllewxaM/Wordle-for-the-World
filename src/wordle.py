@@ -1,5 +1,3 @@
-import pygame
-import pygame_menu
 import sys
 import random
 import speech_recognition as sr
@@ -10,16 +8,8 @@ from pygame import mixer
 from gtts import gTTS
 from playsound import playsound
 
-from word_files.englishwords import *
-from word_files.spanishwords import *
-from word_files.frenchwords import *
-from word_files.germanwords import *
-from word_files.kidwords import *
-
-from messages import *
-from constants import *
 from draw import *
-from classes import *
+from menu import *
 
 """INITIALIZERS / GLOBAL VARIABLES"""
 
@@ -288,7 +278,7 @@ def check_guess(guess_to_check):
             if not audio_interface_enabled:
                 time.sleep(0.25)
                 playsound("sound/effects/incorrect_char_trimmed.wav")
-                time.sleep(0.35)
+                time.sleep(0.25)
             add_incorrect(lowercase_letter)
             for key in keys:
                 if key.text == lowercase_letter.upper():
@@ -918,6 +908,7 @@ def start_the_game():
     draw_keyboard(main_color, sub_color2, my_font, my_font_med, keys)
     draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm)
     draw_nav_bar(main_color, sub_color2, my_font)
+    reset_screen()
 
     mixer.music.pause()
     mixer.music.load(BACKGROUND_MUSIC[current_background_music])
@@ -975,7 +966,7 @@ def start_the_game():
                                 delete_letter()
                         if MENU_AREA.collidepoint(event.pos):
                             start_game = 0
-                            menu()
+                            game_menu()
                         if INFO_SEL_AREA.collidepoint(event.pos):
                             start_game = 0
                             instructions()
@@ -1012,7 +1003,7 @@ def start_the_game():
             pygame.display.flip()
 
             if not started:
-                say("STARTUP", LANGUAGES[current_language])
+                say(STARTUP, LANGUAGES[current_language])
                 started = 1
 
         # how program should run when audio interface is enabled
@@ -1062,59 +1053,21 @@ def set_language(selected, value):
     global lang, correct_word, word_list, check_list, about_display, lang_index, instructions1_display, instructions2_display, \
     instructions3_display, color_instructions_display
 
-    lang = value
+    lang = LANG_SETTINGS[value][0]
+    word_list = LANG_SETTINGS[value][1]
+    check_list = LANG_SETTINGS[value][2]
+    about_display = LANG_SETTINGS[value][3]
+    instructions1_display = LANG_SETTINGS[value][4]
+    instructions2_display = LANG_SETTINGS[value][5]
+    instructions3_display = LANG_SETTINGS[value][6]
+    color_instructions_display = LANG_SETTINGS[value][7]
+    lang_index = value
 
-    if lang == "sp":
-        word_list = SP_WORDS
-        check_list = word_list
-        about_display = ABOUT_SPANISH
-        instructions1_display = INSTRUCTIONS1_SPANISH
-        instructions2_display = INSTRUCTIONS2_SPANISH
-        instructions3_display = INSTRUCTIONS3_SPANISH
-        color_instructions_display = COLOR_INSTRUCTIONS_SPANISH
-        lang_index = 1
-    elif lang == "ger":
-        word_list = GER_WORDS
-        check_list = word_list
-        about_display = ABOUT_GERMAN
-        instructions1_display = INSTRUCTIONS1_GERMAN
-        instructions2_display = INSTRUCTIONS2_GERMAN
-        instructions3_display = INSTRUCTIONS3_GERMAN
-        color_instructions_display = COLOR_INSTRUCTIONS_GERMAN
-        lang_index = 2
-    elif lang == "fr":
-        word_list = FR_WORDS
-        check_list = word_list
-        about_display = ABOUT_FRENCH
-        instructions1_display = INSTRUCTIONS1_FRENCH
-        instructions2_display = INSTRUCTIONS2_FRENCH
-        instructions3_display = INSTRUCTIONS3_FRENCH
-        color_instructions_display = COLOR_INSTRUCTIONS_FRENCH
-        lang_index = 3
-    elif lang == "kid":
-        word_list = KID_WORDS
-        check_list = EN_WORDS
-        about_display = ABOUT_ENGLISH
-        instructions1_display = INSTRUCTIONS1_ENGLISH
-        instructions2_display = INSTRUCTIONS2_ENGLISH
-        instructions3_display = INSTRUCTIONS3_ENGLISH
-        color_instructions_display = COLOR_INSTRUCTIONS_ENGLISH
-        lang_index = 4
-    else:
-        word_list = EN_WORDS
-        check_list = word_list
-        about_display = ABOUT_ENGLISH
-        instructions1_display = INSTRUCTIONS1_ENGLISH
-        instructions2_display = INSTRUCTIONS2_ENGLISH
-        instructions3_display = INSTRUCTIONS3_ENGLISH
-        color_instructions_display = COLOR_INSTRUCTIONS_ENGLISH
-        lang_index = 0
-
-    correct_word = word_list[random.randint(0, len(word_list) - 1)]
-
+    reset()
 
 def menu_set_font(selected, value):
     global font_index, my_font, my_font_med, my_font_sm, my_font_xsm
+
     font_index = value
     my_font = pygame.font.Font(FONTS[font_index], font_size)
     my_font_med = pygame.font.Font(FONTS[font_index], font_size - 10)
@@ -1170,46 +1123,24 @@ def increase_font_size():
         font_size += 1
 
 
-"""MENU"""
+"""MENUS"""
 
+
+def instructions():
+    global start_game
+    start_game = 0
+
+    # MENU LOOP
+    if not start_game:
+        inst_menu.mainloop(SCREEN, background)
+    
 
 def background():
     SCREEN.fill(WHITE)
+    pygame.draw.rect(SCREEN, MENU_COLOR, END_GAME_SCREEN_AREA, 0)
 
 
-def menu():
-    screen_difference = 50
-    padding = 10
-
-    # MENU THEMES
-    mytheme = pygame_menu.themes.THEME_DARK.copy()
-    # mytheme.background_color = pygame_menu.baseimage.BaseImage("assets/Background.png")
-    mytheme.background_color = GREY
-    mytheme.title_font = FONTS[font_index]
-    mytheme.title_bar_style = pygame_menu.widgets.MENUBAR_STYLE_NONE
-    mytheme.title_offset = (WIDTH / 2 - 140, padding * 8)
-    mytheme.title_font_color = WHITE
-    mytheme.title_close_button_background_color = BLACK
-
-    mytheme.widget_selection_effect = pygame_menu.widgets.LeftArrowSelection()
-    mytheme.widget_font_color = WHITE
-    mytheme.widget_font = FONTS[font_index]
-    mytheme.widget_padding = padding
-    mytheme.widget_margin = (0, 3)
-
-    color_theme = pygame_menu.themes.THEME_GREEN.copy()
-    color_theme.background_color = WHITE
-    color_theme.title_font_color = WHITE
-    color_theme.widget_font_color = BLACK
-    color_theme.widget_selection_effect = pygame_menu.widgets.NoneSelection()
-
-    about_theme = color_theme.copy()
-    about_theme.background_color = WHITE
-    about_theme.title_font = FONTS[font_index]
-
-    inst_theme = about_theme
-
-    # MENUS
+def game_menu():
 
     menu = pygame_menu.Menu(
         height=HEIGHT - screen_difference,
@@ -1218,97 +1149,42 @@ def menu():
         width=WIDTH - screen_difference
     )
 
-    color_menu = pygame_menu.Menu(
-        height=HEIGHT - screen_difference,
-        theme=color_theme,
-        title='Change the Game Colors',
-        width=WIDTH - screen_difference
-    )
-
-    about_menu = pygame_menu.Menu(
-        height=HEIGHT - screen_difference,
-        theme=about_theme,
-        title='About',
-        width=WIDTH - screen_difference
-    )
-
-    inst_menu = pygame_menu.Menu(
-        height=HEIGHT - screen_difference,
-        theme=inst_theme,
-        title='Game Instructions',
-        width=WIDTH - screen_difference
-    )
-
     # COLOR MENU PAGE
-    for m in color_instructions_display:
-        color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
+    for m in color_instructions_display: color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
 
     color_menu.add.color_input("Correct Letter Color  ", color_type='hex', onchange=set_correct_color, default=correct_color)
     color_menu.add.color_input("Semi Correct Letter Color  ", color_type='hex', onchange=set_semi_color, default=semi_color)
     color_menu.add.color_input("Wrong Letter Color  ", color_type='hex', onchange=set_wrong_color, default=wrong_color)
 
-    for m in SPACES:
-        color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
+    draw_color_menu()
 
-    color_menu.add.button("Back", pygame_menu.events.BACK)
-
-    for m in SPACES:
-        color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
 
     # ABOUT MENU PAGE
-    for m in about_display:
-        about_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
+    draw_about_page(about_display)
 
-    for m in SPACES:
-        about_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
-
-    about_menu.add.button("Back", pygame_menu.events.BACK)
-
-    for m in SPACES:
-        about_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
 
     # INSTRUCTIONS MENU PAGE
-    for m in instructions1_display: 
-        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
+    draw_instructions(instructions1_display, instructions2_display, instructions3_display)
+    inst_menu.add.button("Play Game", start_the_game)
+    for m in SPACES: inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
 
-    image_path_correct = pygame_menu.baseimage.BaseImage("assets/correct.jpg")
-    inst_menu.add.image(image_path_correct, align=pygame_menu.locals.ALIGN_LEFT)
-
-    for m in instructions2_display: 
-        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-
-    image_path_semicorrect = pygame_menu.baseimage.BaseImage("assets/semicorrect.jpg")
-    inst_menu.add.image(image_path_semicorrect, align=pygame_menu.locals.ALIGN_LEFT)
-
-    for m in instructions3_display:
-        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-
-    inst_menu.add.button("Back", pygame_menu.events.BACK)
-
-    for m in SPACES:
-        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
 
     # MAIN MENU PAGE
     menu.add.button('Play', start_the_game)
-    menu.add.selector('Language: ', [("English", "en"), ("Spanish", "sp"), ("German", "ger"),
-                                     ("French", "fr"), ("Kid Friendly", "kid")], onchange=set_language, default=lang_index)
-    menu.add.selector('Background Music: ', [("Traditional", 0),
-                                             ("Happy Beat", 1),
-                                             ("     Bop      ", 2),
-                                             (" Meditation ", 3),
-                                             ("Electro Chill", 4),
-                                             ("    Escape   ", 5),
-                                             ("      Synth     ", 6),
-                                             (" Nature 1 ", 7),
-                                             (" Nature 2 ", 8),
-                                             (" Nature 3 ", 9),
-                                             (" Nature 4 ", 10)],
-                      onchange=set_background_music, default=current_background_music)
-    menu.add.selector('Change Font: ',
-                      [("Free Sans", 0), ("Comic Sans", 1),
-                       ("Lil Grotesk", 2), ("GFS Didot", 3),
-                       ("First Coffee", 4), ("Wigners Friend", 5)],
-                      onchange=menu_set_font, default=font_index)
+    menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),
+                                     ("French", 3), ("Kid Friendly", 4)], 
+                                     onchange=set_language, default=lang_index)
+    menu.add.selector('Background Music: ', [("Traditional", 0), ("Happy Beat", 1),
+                                             ("     Bop      ", 2), (" Meditation ", 3),
+                                             ("Electro Chill", 4), ("    Escape   ", 5),
+                                             ("     Synth    ", 6), (" Nature 1 ", 7),
+                                             (" Nature 2 ", 8), (" Nature 3 ", 9),
+                                             (" Nature 4 ", 10)], 
+                                             onchange=set_background_music, 
+                                             default=current_background_music)
+    menu.add.selector('Change Font: ', [("Free Sans", 0), ("Comic Sans", 1), ("Lil Grotesk", 2), 
+                                        ("GFS Didot", 3), ("First Coffee", 4), ("Wigners Friend", 5)],
+                                        onchange=menu_set_font, default=font_index)
     menu.add.button('Set Colors', color_menu)
     menu.add.button('Instructions', inst_menu)
     menu.add.button('About', about_menu)
@@ -1318,55 +1194,9 @@ def menu():
         menu.mainloop(SCREEN, background)
 
 
-def instructions():
-    global start_game
-    start_game = 0
-    screen_difference = 50
-
-    mytheme = pygame_menu.themes.THEME_GREEN.copy()
-    mytheme.background_color = WHITE
-    mytheme.title_font_color = WHITE
-    mytheme.title_font = FONTS[font_index]
-    mytheme.widget_font_color = BLACK
-    mytheme.widget_selection_effect = pygame_menu.widgets.NoneSelection()
-
-    inst_menu = pygame_menu.Menu(
-        height=HEIGHT - screen_difference,
-        theme=mytheme,
-        title='Game Instructions',
-        width=WIDTH - screen_difference
-    )
-
-    # INSTRUCTIONS MENU PAGE
-    inst_menu.add.button("Back to Game", start_the_game)
-
-    for m in instructions1_display:
-        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-
-    image_path_correct = pygame_menu.baseimage.BaseImage("assets/correct.jpg")
-    inst_menu.add.image(image_path_correct, align=pygame_menu.locals.ALIGN_LEFT)
-
-    for m in instructions2_display:
-        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-
-    image_path_semicorrect = pygame_menu.baseimage.BaseImage("assets/semicorrect.jpg")
-    inst_menu.add.image(image_path_semicorrect, align=pygame_menu.locals.ALIGN_LEFT)
-
-    for m in instructions3_display:
-        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-
-    inst_menu.add.button("Back to Game", start_the_game)
-
-    for m in SPACES:
-        inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-
-    if not start_game:
-        inst_menu.mainloop(SCREEN, background)
-
-
 def main():
     play_background_music()
-    menu()
+    game_menu()
 
 
 if __name__ == "__main__":
