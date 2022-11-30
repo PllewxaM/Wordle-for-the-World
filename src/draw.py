@@ -56,7 +56,7 @@ def draw_nav_bar(main_color, sub_color2, my_font):
 # DRAW FONT MENU #
 
 
-def draw_font_menu(main_color, sub_color, sub_color2, my_font) :
+def draw_font_menu(main_color, sub_color, sub_color2, my_font, font_size) :
     # draw background and front mini menu screens
     pygame.draw.rect(SCREEN, GREY, SM_MENU_AREA_BACK, 0, ROUND)
     pygame.draw.rect(SCREEN, main_color, SM_MENU_AREA_FRONT, 0, ROUND)
@@ -65,7 +65,7 @@ def draw_font_menu(main_color, sub_color, sub_color2, my_font) :
     draw_text(my_font, "Change Font", sub_color, (WIDTH / 2, (HEIGHT - (HEIGHT * 0.8)) / 2 + 45))
 
     # draw font options
-    draw_font_options(sub_color2)
+    draw_font_options(sub_color2, font_size)
 
     # draw size increase / decrease buttons
     draw_font_size_adjust(my_font)
@@ -76,29 +76,30 @@ def draw_font_menu(main_color, sub_color, sub_color2, my_font) :
 
 
 # Draws font options on the font menu
-def draw_font_options(sub_color2):
+def draw_font_options(sub_color2, font_size):
+    size = font_size - 10
     pygame.draw.rect(SCREEN, LT_GREY, FONT_ONE_AREA, 0, ROUND)
-    draw_text(pygame.font.Font(FONTS[0], 30), "Free Sans Font", BLACK, (WIDTH / 2, HEIGHT - 570))
+    draw_text(pygame.font.Font(FONTS[0], size), "Free Sans Font", BLACK, (WIDTH / 2, HEIGHT - 570))
 
     pygame.draw.rect(SCREEN, LT_GREY, FONT_TWO_AREA, 0, ROUND)
-    draw_text(pygame.font.Font(FONTS[1], 30), "Comic Sans", BLACK, (WIDTH / 2, HEIGHT - 510))
+    draw_text(pygame.font.Font(FONTS[1], size), "Comic Sans", BLACK, (WIDTH / 2, HEIGHT - 510))
 
     pygame.draw.rect(SCREEN, LT_GREY, FONT_THREE_AREA, 0, ROUND)
-    draw_text(pygame.font.Font(FONTS[3], 30), "GFS Didot Bold", BLACK, (WIDTH / 2, HEIGHT - 450))
+    draw_text(pygame.font.Font(FONTS[3], size), "GFS Didot Bold", BLACK, (WIDTH / 2, HEIGHT - 450))
 
     pygame.draw.rect(SCREEN, LT_GREY, FONT_FOUR_AREA, 0, ROUND)
-    draw_text(pygame.font.Font(FONTS[2], 30), "Lil Grotesk", BLACK, (WIDTH / 2, HEIGHT - 390))
+    draw_text(pygame.font.Font(FONTS[2], size), "Lil Grotesk", BLACK, (WIDTH / 2, HEIGHT - 390))
 
     pygame.draw.rect(SCREEN, LT_GREY, FONT_FIVE_AREA, 0, ROUND)
-    draw_text(pygame.font.Font(FONTS[5], 30), "Wigners Friend", BLACK,
+    draw_text(pygame.font.Font(FONTS[5], size), "Wigners Friend", BLACK,
               (WIDTH / 2, HEIGHT - 330))
 
     pygame.draw.rect(SCREEN, LT_GREY, FONT_SIX_AREA, 0, ROUND)
-    draw_text(pygame.font.Font(FONTS[4], 30), "First Coffee", BLACK, (WIDTH / 2, HEIGHT - 265))
+    draw_text(pygame.font.Font(FONTS[4], size), "First Coffee", BLACK, (WIDTH / 2, HEIGHT - 265))
 
     # draw bold options
     pygame.draw.rect(SCREEN, sub_color2, BOLD_AREA, 0, ROUND)
-    draw_text(pygame.font.Font(FONTS[6], 30), "BOLD", WHITE, (WIDTH / 2, HEIGHT - 195))
+    draw_text(pygame.font.Font(FONTS[6], size), "BOLD", WHITE, (WIDTH / 2, HEIGHT - 195))
 
 
 # Draws the increase and decrease buttons on the font menu
@@ -108,6 +109,7 @@ def draw_font_size_adjust(my_font):
 
     pygame.draw.rect(SCREEN, GREY, SUB_AREA, 0, ROUND)
     draw_text(my_font, "-", WHITE, ((WIDTH / 2) + 175, HEIGHT - 195))
+    
 
 
 # DRAW COLOR MENU #

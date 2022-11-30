@@ -103,7 +103,7 @@ def font_menu_control(current):
     value = current
     done = 0
 
-    draw_font_menu(main_color, sub_color, sub_color2, my_font)
+    draw_font_menu(main_color, sub_color, sub_color2, my_font, font_size)
 
     pygame.display.update()
 
@@ -113,39 +113,41 @@ def font_menu_control(current):
                 if event.button == 1:
                     if FONT_ONE_AREA.collidepoint(event.pos):
                         value = 0
-                        draw_font_options(sub_color2)
+                        draw_font_options(sub_color2, font_size)
                         pygame.draw.rect(SCREEN, BLACK, FONT_ONE_AREA, 3, ROUND)
                     if FONT_TWO_AREA.collidepoint(event.pos):
                         value = 1
-                        draw_font_options(sub_color2)
+                        draw_font_options(sub_color2, font_size)
                         pygame.draw.rect(SCREEN, BLACK, FONT_TWO_AREA, 3, ROUND)
                     if FONT_THREE_AREA.collidepoint(event.pos):
                         value = 3
-                        draw_font_options(sub_color2)
+                        draw_font_options(sub_color2, font_size)
                         pygame.draw.rect(SCREEN, BLACK, FONT_THREE_AREA, 3, ROUND)
                     if FONT_FOUR_AREA.collidepoint(event.pos):
                         value = 2
-                        draw_font_options(sub_color2)
+                        draw_font_options(sub_color2, font_size)
                         pygame.draw.rect(SCREEN, BLACK, FONT_FOUR_AREA, 3, ROUND)
                     if FONT_FIVE_AREA.collidepoint(event.pos):
                         value = 5
-                        draw_font_options(sub_color2)
+                        draw_font_options(sub_color2, font_size)
                         pygame.draw.rect(SCREEN, BLACK, FONT_FIVE_AREA, 3, ROUND)
                     if FONT_SIX_AREA.collidepoint(event.pos):
                         value = 4
-                        draw_font_options(sub_color2)
+                        draw_font_options(sub_color2, font_size)
                         pygame.draw.rect(SCREEN, BLACK, FONT_SIX_AREA, 3, ROUND)
                     if BOLD_AREA.collidepoint(event.pos):
                         value = 6
-                        draw_font_options(sub_color2)
+                        draw_font_options(sub_color2, font_size)
                         pygame.draw.rect(SCREEN, BLACK, BOLD_AREA, 3, ROUND)
                     if PLUS_AREA.collidepoint(event.pos):
                         increase_font_size()
                         draw_font_size_adjust(my_font)
+                        draw_font_options(sub_color2, font_size)
                         pygame.draw.rect(SCREEN, BLACK, PLUS_AREA, 3, ROUND)
                     if SUB_AREA.collidepoint(event.pos):
                         decrese_font_size()
                         draw_font_size_adjust(my_font)
+                        draw_font_options(sub_color2, font_size)
                         pygame.draw.rect(SCREEN, BLACK, SUB_AREA, 3, ROUND)
                     if DONE_AREA.collidepoint(event.pos):
                         done = 1
@@ -874,7 +876,6 @@ def stash_char(char_to_stash):
 
 # Delete command handler for handsfree().
 def delete():
-    global current_guess_string
     if len(current_guess_string) > 0:
         letter_to_delete = current_guess_string[len(current_guess_string) - 1]
         say("Deleting " + letter_to_delete, LANGUAGES[current_language])
@@ -885,7 +886,6 @@ def delete():
 
 # Submit command handler for handsfree()
 def submit():
-    global current_guess_string, current_guess
     if len(current_guess_string) == 5 and current_guess_string.lower() in check_list:
         say_and_confirm_by_char(current_guess_string, correct_word.upper(), LANGUAGES[current_language])
         check_guess(current_guess)
@@ -966,7 +966,7 @@ def start_the_game():
                                 delete_letter()
                         if MENU_AREA.collidepoint(event.pos):
                             start_game = 0
-                            game_menu()
+                            game_menu(0)
                         if INFO_SEL_AREA.collidepoint(event.pos):
                             start_game = 0
                             instructions()
@@ -1140,7 +1140,7 @@ def background():
     pygame.draw.rect(SCREEN, MENU_COLOR, END_GAME_SCREEN_AREA, 0)
 
 
-def game_menu():
+def game_menu(enter_time):
 
     menu = pygame_menu.Menu(
         height=HEIGHT - screen_difference,
@@ -1149,39 +1149,41 @@ def game_menu():
         width=WIDTH - screen_difference
     )
 
-    # COLOR MENU PAGE
-    for m in color_instructions_display: color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
+    if enter_time == 1:        
 
-    color_menu.add.color_input("Correct Letter Color  ", color_type='hex', onchange=set_correct_color, default=correct_color)
-    color_menu.add.color_input("Semi Correct Letter Color  ", color_type='hex', onchange=set_semi_color, default=semi_color)
-    color_menu.add.color_input("Wrong Letter Color  ", color_type='hex', onchange=set_wrong_color, default=wrong_color)
+        # COLOR MENU PAGE
+        for m in color_instructions_display: color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
 
-    draw_color_menu()
+        color_menu.add.color_input("Correct Letter Color  ", color_type='hex', onchange=set_correct_color, default=correct_color)
+        color_menu.add.color_input("Semi Correct Letter Color  ", color_type='hex', onchange=set_semi_color, default=semi_color)
+        color_menu.add.color_input("Wrong Letter Color  ", color_type='hex', onchange=set_wrong_color, default=wrong_color)
 
-
-    # ABOUT MENU PAGE
-    draw_about_page(about_display)
+        draw_color_menu()
 
 
-    # INSTRUCTIONS MENU PAGE
-    draw_instructions(instructions1_display, instructions2_display, instructions3_display)
-    inst_menu.add.button("Play Game", start_the_game)
-    for m in SPACES: inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
+        # ABOUT MENU PAGE
+        draw_about_page(about_display)
+
+
+        # INSTRUCTIONS MENU PAGE
+        draw_instructions(instructions1_display, instructions2_display, instructions3_display)
+        inst_menu.add.button("Play Game", start_the_game)
+        for m in SPACES: inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
 
 
     # MAIN MENU PAGE
     menu.add.button('Play', start_the_game)
     menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),
-                                     ("French", 3), ("Kid Friendly", 4)], 
-                                     onchange=set_language, default=lang_index)
+                                    ("French", 3), ("Kid Friendly", 4)], 
+                                    onchange=set_language, default=lang_index)
     menu.add.selector('Background Music: ', [("Traditional", 0), ("Happy Beat", 1),
-                                             ("     Bop      ", 2), (" Meditation ", 3),
-                                             ("Electro Chill", 4), ("    Escape   ", 5),
-                                             ("     Synth    ", 6), (" Nature 1 ", 7),
-                                             (" Nature 2 ", 8), (" Nature 3 ", 9),
-                                             (" Nature 4 ", 10)], 
-                                             onchange=set_background_music, 
-                                             default=current_background_music)
+                                            ("     Bop      ", 2), (" Meditation ", 3),
+                                            ("Electro Chill", 4), ("    Escape   ", 5),
+                                            ("     Synth    ", 6), (" Nature 1 ", 7),
+                                            (" Nature 2 ", 8), (" Nature 3 ", 9),
+                                            (" Nature 4 ", 10)], 
+                                            onchange=set_background_music, 
+                                            default=current_background_music)
     menu.add.selector('Change Font: ', [("Free Sans", 0), ("Comic Sans", 1), ("Lil Grotesk", 2), 
                                         ("GFS Didot", 3), ("First Coffee", 4), ("Wigners Friend", 5)],
                                         onchange=menu_set_font, default=font_index)
@@ -1196,7 +1198,7 @@ def game_menu():
 
 def main():
     play_background_music()
-    game_menu()
+    game_menu(1)
 
 
 if __name__ == "__main__":
