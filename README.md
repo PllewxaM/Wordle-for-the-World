@@ -18,8 +18,76 @@ At the start of our process, we noticed that a number of Wordle’s qualities we
 With these shortcomings in mind, we set out to make Wordle accessible to the visually and physically impaired communities, as well as non-English speakers. We have done this by implementing a hands-free option for users to play using only their voice, as well as a language option for players to choose which language they would like play in. In addition to our accessibility features, we also added a color picker to allow users customize their gaming experience. With these implementations, we hope that this version of our World-le can truly be “Wordle for the world.”
 <br>
 
+***
+
 ## Installation Instructions <div id='install'/>
 
+<details>
+  <summary> WINDOWS INSTALLATION INSTRUCTIONS </summary>
+<p>
+
+***
+Install python (Windows installer (64-bit)) using this link :
+>https://www.python.org/downloads/release/python-3110/
+
+Ensure you have pygame version 2.1.3 by using the command :
+
+     pip install pygame
+
+- Check the version using :
+
+      pip show pygame
+
+ - To update, use :
+
+       python -m pip install pygame --upgrade --pre
+
+Install pygame-menu using the command :
+
+     pip install pygame-menu -U
+
+Install PyObjC using the command :
+
+     pip install PyObjC
+
+For speech recognition install Google’s Speech Recognition package using the command :
+
+     pip install SpeechRecognition  
+
+For speech generation use Google’s gTTS Python package. To install the Python package type: 
+
+     pip install gTTS 
+
+Install playsound version 1.2.2 using the command :
+
+     pip install playsound==1.2.2
+
+If playsound is already installed use this command first :
+
+     pip uninstall playsound
+
+You must also download the file libmpg123-0.dll from the following link and place it inside your System32 folder :
+>Link: https://www.dll-files.com/libmpg123-0.dll.html
+
+>Folder Location: Search "System32" in your C: drive
+
+***
+
+</details>
+
+<br>
+
+<details>
+  <summary> MACOS/LINUX INSTALLATION INSTRUCTIONS </summary>
+<p>
+
+This is where you write the instructions :P
+
+</details>
+
+<br>
+
+***
 
 ## Accessibility Features <div id='features'/>
 
@@ -29,14 +97,9 @@ With these shortcomings in mind, we set out to make Wordle accessible to the vis
 * Screen reader
 * Speech interpreter
 
-## Important links: <div id='links'/>
 
-* [Lucid Chart](https://lucid.app/lucidchart/4735d828-7099-46f1-9da6-7ea53dc85e6f/edit?viewport_loc=107%2C-53%2C2208%2C1298%2C0_0&invitationId=inv_0f5a4729-5154-41bb-9f9f-4aaded83f005)
-
-* [Assignment PDF](FinalProjectAssignment.pdf)
-
-* [Shared Google Drive](https://drive.google.com/drive/folders/0ABLGOc9WOIvZUk9PVA?ths=true)
-
+***
+<br>
 <div id='handsfree'/>
 
 ## Handsfree Game Instructions
@@ -115,6 +178,11 @@ To change the background music to find your favorite of the 10 different options
 
 </details>
 
+<br>
+
+***
+<br>
+
 ## File Organization <div id='files'/>
 <details>
   <summary>Click to see all files</summary> 
@@ -131,6 +199,10 @@ To change the background music to find your favorite of the 10 different options
 	@@ -143,4 +147,4 @@ The main file of this program is wordle.py. It houses all of the game functions
 </details>
 
+<br>
+
+***
+<br>
 
 ## Credits <div id='credits'/>
 
@@ -147,6 +219,6 @@ Some resources that were helpful in developing this project include:
 
 * Wordle Example: https://github.com/plemaster01/LeMasterTechYT
 
-* Other Wordle Example: https://github.com/baraltech/Wordle-PyGame
+* Wordle Example 2: https://github.com/baraltech/Wordle-PyGame
 
 * PyGame Creating a Menu: https://github.com/russs123/pygame_tutorials/tree/main/Menu 

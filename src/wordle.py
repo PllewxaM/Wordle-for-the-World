@@ -108,9 +108,6 @@ current_letter_bg_x = WIDTH / 3.25
 """"MENU CONTROLS"""
 
 
-# FONT MENU
-
-
 # draws the font menu on the screen when the font change icon is selected
 def font_menu_control(current):
     value = current
@@ -165,9 +162,6 @@ def font_menu_control(current):
         pygame.display.update()
 
     return value
-
-
-# COLOR MENU
 
 
 # draw screen where you select which color to change
@@ -226,6 +220,32 @@ def add_correct(char):
     global correct_guesses
     if char not in correct_guesses:
         correct_guesses.append(char)
+
+
+# for traditional version of the game
+def create_new_letter():
+    # Creates a new letter and adds it to the guess.
+    global current_guess_string, current_letter_bg_x
+    current_guess_string += key_pressed
+    # do not change this to adjust board positioning
+    new_letter = Letter(key_pressed, (current_letter_bg_x, guesses_count * 70 + LETTER_Y_SPACING), main_color, sub_color, my_font)
+    current_letter_bg_x += LETTER_X_SPACING
+    guesses[guesses_count].append(new_letter)
+    current_guess.append(new_letter)
+    for guess in guesses:
+        for letter in guess:
+            letter.draw(main_color, my_font)
+
+
+# delete for traditional version of game
+def delete_letter():
+    # Deletes the last letter from the guess.
+    global current_guess_string, current_letter_bg_x
+    guesses[guesses_count][-1].delete(main_color)
+    guesses[guesses_count].pop()
+    current_guess_string = current_guess_string[:-1]
+    current_guess.pop()
+    current_letter_bg_x -= LETTER_X_SPACING
 
 
 # check what parts of the user's guess is correct
@@ -873,39 +893,10 @@ def submit():
         say("your stash must contain a real five letter word, try again!", LANGUAGES[current_language])
 
 
-"""TRADITIONAL PLAY CONTROL"""
-
-
-# for traditional version of the game
-def create_new_letter():
-    # Creates a new letter and adds it to the guess.
-    global current_guess_string, current_letter_bg_x
-    current_guess_string += key_pressed
-    # do not change this to adjust board positioning
-    new_letter = Letter(key_pressed, (current_letter_bg_x, guesses_count * 70 + LETTER_Y_SPACING), main_color, sub_color, my_font)
-    current_letter_bg_x += LETTER_X_SPACING
-    guesses[guesses_count].append(new_letter)
-    current_guess.append(new_letter)
-    for guess in guesses:
-        for letter in guess:
-            letter.draw(main_color, my_font)
-
-
-# delete for traditional version of game
-def delete_letter():
-    # Deletes the last letter from the guess.
-    global current_guess_string, current_letter_bg_x
-    guesses[guesses_count][-1].delete(main_color)
-    guesses[guesses_count].pop()
-    current_guess_string = current_guess_string[:-1]
-    current_guess.pop()
-    current_letter_bg_x -= LETTER_X_SPACING
-
-
 """APPLICATION CONTROL"""
 
 
-def start_the_game() -> None:
+def start_the_game():
     global start_game, audio_interface_enabled, started, game_result, activate, current_guess_string, \
         key_pressed, rendered
     start_game = 1
@@ -1047,7 +1038,7 @@ def start_the_game() -> None:
 """SETTERS"""
 
 
-def set_background_music(selected, value) -> None:
+def set_background_music(selected, value):
     global current_background_music
 
     current_background_music = value
@@ -1057,7 +1048,7 @@ def set_background_music(selected, value) -> None:
     mixer.music.play(-1)
 
 
-def set_language(selected, value) -> None:
+def set_language(selected, value):
     global lang, correct_word, word_list, check_list, about_display, lang_index, instructions1_display, instructions2_display, \
     instructions3_display, color_instructions_display
 
