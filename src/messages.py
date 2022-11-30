@@ -225,9 +225,9 @@ INSTRUCTIONS3_ENGLISH = ["- Incorrect letters will appear gray, as shown above."
 INSTRUCTIONS1_SPANISH = ["Cómo jugar usando un teclado:",
                          "- Usando el teclado de su computadora o el que está en la pantalla, adivine una", 
                          "  palabra de cinco letras.",
-                         "- Haga clic en el botón DEL en su pantalla, o presione la tecla Retroceso en su",
+                         "- Haga clic en el botón DEL en su pantalla, o presione la tecla Backspace en su",
                          "  teclado para eliminar una letra. ",
-                         "- Pulse la tecla Intro para enviar una conjetura.",
+                         "- Pulse la tecla Enter para enviar una conjetura.",
                          "- Las letras en la posición correcta aparecerán en verde, como se muestra a."
                          "  continuación"]
 
@@ -240,9 +240,9 @@ INSTRUCTIONS3_SPANISH = ["- Las letras incorrectas aparecerán en gris, como se 
 INSTRUCTIONS1_GERMAN = ["Wie man mit einer Tastatur spielt:",
                         "- Errate mit der Tastatur deines Computers oder der auf dem Bildschirm ein Wort mit",
                         "  fünf Buchstaben.",
-                        "- Klicken Sie auf Ihrem Bildschirm auf die Schaltfläche ENTF oder drücken Sie die", 
-                        "  Rücktaste auf Ihrer Tastatur, um einen Buchstaben zu entfernen.",
-                        "- Drücken Sie die Eingabetaste, um einen Tipp abzugeben.",
+                        "- Klicken Sie auf Ihrem Bildschirm auf die Schaltfläche DEL oder drücken Sie die", 
+                        "  Backspace auf Ihrer Tastatur, um einen Buchstaben zu entfernen.",
+                        "- Drücken Sie die Enter, um einen Tipp abzugeben.",
                         "- Buchstaben an der richtigen Position erscheinen grün, wie unten gezeigt."]
 
 INSTRUCTIONS2_GERMAN = ["- Buchstaben im Wort, aber an der falschen Position, erscheinen gelb, wie unten gezeigt. "] 
@@ -253,9 +253,9 @@ INSTRUCTIONS3_GERMAN = ["- Falsche Buchstaben werden wie oben gezeigt grau angez
 INSTRUCTIONS1_FRENCH = ["Comment jouer avec un clavier:",
                         "- À l'aide du clavier de votre ordinateur ou de celui de l'écran, devinez",
                         "  un mot de cinq lettres.",
-                        "- Cliquez sur le bouton SUPPR de votre écran ou appuyez sur la touche Retour", 
+                        "- Cliquez sur le bouton DEL de votre écran ou appuyez sur la touche Backspace", 
                         "  arrière de votre clavier pour supprimer une lettre.",
-                        "- Appuyez sur la touche Entrée pour soumettre une estimation.",
+                        "- Appuyez sur la touche Enter pour soumettre une estimation.",
                         "- Les lettres dans la bonne position apparaîtront en vert, comme illustré ci-dessous."]
 
 INSTRUCTIONS2_FRENCH = ["- Les lettres du mot, mais dans la position incorrecte, apparaîtront en jaune, comme",

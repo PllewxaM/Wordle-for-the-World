@@ -103,7 +103,7 @@ def font_menu_control(current):
     value = current
     done = 0
 
-    draw_font_menu(main_color, sub_color, sub_color2, my_font, font_size)
+    draw_font_menu(main_color, sub_color, sub_color2, my_font, font_size, lang_index)
 
     pygame.display.update()
 
@@ -113,41 +113,41 @@ def font_menu_control(current):
                 if event.button == 1:
                     if FONT_ONE_AREA.collidepoint(event.pos):
                         value = 0
-                        draw_font_options(sub_color2, font_size)
+                        draw_font_options(sub_color2, font_size, lang_index)
                         pygame.draw.rect(SCREEN, BLACK, FONT_ONE_AREA, 3, ROUND)
                     if FONT_TWO_AREA.collidepoint(event.pos):
                         value = 1
-                        draw_font_options(sub_color2, font_size)
+                        draw_font_options(sub_color2, font_size, lang_index)
                         pygame.draw.rect(SCREEN, BLACK, FONT_TWO_AREA, 3, ROUND)
                     if FONT_THREE_AREA.collidepoint(event.pos):
                         value = 3
-                        draw_font_options(sub_color2, font_size)
+                        draw_font_options(sub_color2, font_size, lang_index)
                         pygame.draw.rect(SCREEN, BLACK, FONT_THREE_AREA, 3, ROUND)
                     if FONT_FOUR_AREA.collidepoint(event.pos):
                         value = 2
-                        draw_font_options(sub_color2, font_size)
+                        draw_font_options(sub_color2, font_size, lang_index)
                         pygame.draw.rect(SCREEN, BLACK, FONT_FOUR_AREA, 3, ROUND)
                     if FONT_FIVE_AREA.collidepoint(event.pos):
                         value = 5
-                        draw_font_options(sub_color2, font_size)
+                        draw_font_options(sub_color2, font_size, lang_index)
                         pygame.draw.rect(SCREEN, BLACK, FONT_FIVE_AREA, 3, ROUND)
                     if FONT_SIX_AREA.collidepoint(event.pos):
                         value = 4
-                        draw_font_options(sub_color2, font_size)
+                        draw_font_options(sub_color2, font_size, lang_index)
                         pygame.draw.rect(SCREEN, BLACK, FONT_SIX_AREA, 3, ROUND)
                     if BOLD_AREA.collidepoint(event.pos):
                         value = 6
-                        draw_font_options(sub_color2, font_size)
+                        draw_font_options(sub_color2, font_size, lang_index)
                         pygame.draw.rect(SCREEN, BLACK, BOLD_AREA, 3, ROUND)
                     if PLUS_AREA.collidepoint(event.pos):
                         increase_font_size()
                         draw_font_size_adjust(my_font)
-                        draw_font_options(sub_color2, font_size)
+                        draw_font_options(sub_color2, font_size, lang_index)
                         pygame.draw.rect(SCREEN, BLACK, PLUS_AREA, 3, ROUND)
                     if SUB_AREA.collidepoint(event.pos):
                         decrese_font_size()
                         draw_font_size_adjust(my_font)
-                        draw_font_options(sub_color2, font_size)
+                        draw_font_options(sub_color2, font_size, lang_index)
                         pygame.draw.rect(SCREEN, BLACK, SUB_AREA, 3, ROUND)
                     if DONE_AREA.collidepoint(event.pos):
                         done = 1
@@ -160,7 +160,7 @@ def font_menu_control(current):
 def color_menu_control():
     done = 0
 
-    draw_color_select_menu(main_color, sub_color, sub_color2, correct_color, semi_color, wrong_color, my_font, my_font_med, my_font_sm)
+    draw_color_select_menu(main_color, sub_color, sub_color2, correct_color, semi_color, wrong_color, my_font, my_font_med, my_font_sm, lang_index)
 
     pygame.display.update()
 
@@ -170,17 +170,17 @@ def color_menu_control():
                 if event.button == 1:
                     if PICK_ONE_AREA.collidepoint(event.pos):
                         reset_screen()
-                        chosen_color = draw_color_screen(correct_color, main_color, sub_color, sub_color2, my_font)
+                        chosen_color = draw_color_screen(correct_color, main_color, sub_color, sub_color2, my_font, lang_index)
                         set_correct_color(chosen_color)
                         done = 1
                     if PICK_TWO_AREA.collidepoint(event.pos):
                         reset_screen()
-                        chosen_color = draw_color_screen(semi_color, main_color, sub_color, sub_color2, my_font)
+                        chosen_color = draw_color_screen(semi_color, main_color, sub_color, sub_color2, my_font, lang_index)
                         set_semi_color(chosen_color)
                         done = 1
                     if PICK_THREE_AREA.collidepoint(event.pos):
                         reset_screen()
-                        chosen_color = draw_color_screen(wrong_color, main_color, sub_color, sub_color2, my_font)
+                        chosen_color = draw_color_screen(wrong_color, main_color, sub_color, sub_color2, my_font, lang_index)
                         set_wrong_color(chosen_color)
                         done = 1
                     if PICK_FOUR_AREA.collidepoint(event.pos):
@@ -364,7 +364,7 @@ def reset():
         else :
             key.draw(main_color, my_font_med)
 
-    draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm)
+    draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm, lang_index)
     draw_nav_bar(main_color, sub_color2, my_font)
 
     play_background_music()
@@ -393,7 +393,7 @@ def reset_screen():
         else:
             key.draw(main_color, my_font_med)
 
-    draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm)
+    draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm, lang_index)
     draw_nav_bar(main_color, sub_color2, my_font)
 
     for guess in guesses:
@@ -906,7 +906,7 @@ def start_the_game():
     print(lang)
 
     draw_keyboard(main_color, sub_color2, my_font, my_font_med, keys)
-    draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm)
+    draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm, lang_index)
     draw_nav_bar(main_color, sub_color2, my_font)
     reset_screen()
 
@@ -986,15 +986,15 @@ def start_the_game():
                             set_wrong_color(GREY)
                             reset_screen()
                         if CORRECT_COLOR_AREA.collidepoint(event.pos):
-                            chosen_color = draw_color_screen(correct_color, main_color, sub_color, sub_color2, my_font)
+                            chosen_color = draw_color_screen(correct_color, main_color, sub_color, sub_color2, my_font, lang_index)
                             set_correct_color(chosen_color)
                             reset_screen()
                         if SEMI_COLOR_AREA.collidepoint(event.pos):
-                            chosen_color = draw_color_screen(semi_color, main_color, sub_color, sub_color2, my_font)
+                            chosen_color = draw_color_screen(semi_color, main_color, sub_color, sub_color2, my_font, lang_index)
                             set_semi_color(chosen_color)
                             reset_screen()
                         if WRONG_COLOR_AREA.collidepoint(event.pos):
-                            chosen_color = draw_color_screen(wrong_color, main_color, sub_color, sub_color2, my_font)
+                            chosen_color = draw_color_screen(wrong_color, main_color, sub_color, sub_color2, my_font, lang_index)
                             set_wrong_color(chosen_color)
                             reset_screen()
                         if RESET_GAME.collidepoint(event.pos):
