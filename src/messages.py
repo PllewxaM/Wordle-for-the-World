@@ -236,36 +236,7 @@ INSTRUCTIONS2_SPANISH = ["- Las letras de la palabra, pero en la posición incor
                          "  amarilla, como se muestra a continuación."]
 
 INSTRUCTIONS3_SPANISH = ["- Las letras incorrectas aparecerán en gris, como se muestra arriba.",
-                         "- Tienes seis intentos para adivinar la palabra secreta.",
-                         " ",
-                         "Cómo jugar manos libres:",
-                        "- Para activar el modo manos libres, presione la barra espaciadora dos veces.",
-                        # disactivate
-                        "- Para desactivar el modo manos libres, diga “desactivar”.",
-                        # stash
-                        "- Para deletrear una palabra, puede esconder cinco letras individuales o esconder",
-                        "  una palabra de cinco letras. Por ejemplo, “stash s, stash t, stash a, stash r,",
-                        "  stash t” y “stash start” esconden la palabra start.",
-                        # submit
-                        "- Para enviar una palabra oculta, diga “enviar”.",
-                        # delete
-                        "- Para eliminar la carta oculta más reciente, diga “eliminar”.",
-                        # clear
-                        "- Para limpiar tu reserva, di “borrar”.",
-                        # replace
-                        "- Para reemplazar una letra, diga “reemplazar”, seguido del carácter que desea",
-                        "  reemplazar, la palabra “con” y el nuevo carácter. Por ejemplo, “reemplazar p",
-                        "  con t” convertiría la palabra “cubos” en “cruces”.",
-                        # read guess
-                        "- Para escuchar una palabra adivinada en particular, diga “leer adivinar” seguido",
-                        "  del número de la palabra adivinada. Por ejemplo, “leer adivinar uno” leerá la ",
-                        "  primera palabra adivinada.",
-                        # read semi
-                        "- Para escuchar sus letras semi-correctas, diga “leer semi”.",
-                        # read wrong
-                        "- Para escuchar sus palabras adivinadas incorrectas anteriores, diga “leer mal”.",
-                        # play again
-                        "- Para volver a jugar después de terminar un juego, di “jugar de nuevo”."]
+                         "- Tienes seis intentos para adivinar la palabra secreta."]
 
 INSTRUCTIONS1_GERMAN = ["Wie man mit einer Tastatur spielt:",
                         "- Errate mit der Tastatur deines Computers oder der auf dem Bildschirm ein Wort mit",
@@ -278,36 +249,7 @@ INSTRUCTIONS1_GERMAN = ["Wie man mit einer Tastatur spielt:",
 INSTRUCTIONS2_GERMAN = ["- Buchstaben im Wort, aber an der falschen Position, erscheinen gelb, wie unten gezeigt. "] 
 
 INSTRUCTIONS3_GERMAN = ["- Falsche Buchstaben werden wie oben gezeigt grau angezeigt.", 
-                        "- Sie haben sechs Versuche, das geheime Wort zu erraten."
-                        " ",
-                        "So spielen Sie freihändig:",
-                        "- Um den Freisprechmodus zu aktivieren, drücken Sie zweimal die Leertaste.",
-                        # disactivate
-                        "- Um den Freisprechmodus zu deaktivieren, sagen Sie „deaktivieren“.",
-                        # stash
-                        "- Um ein Wort zu buchstabieren, können Sie entweder fünf einzelne Buchstaben oder ein",
-                        "  Wort mit fünf Buchstaben verstauen. Zum Beispiel “stash s, stash t, stash a, stash r,",
-                        "  stash t” und “stash start” verstauen beide das Wort “start.”",
-                        # submit
-                        "- Um ein verstecktes Wort einzureichen, sagen Sie “Senden.”",
-                        # delete
-                        "- Um den zuletzt abgelegten Buchstaben zu löschen, sagen Sie “Löschen.”",
-                        # clear
-                        "- Um Ihren Vorrat zu leeren, sagen Sie “löschen.”",
-                        # replace
-                        "- Um einen Buchstaben zu ersetzen, sagen Sie “ersetzen”, gefolgt von dem zu ersetzenden",
-                        "  Zeichen, dem Wort “durch” und dem neuen Zeichen. Zum Beispiel würde “p durch t ersetzen”",  
-                        "  das Wort “Pails” in “Tails” verwandeln.", 
-                        # read guess
-                        "- Um ein bestimmtes erratenes Wort zu hören, sagen Sie “Rate vorlesen,” gefolgt von der",
-                        "  Nummer des erratenen Wortes. Zum Beispiel liest “read rate one” Ihr erstes erratenes Wort", 
-                        "  vor.",
-                        # read semi
-                        "- Um Ihre halbkorrekten Buchstaben zu hören, sagen Sie “halb lesen.”",
-                        # read wrong
-                        "- Um Ihre zuvor falsch erratenen Wörter zu hören, sagen Sie “falsch gelesen.”",
-                        # play again
-                        "- Um nach dem Beenden eines Spiels erneut zu spielen, sagen Sie “Erneut spielen.”"]
+                        "- Sie haben sechs Versuche, das geheime Wort zu erraten."]
 
 INSTRUCTIONS1_FRENCH = ["Comment jouer avec un clavier:",
                         "- À l'aide du clavier de votre ordinateur ou de celui de l'écran, devinez",
@@ -321,35 +263,7 @@ INSTRUCTIONS2_FRENCH = ["- Les lettres du mot, mais dans la position incorrecte,
                         "  indiqué ci-dessous."]
 
 INSTRUCTIONS3_FRENCH = ["- Les lettres incorrectes apparaîtront en gris, comme indiqué ci-dessus.",
-                        "- Vous avez six tentatives pour deviner le mot secret."
-                        " ",
-                        "Comment jouer en mode mains libres:",
-                        "- Pour activer le mode mains libres, appuyez deux fois sur la barre d'espace.",
-                        # disactivate
-                        "- Pour désactiver le mode mains libres, dites “désactiver.”",
-                        # stash
-                        "- Pour épeler un mot, vous pouvez soit cacher cinq lettres individuelles, soit",
-                        "  cacher un mot de cinq lettres. Par exemple, “stash s, stash t, stash a, stash r,",
-                        "  stash t” et “stash start” cachent tous deux le mot, start.",
-                        # submit
-                        "- Pour soumettre un mot caché, dites “soumettre.”",
-                        # delete
-                        "- Pour supprimer la dernière lettre stockée, dites “supprimer.”",
-                        # clear
-                        "- Pour vider votre réserve, dites “vider.”",
-                        # replace 
-                        "- Pour remplacer une lettre, dites “remplacer,” suivi du caractère que vous",
-                        "  souhaitez remplacer, du mot “par” et du nouveau caractère. Par exemple, “remplacer",
-                        "  p par t” transformerait le mot “seaux” en “queues.”",
-                        # read guess
-                        "- Pour entendre un mot deviné particulier, dites “lire deviner » suivi du numéro du",
-                        "  mot deviné. Par exemple, “lisez devinez un » lira votre premier mot deviné.",
-                        # read semi
-                        "- Pour entendre vos lettres semi-correctes, dites “read semi.”",
-                        # read wrong
-                        "- Pour entendre vos précédents mots mal devinés, dites “mal lu”.",
-                        # play again
-                        "- Pour rejouer après avoir terminé une partie, dites “rejouer.”"]
+                        "- Vous avez six tentatives pour deviner le mot secret."]
 
 COLOR_INSTRUCTIONS_ENGLISH = ["On this screen you can input colors using their hexadecimal code.", 
                               "Don't worry if you're not sure how to do this, you can also change the colors from",  
