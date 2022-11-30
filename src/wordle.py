@@ -40,7 +40,7 @@ current_background_music = 0
 try:
     mixer.init()
     mixer.music.load('sound/background_music/the_trail_instruments_trimmed.mp3')
-    mixer.music.set_volume(0.1)
+    mixer.music.set_volume(0.2)
 except Exception as e:
     print(str(e) + "Something went wrong")
 
@@ -251,7 +251,7 @@ def delete_letter():
 # check what parts of the user's guess is correct
 def check_guess(guess_to_check):
     # Goes through each letter and checks if it should be green, yellow, or grey.
-    global current_guess, current_guess_string, guesses_count, current_letter_bg_x, game_result
+    global current_guess, current_guess_string, guesses_count, current_letter_bg_x, game_result, audio_interface_enabled
     game_decided = False
     guesses_str.append(current_guess_string)
     for i in range(5):
@@ -259,6 +259,9 @@ def check_guess(guess_to_check):
         if lowercase_letter in correct_word:
             if lowercase_letter == correct_word[i]:
                 guess_to_check[i].bg_color = correct_color
+                if not audio_interface_enabled:
+                    time.sleep(0.25)
+                    playsound("sound/effects/correct_char_trimmed.mp3")
                 add_correct(lowercase_letter)
                 for key in keys:
                     if key.text == lowercase_letter.upper():
@@ -269,6 +272,9 @@ def check_guess(guess_to_check):
                     game_result = "W"
             else:
                 guess_to_check[i].bg_color = semi_color
+                if not audio_interface_enabled:
+                    time.sleep(0.25)
+                    playsound("sound/effects/semi_correct_char_trimmed.wav")
                 add_semi(lowercase_letter)
                 for key in keys:
                     if key.text == lowercase_letter.upper():
@@ -279,6 +285,10 @@ def check_guess(guess_to_check):
                 game_decided = True
         else:
             guess_to_check[i].bg_color = wrong_color
+            if not audio_interface_enabled:
+                time.sleep(0.25)
+                playsound("sound/effects/incorrect_char_trimmed.wav")
+                time.sleep(0.35)
             add_incorrect(lowercase_letter)
             for key in keys:
                 if key.text == lowercase_letter.upper():
@@ -529,7 +539,7 @@ def volume_handler(command):
             index += 1
 
         if value_to_set <= 10:
-            set_background_music_volume(value_to_set / 100)
+            set_background_music_volume(value_to_set / 50)
         else:
             say("You can only set volume between 0 and 10.", LANGUAGES[current_language])
 
@@ -764,7 +774,7 @@ def handsfree():
                 say("Disabling audio, press space bar twice to re-enable.", LANGUAGES[current_language])
                 activate = 0
                 audio_interface_enabled = 0
-                set_background_music_volume(0.1)
+                set_background_music_volume(0.2)
                 waiting_for_command = 0
             elif "volume" in command:
                 if has_warned or not audio_interface_enabled:
