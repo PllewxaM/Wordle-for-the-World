@@ -34,6 +34,9 @@ color_theme.widget_selection_effect = pygame_menu.widgets.NoneSelection()
 about_theme = color_theme
 inst_theme = color_theme
 
+
+# MENUS
+
 color_menu = pygame_menu.Menu(
     height=HEIGHT - screen_difference,
     theme=color_theme,
@@ -54,6 +57,8 @@ inst_menu = pygame_menu.Menu(
     title='Game Instructions',
     width=WIDTH - screen_difference
 )
+
+# DRAW MENUS
 
 def draw_instructions(instructions1_display, instructions2_display, instructions3_display):
 

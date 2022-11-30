@@ -771,7 +771,7 @@ def handsfree():
                     say("Adjusting volume.", LANGUAGES[current_language])
                     volume_handler(command)
                 else:
-                    say(volume_warning, LANGUAGES[current_language])
+                    say(VOLUME_WARNING, LANGUAGES[current_language])
                     has_warned = 1
                 waiting_for_command = 0
             elif "song" in command:
