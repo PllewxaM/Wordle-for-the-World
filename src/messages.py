@@ -353,27 +353,28 @@ INSTRUCTIONS3_FRENCH = ["- Les lettres incorrectes apparaîtront en gris, comme 
 COLOR_INSTRUCTIONS_ENGLISH = ["On this screen you can input colors using their hexadecimal code.", 
                               "Don't worry if you're not sure how to do this, you can also change the colors from",  
                               "the main game screen by clicking on the color key.", 
-                              "From there you can pick from assorted pre-set colors and themes.", "", "", ""]
+                              "From there you can pick from assorted pre-set colors and themes."]
 
 COLOR_INSTRUCTIONS_SPANISH = ["En esta pantalla puede ingresar colores usando su código hexadecimal. No te",
                               "preocupes si no estás seguro de cómo hacerlo, también puedes cambiar los",
                               "colores desde la pantalla principal del juego haciendo clic en la tecla de", 
                               "color. Desde allí, puede elegir entre una variedad de colores y temas",
-                              "preestablecidos.", "", "", ""]
+                              "preestablecidos."]
 
 COLOR_INSTRUCTIONS_GERMAN = ["Auf diesem Bildschirm können Sie Farben mit ihrem Hexadezimalcode eingeben. Machen",
                              "Sie sich keine Sorgen, wenn Sie sich nicht sicher sind, wie das geht. Sie können",
                              "die Farben auch vom Hauptspielbildschirm aus ändern, indem Sie auf die Farbtaste",
                              "klicken. Von dort aus können Sie aus verschiedenen voreingestellten Farben und", 
-                             "Themen auswählen.", "", "", ""]
+                             "Themen auswählen."]
 
 COLOR_INSTRUCTIONS_FRENCH = ["Sur cet écran, vous pouvez saisir les couleurs en utilisant leur code hexadécimal.",
                              "Ne vous inquiétez pas si vous ne savez pas comment procéder, vous pouvez également",
                              "modifier les couleurs à partir de l'écran principal du jeu en cliquant sur la",
                              "touche de couleur. À partir de là, vous pouvez choisir parmi un assortiment de",
-                             "couleurs et de thèmes prédéfinis.", "", "", ""]
+                             "couleurs et de thèmes prédéfinis."]
 
 SPACES = [" ", " "]
+SPACER = "<------------------------------------------------------------------>"
 
 # Long sections of text used for instructing hands-free user
 STARTUP = "Welcome to wordle for the world, to activate the hands free version of the program, press " \

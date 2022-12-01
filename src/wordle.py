@@ -1050,21 +1050,45 @@ def set_background_music(selected, value):
 
 
 def set_language(selected, value):
-    global lang, correct_word, word_list, check_list, about_display, lang_index, instructions1_display, instructions2_display, \
-    instructions3_display, color_instructions_display
+    global lang, correct_word, word_list, check_list, lang_index
 
     lang = LANG_SETTINGS[value][0]
     word_list = LANG_SETTINGS[value][1]
     check_list = LANG_SETTINGS[value][2]
-    about_display = LANG_SETTINGS[value][3]
-    instructions1_display = LANG_SETTINGS[value][4]
-    instructions2_display = LANG_SETTINGS[value][5]
-    instructions3_display = LANG_SETTINGS[value][6]
-    color_instructions_display = LANG_SETTINGS[value][7]
     lang_index = value
 
     reset()
 
+def set_about_lang(selected, value):
+    global about_display
+    about_display = LANG_SETTINGS[value][3]
+
+
+def send_about():
+    append_about_instructions(about_display)
+
+
+def set_instructions_lang(selected, value):
+    global instructions1_display, instructions2_display, instructions3_display
+    instructions1_display = LANG_SETTINGS[value][4]
+    instructions2_display = LANG_SETTINGS[value][5]
+    instructions3_display = LANG_SETTINGS[value][6]
+
+def send_instructions():
+    append_instructions(instructions1_display, instructions2_display, instructions3_display)
+
+
+# Color Menu
+def set_color_lang(selected, value):
+    global color_instructions_display
+    color_instructions_display = LANG_SETTINGS[value][7]
+
+
+def send_color_instructions():
+    append_color_instructions(color_instructions_display)
+
+
+# Font Menu
 def menu_set_font(selected, value):
     global font_index, my_font, my_font_med, my_font_sm, my_font_xsm
 
@@ -1074,7 +1098,7 @@ def menu_set_font(selected, value):
     my_font_sm = pygame.font.Font(FONTS[font_index], font_size - 20)
     my_font_xsm = pygame.font.Font(FONTS[font_index], font_size - 25)
 
-
+# Set Game Colors
 def set_correct_color(value):
     global correct_color
     correct_color = value
@@ -1102,6 +1126,7 @@ def set_dark_mode():
         sub_color2 = LT_GREY
 
 
+# Set Game Font
 def set_font(value):
     global font_index, my_font, my_font_med, my_font_sm, my_font_xsm
     font_index = value
@@ -1111,6 +1136,7 @@ def set_font(value):
     my_font_xsm = pygame.font.Font(FONTS[font_index], font_size - 25)
 
 
+# Change Font Size
 def decrese_font_size():
     global font_size
     if font_size - 25 > 5:
@@ -1152,20 +1178,34 @@ def game_menu(enter_time):
     if enter_time == 1:        
 
         # COLOR MENU PAGE
-        for m in color_instructions_display: color_menu.add.label(m, align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
-
+        color_menu.add.label(" ", align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
+        color_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),
+                                ("French", 3), ("Kid Friendly", 4)], 
+                                onchange=set_color_lang, default=lang_index)
+        color_menu.add.button("Click to Add Instructions in New Language", send_color_instructions)
+        color_menu.add.label("Scroll down to see new instructions", align=pygame_menu.locals.ALIGN_CENTER, font_size=22)
+        draw_color_instructions(color_instructions_display)
         color_menu.add.color_input("Correct Letter Color  ", color_type='hex', onchange=set_correct_color, default=correct_color)
         color_menu.add.color_input("Semi Correct Letter Color  ", color_type='hex', onchange=set_semi_color, default=semi_color)
         color_menu.add.color_input("Wrong Letter Color  ", color_type='hex', onchange=set_wrong_color, default=wrong_color)
-
         draw_color_menu()
 
 
         # ABOUT MENU PAGE
+        about_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),
+                                ("French", 3), ("Kid Friendly", 4)], 
+                                onchange=set_about_lang, default=lang_index)
+        about_menu.add.button("Click to Add Content in New Language", send_about)
+        about_menu.add.label("Scroll down to see new information", align=pygame_menu.locals.ALIGN_CENTER, font_size=22)
         draw_about_page(about_display)
 
 
         # INSTRUCTIONS MENU PAGE
+        inst_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),
+                                ("French", 3), ("Kid Friendly", 4)], 
+                                onchange=set_instructions_lang, default=lang_index)
+        inst_menu.add.button("Click to Add Instructions in New Language", send_instructions)
+        inst_menu.add.label("Scroll down to see new instructions", align=pygame_menu.locals.ALIGN_CENTER, font_size=22)
         draw_instructions(instructions1_display, instructions2_display, instructions3_display)
         inst_menu.add.button("Play Game", start_the_game)
         for m in SPACES: inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
@@ -1185,7 +1225,7 @@ def game_menu(enter_time):
                                             onchange=set_background_music, 
                                             default=current_background_music)
     menu.add.selector('Change Font: ', [("Free Sans", 0), ("Comic Sans", 1), ("Lil Grotesk", 2), 
-                                        ("GFS Didot", 3), ("First Coffee", 4), ("Wigners Friend", 5)],
+                                        ("GFS Didot Bold", 3), ("First Coffee", 4), ("Wigners Friend", 5)],
                                         onchange=menu_set_font, default=font_index)
     menu.add.button('Set Colors', color_menu)
     menu.add.button('Instructions', inst_menu)
