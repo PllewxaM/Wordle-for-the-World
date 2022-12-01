@@ -55,28 +55,27 @@ def draw_nav_bar(main_color, sub_color2, my_font):
 
 # DRAW FONT MENU #
 
-
-def draw_font_menu(main_color, sub_color, sub_color2, my_font, font_size) :
+def draw_font_menu(main_color, sub_color, sub_color2, my_font, font_size, lang_index) :
     # draw background and front mini menu screens
     pygame.draw.rect(SCREEN, GREY, SM_MENU_AREA_BACK, 0, ROUND)
     pygame.draw.rect(SCREEN, main_color, SM_MENU_AREA_FRONT, 0, ROUND)
 
     # draw menu title
-    draw_text(my_font, "Change Font", sub_color, (WIDTH / 2, (HEIGHT - (HEIGHT * 0.8)) / 2 + 45))
+    draw_text(my_font, CHANGE_FONTS[lang_index], sub_color, (WIDTH / 2, (HEIGHT - (HEIGHT * 0.8)) / 2 + 45))
 
     # draw font options
-    draw_font_options(sub_color2, font_size)
+    draw_font_options(sub_color2, font_size, lang_index)
 
     # draw size increase / decrease buttons
     draw_font_size_adjust(my_font)
 
     # draw done button
     pygame.draw.rect(SCREEN, sub_color2, DONE_AREA, 0, ROUND)
-    draw_text(my_font, "DONE", WHITE, (WIDTH / 2, HEIGHT - 125))
+    draw_text(my_font, DONE[lang_index], WHITE, (WIDTH / 2, HEIGHT - 125))
 
 
 # Draws font options on the font menu
-def draw_font_options(sub_color2, font_size):
+def draw_font_options(sub_color2, font_size, lang_index):
     size = font_size - 10
     pygame.draw.rect(SCREEN, LT_GREY, FONT_ONE_AREA, 0, ROUND)
     draw_text(pygame.font.Font(FONTS[0], size), "Free Sans Font", BLACK, (WIDTH / 2, HEIGHT - 570))
@@ -99,7 +98,7 @@ def draw_font_options(sub_color2, font_size):
 
     # draw bold options
     pygame.draw.rect(SCREEN, sub_color2, BOLD_AREA, 0, ROUND)
-    draw_text(pygame.font.Font(FONTS[6], size), "BOLD", WHITE, (WIDTH / 2, HEIGHT - 195))
+    draw_text(pygame.font.Font(FONTS[6], size), BOLD[lang_index], WHITE, (WIDTH / 2, HEIGHT - 195))
 
 
 # Draws the increase and decrease buttons on the font menu
@@ -116,7 +115,7 @@ def draw_font_size_adjust(my_font):
 
 
 # Draws the color key to show the user what colors are selected and what they mean
-def draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm):
+def draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm, lang_index):
     # function variables
     key_width, key_height = 155, 225
     block_x, block_y = WIDTH - 170, 70
@@ -127,27 +126,27 @@ def draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm
 
     # Draws the color key outline and title of area
     pygame.draw.rect(SCREEN, sub_color, [block_x, block_y, key_width, key_height], 1, ROUND)
-    draw_text(my_font_sm, "Color Key", sub_color, (title_x, title_y))
+    draw_text(my_font_sm, COLOR_KEY[lang_index], sub_color, (title_x, title_y))
 
     # draws the correct color circle and lable of color
     pygame.draw.rect(SCREEN, correct_color, [color_x, color_y, size, size], 0, shape)
-    draw_text(my_font_xsm, "CORRECT", sub_color, (text_x, color_y + 15))
+    draw_text(my_font_xsm, CORRECT[lang_index], sub_color, (text_x, color_y + 15))
 
     # draws the semi correct color circle and lable of color
     pygame.draw.rect(SCREEN, semi_color, [color_x, color_y + 50, size, size], 0, shape)
-    draw_text(my_font_xsm, "SEMI", sub_color, (text_x, color_y + 55))
-    draw_text(my_font_xsm, "CORRECT", sub_color, (text_x, color_y + 75))
+    draw_text(my_font_xsm, SEMI[lang_index], sub_color, (text_x, color_y + 55))
+    draw_text(my_font_xsm, CORRECT[lang_index], sub_color, (text_x, color_y + 75))
 
     # draws the wrong color circle and lable of color
     pygame.draw.rect(SCREEN, wrong_color, [color_x, color_y + 105, size, size], 0, shape)
-    draw_text(my_font_xsm, "WRONG", sub_color, (text_x, color_y + 120))
+    draw_text(my_font_xsm, WRONG[lang_index], sub_color, (text_x, color_y + 120))
 
     # draw reset colors button
     pygame.draw.rect(SCREEN, LT_GREY, RESET_COLORS, 0, ROUND)
-    draw_text(my_font_sm, "Reset Colors", BLACK, (title_x, color_y + 185))
+    draw_text(my_font_sm, RESET_COLOR[lang_index], BLACK, (title_x, color_y + 185))
 
     pygame.draw.rect(SCREEN, LT_GREY, RESET_GAME, 0, ROUND)
-    draw_text(my_font_sm, "Reset Game", BLACK, (title_x, color_y + 235))
+    draw_text(my_font_sm, RESET_GAMES[lang_index], BLACK, (title_x, color_y + 235))
 
     pygame.display.update()
 
@@ -170,7 +169,7 @@ def draw_color_squrs():
 
 
 # Draws the color menu and controls the menu functionality, returns selected color
-def draw_color_screen(current, main_color, sub_color, sub_color2, my_font):
+def draw_color_screen(current, main_color, sub_color, sub_color2, my_font, lang_index):
     value = current
     done = 0
 
@@ -180,11 +179,11 @@ def draw_color_screen(current, main_color, sub_color, sub_color2, my_font):
     pygame.draw.rect(SCREEN, main_color, SM_MENU_AREA_FRONT, 0, ROUND)
 
     # draw menu title
-    draw_text(my_font, "Change Color", sub_color, (WIDTH / 2, (HEIGHT - (HEIGHT * 0.8)) / 2 + 45))
+    draw_text(my_font, CHANGE_COLOR[lang_index], sub_color, (WIDTH / 2, (HEIGHT - (HEIGHT * 0.8)) / 2 + 45))
 
     # draw done button
     pygame.draw.rect(SCREEN, sub_color2, DONE_AREA, 0, ROUND)
-    draw_text(my_font, "DONE", WHITE, (WIDTH / 2, HEIGHT - 125))
+    draw_text(my_font, DONE[lang_index], WHITE, (WIDTH / 2, HEIGHT - 125))
 
     # draw the color squares
     draw_color_squrs()
@@ -207,34 +206,34 @@ def draw_color_screen(current, main_color, sub_color, sub_color2, my_font):
     return value
 
 
-def draw_color_select_menu(main_color, sub_color, sub_color2, correct_color, semi_color, wrong_color, my_font, my_font_med, my_font_sm) :
+def draw_color_select_menu(main_color, sub_color, sub_color2, correct_color, semi_color, wrong_color, my_font, my_font_med, my_font_sm, lang_index) :
     
     # draw background screen and front ground screen
     pygame.draw.rect(SCREEN, GREY, SM_MENU_AREA_BACK, 0, ROUND)
     pygame.draw.rect(SCREEN, main_color, SM_MENU_AREA_FRONT, 0, ROUND)
 
     # draw menu title
-    draw_text(my_font, "SELECT COLOR", sub_color, (WIDTH / 2, (HEIGHT - (HEIGHT * 0.85)) / 2 + 45))
-    draw_text(my_font, "TO CHANGE", sub_color, (WIDTH / 2, (HEIGHT - (HEIGHT * 0.85)) / 2 + 90))
+    draw_text(my_font, SELECT_COLOR[lang_index], sub_color, (WIDTH / 2, (HEIGHT - (HEIGHT * 0.85)) / 2 + 45))
+    draw_text(my_font, TO_CHANGE[lang_index], sub_color, (WIDTH / 2, (HEIGHT - (HEIGHT * 0.85)) / 2 + 90))
 
     # draw correct select button
     pygame.draw.rect(SCREEN, correct_color, PICK_ONE_AREA, 0, ROUND)
-    draw_text(my_font_med, "Change Correct Color", BLACK, (WIDTH / 2, HEIGHT - 510))
+    draw_text(my_font_med, CHANGE_CORRECT_COLOR[lang_index], BLACK, (WIDTH / 2, HEIGHT - 510))
 
     # draw semi correct select button
     pygame.draw.rect(SCREEN, semi_color, PICK_TWO_AREA, 0, ROUND)
-    draw_text(my_font_med, "Change Semi Correct Color", BLACK, (WIDTH / 2, HEIGHT - 410))
+    draw_text(my_font_med, CHANGE_SEMI_COLOR[lang_index], BLACK, (WIDTH / 2, HEIGHT - 410))
 
     # draw wrong select button
     pygame.draw.rect(SCREEN, wrong_color, PICK_THREE_AREA, 0, ROUND)
-    draw_text(my_font_med, "Change Wrong Color", BLACK, (WIDTH / 2, HEIGHT - 310))
+    draw_text(my_font_med, CHANGE_WRONG_COLOR[lang_index], BLACK, (WIDTH / 2, HEIGHT - 310))
 
     pygame.draw.rect(SCREEN, HIGH_CONTRAST_2, PICK_FOUR_AREA, 0, ROUND)
-    draw_text(my_font_med, "Activate High Contrast Mode", BLACK, (WIDTH / 2, HEIGHT - 210))
+    draw_text(my_font_med, HIGH_CONTRAST[lang_index], BLACK, (WIDTH / 2, HEIGHT - 210))
 
     # draw cancel button
     pygame.draw.rect(SCREEN, sub_color2, CANCEL_AREA, 0, ROUND)
-    draw_text(my_font_sm, "CANCEL", WHITE, (WIDTH / 2, HEIGHT - 115))
+    draw_text(my_font_sm, CANCEL[lang_index], WHITE, (WIDTH / 2, HEIGHT - 115))
 
 
 # DRAW KEYBOARD #
