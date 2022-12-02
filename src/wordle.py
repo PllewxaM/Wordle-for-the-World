@@ -339,12 +339,16 @@ def check_guess(guess_to_check):
 
 
 # display lost game screen and instructions to play again
-def lose_play_again():
+def lose_play_again(Stats):
     reset_game = 0
     SCREEN.fill(WHITE)
     pygame.draw.rect(SCREEN, DK_RED, END_GAME_SCREEN_AREA, 0, ROUND)
-    draw_text(my_font, "Press ENTER to Play Again!", WHITE, (WIDTH / 2, 320))
     draw_text(my_font, f"Sorry, the word was {correct_word}!", WHITE, (WIDTH / 2, 250))
+    draw_text(my_font, "Press ENTER to Play Again!", WHITE, (WIDTH / 2, 320))
+    # Draw game and player statistics
+    won_percent = "         {:.1f}%         ".format(int(Stats[1]) / int(Stats[0]) * 100)
+    draw_text(my_font, str(Stats[0]) + won_percent + str(Stats[2]) + "            " + str(Stats[3]), WHITE, (WIDTH/2, 460))
+    draw_text(my_font_sm, "Games Played       Games Won %       Current Streak       Max Streak", WHITE, (WIDTH/2, 530))
     pygame.display.update()
     while not reset_game:
         for event in pygame.event.get():
@@ -360,13 +364,17 @@ def lose_play_again():
 
 
 # display won game screen and instructions for play again
-def correct_play_again():
+def correct_play_again(Stats):
     reset_game = 0
     SCREEN.fill(WHITE)
     pygame.draw.rect(SCREEN, correct_color, END_GAME_SCREEN_AREA, 0, ROUND)
     draw_text(my_font, "Congratulations!", WHITE, (WIDTH / 2, 250))
     draw_text(my_font, f"The word was {correct_word}!", WHITE, (WIDTH / 2, 320))
     draw_text(my_font, "Press ENTER to Play Again!", WHITE, (WIDTH / 2, 390))
+    # Draw game and player statistics
+    won_percent = "         {:.1f}%         ".format(int(Stats[1]) / int(Stats[0]) * 100)
+    draw_text(my_font, str(Stats[0]) + won_percent + str(Stats[2]) + "            " + str(Stats[3]), WHITE, (WIDTH/2, 530))
+    draw_text(my_font_sm, "Games Played       Games Won %       Current Streak       Max Streak", WHITE, (WIDTH/2, 600))
     pygame.display.update()
     while not reset_game:
         for event in pygame.event.get():
@@ -383,14 +391,34 @@ def correct_play_again():
 
 def handle_stats(stat):
     if(os.path.exists("stats.txt") == False):
+        # create new file if none exsists
         f = open("stats.txt", "w+")
-        # games played, games won, current streak, max streak
+        # write stats to file :games played, games won, current streak, max streak
         f.write("%d\n%d\n%d\n%d" % (1, stat, stat, stat))
+        # return current stats
+        Data = [1, stat, stat, stat]
     else :
-        f = open("stats.txt", "w+")
-        data = f.read()
-        print(data)
-        f.write("Hello")
+        # open file and read stats
+        f = open("stats.txt", "r")
+        Data = f.readlines()
+        # increment games played
+        Data[0] = int(Data[0]) + 1 
+        # increament games won
+        Data[1] = int(Data[1]) + stat
+        # set current streak value
+        if stat == 0:
+            Data[2] = 0
+        else:
+            Data[2] = int(Data[2]) + stat
+        # chekc if max streak should be changed
+        if Data[2] > int(Data[3]):
+            Data[3] = Data[2]
+        # write new data to file
+        f = open("stats.txt", "w")
+        # write to file: games played, games won, current streak, max streak
+        f.write("%d\n%d\n%d\n%d" % (Data[0], Data[1], Data[2], int(Data[3])))
+
+    return Data
 
 
 # reset global variables and game screen after previous game ends
@@ -932,12 +960,12 @@ def start_the_game():
             draw(sub_color)
             # load end of game screens depending on result
             if game_result == "L":
-                handle_stats(0)
-                lose_play_again()
+                Stats = handle_stats(0)
+                lose_play_again(Stats)
                 eog_sound(game_result)
             if game_result == "W":
-                handle_stats(1)
-                correct_play_again()
+                Stats = handle_stats(1)
+                correct_play_again(Stats)
                 eog_sound(game_result)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
