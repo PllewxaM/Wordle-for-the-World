@@ -17,9 +17,9 @@ pygame.init()
 start_game = 0
 
 # AUDIO INTERFACE
-rendered = 0
-started = 0
-activate = 0
+hands_free_rendered = 0
+game_started = 0
+activate_audio = 0
 audio_interface_enabled = 0
 threshold_initialized = 0
 
@@ -727,7 +727,7 @@ def return_keyword_index(keyword, command):
 
 # Listens for user command, validates the command, and calls the correct function to execute user command.
 def handsfree():
-    global current_guess_string, activate, audio_interface_enabled, has_warned
+    global current_guess_string, activate_audio, audio_interface_enabled, has_warned
 
     waiting_for_command = 1
     while waiting_for_command:
@@ -771,7 +771,7 @@ def handsfree():
                 waiting_for_command = 0
             elif "disable" in command:
                 say("Disabling audio, press space bar twice to re-enable.", LANGUAGES[current_language])
-                activate = 0
+                activate_audio = 0
                 audio_interface_enabled = 0
                 set_background_music_volume(0.2)
                 waiting_for_command = 0
@@ -902,21 +902,25 @@ def submit():
 
 """APPLICATION CONTROL"""
 
-
+# This function is the main control loop for the game and is called once the user presses play in the menu
+# This function draws the screen components and loops continuously until the user quits the game
+# The program tracks the current game status, keyboard clicks, mousebutton clicks and 
 def start_the_game():
-    global start_game, audio_interface_enabled, started, game_result, activate, current_guess_string, \
-        key_pressed, rendered
+    global start_game, audio_interface_enabled, game_started, game_result, activate_audio, current_guess_string, \
+        key_pressed, hands_free_rendered
     start_game = 1
 
     SCREEN.fill(main_color)
+    # for testing purposes
     print(correct_word)
-    print(lang)
 
+    # draw screen elements - keyboard, nav bar and color key
     draw_keyboard(main_color, sub_color2, my_font, my_font_med, keys)
     draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm, lang_index)
     draw_nav_bar(main_color, sub_color2, my_font)
     reset_screen()
 
+    # load background music
     mixer.music.pause()
     mixer.music.load(BACKGROUND_MUSIC[current_background_music])
     mixer.music.play(-1)
@@ -925,6 +929,7 @@ def start_the_game():
         # how program should run when audio interface is not enabled
         while not audio_interface_enabled and start_game:
             draw(sub_color)
+            # load end of game screens depending on result
             if game_result == "L":
                 lose_play_again()
                 eog_sound(game_result)
@@ -936,26 +941,32 @@ def start_the_game():
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
+                    # if user pressed enter key
                     if event.key == pygame.K_RETURN:
+                        # if game is on end of game screen, restart game
                         if game_result != "":
                             reset()
+                        # if game is in progress, try to submit and check guess
                         else:
                             if len(current_guess_string) == 5 and current_guess_string.lower() in check_list:
                                 check_guess(current_guess)
+                    # if user presses backspace key, delete letter from guess
                     elif event.key == pygame.K_BACKSPACE:
                         if len(current_guess_string) > 0:
                             delete_letter()
                     # have to press space bar twice to activate audio interface
-                    elif not activate and event.key == pygame.K_SPACE:
-                        activate = 1
-                    elif activate and event.key == pygame.K_SPACE:
+                    elif not activate_audio and event.key == pygame.K_SPACE:
+                        activate_audio = 1
+                    # if user pressed space bar already and presses again, enable audio interface
+                    elif activate_audio and event.key == pygame.K_SPACE:
                         audio_interface_enabled = 1
-
+                    # if user presses any letter key, add letter to guess
                     else:
                         key_pressed = event.unicode.upper()
                         if key_pressed in "QWERTYUIOPASDFGHJKLZXCVBNM" and key_pressed != "":
                             if len(current_guess_string) < 5:
                                 create_new_letter()
+                # if user clicks on screen
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         # check if any letter areas are selected
@@ -965,70 +976,87 @@ def start_the_game():
                                     key_pressed = letter
                                     if len(current_guess_string) < 5:
                                         create_new_letter()
+                        # check if on-screen enter key is clicked, submit and check guess
                         if ENTER_AREA.collidepoint(event.pos):
                             if len(current_guess_string) == 5 and current_guess_string.lower() in check_list:
                                 check_guess(current_guess)
+                        # check if on-screen delete key is clicked, delete letter from guess
                         if DEL_AREA.collidepoint(event.pos):
                             if len(current_guess_string) > 0:
                                 delete_letter()
+                        # if menu icon in nav bar is clicked
                         if MENU_AREA.collidepoint(event.pos):
                             start_game = 0
                             game_menu(0)
+                        # if info icon in nav bar is clicked load instructions page
                         if INFO_SEL_AREA.collidepoint(event.pos):
                             start_game = 0
                             instructions()
+                        # if font icon in nav bar is clicked, open font menu
                         if FONT_SEL_AREA.collidepoint(event.pos):
                             chosen_font = font_menu_control(font_index)
                             menu_set_font(1, chosen_font)
                             reset_screen()
+                        # if color icon in nav bar is clicked, open color menu
                         if COLOR_SEL_AREA.collidepoint(event.pos):
                             color_menu_control()
                             reset_screen()
+                        # if dark mode icon is clicked, activate dark mode
                         if DARK_SEL_AREA.collidepoint(event.pos):
                             set_dark_mode()
                             reset_screen()
+                        # if reset color button is clicked, reset colors to default wordle colors
                         if RESET_COLORS.collidepoint(event.pos):
                             set_correct_color(GREEN)
                             set_semi_color(YELLOW)
                             set_wrong_color(GREY)
                             reset_screen()
+                        # if the correct color in color key is clicked, open color selector page
                         if CORRECT_COLOR_AREA.collidepoint(event.pos):
                             chosen_color = draw_color_screen(correct_color, main_color, sub_color, sub_color2, my_font, lang_index)
                             set_correct_color(chosen_color)
                             reset_screen()
+                        # if the semi correct color in color key is clicked, open color selector page
                         if SEMI_COLOR_AREA.collidepoint(event.pos):
                             chosen_color = draw_color_screen(semi_color, main_color, sub_color, sub_color2, my_font, lang_index)
                             set_semi_color(chosen_color)
                             reset_screen()
+                        # if the wrong color in color key is clicked, open color selector page
                         if WRONG_COLOR_AREA.collidepoint(event.pos):
                             chosen_color = draw_color_screen(wrong_color, main_color, sub_color, sub_color2, my_font, lang_index)
                             set_wrong_color(chosen_color)
                             reset_screen()
+                        # if reset game button is clicked, reset entire game
                         if RESET_GAME.collidepoint(event.pos):
                             reset()
 
             pygame.display.flip()
 
-            if not started:
+            # audio reads startup instructions to user when game is loaded
+            if not game_started:
                 say(STARTUP, LANGUAGES[current_language])
-                started = 1
+                game_started = 1
 
         # how program should run when audio interface is enabled
         while audio_interface_enabled and start_game:
             draw(sub_color)
+            # if user loses game
             if game_result == "L":
                 eog_sound(game_result)
                 say("You have run out of guesses. The word was " + correct_word + " say play again to start over with "
                                                                                   "a new word!",
                     LANGUAGES[current_language])
                 lose_play_again()
+            # if user wins game
             if game_result == "W":
                 eog_sound(game_result)
                 say("Correct, the word was: " + correct_word + ". say play again to get "
                                                                "a new word.", LANGUAGES[current_language])
                 correct_play_again()
-            if rendered:
+            # go to hands free control function
+            if hands_free_rendered:
                 handsfree()
+            # when audio mode is first activated read breif instructions to user
             else:
                 pygame.display.flip()
                 say(ACTIVATED, LANGUAGES[current_language])
@@ -1040,7 +1068,7 @@ def start_the_game():
 
             pygame.display.flip()
 
-            rendered = 1
+            hands_free_rendered = 1
 
 
 """SETTERS"""
