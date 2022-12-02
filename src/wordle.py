@@ -1148,7 +1148,7 @@ def increase_font_size():
 
 """MENUS"""
 
-
+# generates the instruction menu when the user clicks the instruction icon in the nav bar
 def instructions():
     global start_game
     start_game = 0
@@ -1157,14 +1157,15 @@ def instructions():
     if not start_game:
         inst_menu.mainloop(SCREEN, background)
     
-
+# the general applicaition background - menu is drawn on top of this
 def background():
     SCREEN.fill(WHITE)
     pygame.draw.rect(SCREEN, MENU_COLOR, END_GAME_SCREEN_AREA, 0)
 
-
+# draws and controls the opening game menu - is also called when user selects menu icon in nav bar
 def game_menu(enter_time):
 
+    # main menu object details
     menu = pygame_menu.Menu(
         height=HEIGHT - screen_difference,
         theme=mytheme,
@@ -1172,9 +1173,10 @@ def game_menu(enter_time):
         width=WIDTH - screen_difference
     )
 
+    # draw sub menu items only on first generation of menu on application load
     if enter_time == 1:        
 
-        # COLOR MENU PAGE
+        # DRAW COLOR MENU PAGE
         color_menu.add.label(" ", align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
         color_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),
                                 ("French", 3), ("Kid Friendly", 4)], 
@@ -1188,7 +1190,7 @@ def game_menu(enter_time):
         draw_color_menu()
 
 
-        # ABOUT MENU PAGE
+        # DRAW ABOUT MENU PAGE
         about_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),
                                 ("French", 3), ("Kid Friendly", 4)], 
                                 onchange=set_about_lang, default=lang_index)
@@ -1197,7 +1199,7 @@ def game_menu(enter_time):
         draw_about_page(about_display)
 
 
-        # INSTRUCTIONS MENU PAGE
+        # DRAW INSTRUCTIONS MENU PAGE
         inst_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),
                                 ("French", 3), ("Kid Friendly", 4)], 
                                 onchange=set_instructions_lang, default=lang_index)
@@ -1208,7 +1210,7 @@ def game_menu(enter_time):
         for m in SPACES: inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
 
 
-    # MAIN MENU PAGE
+    # DRAW MAIN MENU PAGE
     menu.add.button('Play', start_the_game)
     menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),
                                     ("French", 3), ("Kid Friendly", 4)], 
@@ -1229,10 +1231,12 @@ def game_menu(enter_time):
     menu.add.button('About', about_menu)
     menu.add.button('Quit', pygame_menu.events.EXIT)
 
+    # loop the menu until the user starts the game
     if not start_game:
         menu.mainloop(SCREEN, background)
 
 
+# main function calls the menu on startup and starts the backgrouns music
 def main():
     play_background_music()
     game_menu(1)
