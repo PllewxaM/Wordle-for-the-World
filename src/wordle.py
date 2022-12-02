@@ -98,8 +98,10 @@ current_letter_bg_x = WIDTH / 3.25
 """"MENU CONTROLS"""
 
 
-# draws the font menu on the screen when the font change icon is selected
+# calls draw functions to draws the font menu on the screen when the font change icon is selected
+# controls what happens when user clicks on different areas of the screen while the font menu is up
 def font_menu_control(current):
+    # what is the current font
     value = current
     done = 0
 
@@ -107,10 +109,12 @@ def font_menu_control(current):
 
     pygame.display.update()
 
+    # listens for screen click and handles program actions accordingly
     while not done:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
+                    # if user clicks a font area, the font is changes to the respective font
                     if FONT_ONE_AREA.collidepoint(event.pos):
                         value = 0
                         draw_font_options(sub_color2, font_size, lang_index)
@@ -139,6 +143,7 @@ def font_menu_control(current):
                         value = 6
                         draw_font_options(sub_color2, font_size, lang_index)
                         pygame.draw.rect(SCREEN, BLACK, BOLD_AREA, 3, ROUND)
+                    # increase and decrease font depending on which area is clicked
                     if PLUS_AREA.collidepoint(event.pos):
                         increase_font_size()
                         draw_font_size_adjust(my_font)
@@ -149,40 +154,48 @@ def font_menu_control(current):
                         draw_font_size_adjust(my_font)
                         draw_font_options(sub_color2, font_size, lang_index)
                         pygame.draw.rect(SCREEN, BLACK, SUB_AREA, 3, ROUND)
+                    # finish slecting font
                     if DONE_AREA.collidepoint(event.pos):
                         done = 1
         pygame.display.update()
-
+    # return the chosen font - same as current if not changed
     return value
 
 
-# draw screen where you select which color to change
+# calls draw functions to draws the color menu on the screen when the color change icon is selected
+# controls what happens when user clicks on different areas of the screen while the color menu is up
 def color_menu_control():
     done = 0
 
+    # draw the menu to select which color to change
     draw_color_select_menu(main_color, sub_color, sub_color2, correct_color, semi_color, wrong_color, my_font, my_font_med, my_font_sm, lang_index)
 
     pygame.display.update()
 
+    # listens for which color the user wants to change - area click corresponds to different colors
     while not done:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
+                    # pick change correct color - will reset screen and call function to select a color
                     if PICK_ONE_AREA.collidepoint(event.pos):
                         reset_screen()
                         chosen_color = draw_color_screen(correct_color, main_color, sub_color, sub_color2, my_font, lang_index)
                         set_correct_color(chosen_color)
                         done = 1
+                    # pick change semi correct color - will reset screen and call function to select a color
                     if PICK_TWO_AREA.collidepoint(event.pos):
                         reset_screen()
                         chosen_color = draw_color_screen(semi_color, main_color, sub_color, sub_color2, my_font, lang_index)
                         set_semi_color(chosen_color)
                         done = 1
+                    # pick change wrong color - will reset screen and call function to select a color
                     if PICK_THREE_AREA.collidepoint(event.pos):
                         reset_screen()
                         chosen_color = draw_color_screen(wrong_color, main_color, sub_color, sub_color2, my_font, lang_index)
                         set_wrong_color(chosen_color)
                         done = 1
+                    # activate high contrast colors - changes all colors
                     if PICK_FOUR_AREA.collidepoint(event.pos):
                         set_correct_color(HIGH_CONTRAST_1)
                         set_semi_color(HIGH_CONTRAST_2)
@@ -196,40 +209,46 @@ def color_menu_control():
 """GENERAL GAME CONTROLS"""
 
 
+# parameter is a character that was semi correct/ in word, wrong position
+# if it was not already in the list, append it to the semi correct guess list
 def add_semi(char):
     global semi_correct_guesses
     if char not in semi_correct_guesses:
         semi_correct_guesses.append(char)
 
 
+# parameter is a character that was incorrect/ not in the word
+# if it was not already in the list, append it to the incorrect guess list
 def add_incorrect(char):
     global incorrect_guesses
     if char not in incorrect_guesses:
         incorrect_guesses.append(char)
 
-
+# parameter is a character that was correct/ ni word and right position
+# if it was not already in the list, append it to the correct guess list
 def add_correct(char):
     global correct_guesses
     if char not in correct_guesses:
         correct_guesses.append(char)
 
 
-# for traditional version of the game
+# adds a new letter when letter is entered by a user
 def create_new_letter():
     # Creates a new letter and adds it to the guess.
     global current_guess_string, current_letter_bg_x
     current_guess_string += key_pressed
-    # do not change this to adjust board positioning
+    # create new letter object 
     new_letter = Letter(key_pressed, (current_letter_bg_x, guesses_count * 70 + LETTER_Y_SPACING), main_color, sub_color, my_font)
     current_letter_bg_x += LETTER_X_SPACING
     guesses[guesses_count].append(new_letter)
     current_guess.append(new_letter)
+    # draw letter at correct position
     for guess in guesses:
         for letter in guess:
             letter.draw(main_color, my_font)
 
 
-# delete for traditional version of game
+# delete letter when user presses backspace
 def delete_letter():
     # Deletes the last letter from the guess.
     global current_guess_string, current_letter_bg_x
@@ -301,9 +320,8 @@ def check_guess(guess_to_check):
         game_result = "L"
 
 
-# display loosing screen and call reset
+# display lost game screen and instructions to play again
 def lose_play_again():
-    # Puts the play again text on the screen.
     SCREEN.fill(WHITE)
     pygame.draw.rect(SCREEN, DK_RED, END_GAME_SCREEN_AREA, 0, ROUND)
     draw_text(my_font, "Press ENTER to Play Again!", WHITE, (WIDTH / 2, 320))
@@ -311,7 +329,7 @@ def lose_play_again():
     pygame.display.update()
 
 
-# display winning screen and instructions for play again
+# display won game screen and instructions for play again
 def correct_play_again():
     SCREEN.fill(WHITE)
     pygame.draw.rect(SCREEN, correct_color, END_GAME_SCREEN_AREA, 0, ROUND)
@@ -321,11 +339,11 @@ def correct_play_again():
     pygame.display.update()
 
 
-# reset global variables
+# reset global variables and game screen after previous game ends
 def reset():
     # Resets all global variables to their default states.
     global guesses_count, correct_word, guesses, current_guess, current_guess_string, game_result, lang, \
-        semi_correct_guesses, correct_guesses, incorrect_guesses, word_list, check_list, eog_sound_allowed
+        semi_correct_guesses, correct_guesses, incorrect_guesses, eog_sound_allowed
 
     SCREEN.fill(main_color)
 
@@ -339,24 +357,9 @@ def reset():
     semi_correct_guesses = []
     eog_sound_allowed = 1
 
-    if lang == "sp":
-        word_list = SP_WORDS
-        check_list = word_list
-    elif lang == "ger":
-        word_list = GER_WORDS
-        check_list = word_list
-    elif lang == "fr":
-        word_list = FR_WORDS
-        check_list = word_list
-    elif lang == "kid":
-        word_list = KID_WORDS
-        check_list = EN_WORDS
-    else:
-        word_list = EN_WORDS
-        check_list = word_list
-
     correct_word = word_list[random.randint(0, len(word_list) - 1)]
 
+    # redraw game screen items
     for key in keys:
         key.bg_color = sub_color2
         if key.width < 60 :
@@ -367,17 +370,20 @@ def reset():
     draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm, lang_index)
     draw_nav_bar(main_color, sub_color2, my_font)
 
+    # restart background music
     play_background_music()
 
+    # For testing purposes
     print(correct_word)
-    print(lang)
+
     pygame.display.update()
 
 
-# reset the screen and redraw with new colors
+# reset the screen and redraw with new colors/font/any changes user has made
 def reset_screen():
     SCREEN.fill(main_color)
 
+    # redraw keys
     for key in keys:
         for l in correct_guesses:
             if key.text == l.upper():
@@ -396,6 +402,7 @@ def reset_screen():
     draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm, lang_index)
     draw_nav_bar(main_color, sub_color2, my_font)
 
+    # redraw current game board state
     for guess in guesses:
         for letter in guess:
             for l in correct_guesses:
@@ -972,7 +979,7 @@ def start_the_game():
                             instructions()
                         if FONT_SEL_AREA.collidepoint(event.pos):
                             chosen_font = font_menu_control(font_index)
-                            set_font(chosen_font)
+                            menu_set_font(1, chosen_font)
                             reset_screen()
                         if COLOR_SEL_AREA.collidepoint(event.pos):
                             color_menu_control()
@@ -1038,7 +1045,7 @@ def start_the_game():
 
 """SETTERS"""
 
-
+# sets the background music value 
 def set_background_music(selected, value):
     global current_background_music
 
@@ -1048,7 +1055,7 @@ def set_background_music(selected, value):
     mixer.music.load(BACKGROUND_MUSIC[current_background_music])
     mixer.music.play(-1)
 
-
+# sets the language and word list that the program uses to get the word and check guesses
 def set_language(selected, value):
     global lang, correct_word, word_list, check_list, lang_index
 
@@ -1057,63 +1064,64 @@ def set_language(selected, value):
     check_list = LANG_SETTINGS[value][2]
     lang_index = value
 
+    # reset game - current word and game screen
     reset()
 
+# set the language that the about page content should be drawn in
 def set_about_lang(selected, value):
     global about_display
     about_display = LANG_SETTINGS[value][3]
 
-
+# send the about page content to the menu drawing functions in the new language
 def send_about():
     append_about_instructions(about_display)
 
-
+# set the language that the instructions menu should be drawn in
 def set_instructions_lang(selected, value):
     global instructions1_display, instructions2_display, instructions3_display
     instructions1_display = LANG_SETTINGS[value][4]
     instructions2_display = LANG_SETTINGS[value][5]
     instructions3_display = LANG_SETTINGS[value][6]
 
+# send the instructions page content to the menu drawing functions in the new language
 def send_instructions():
     append_instructions(instructions1_display, instructions2_display, instructions3_display)
 
-
-# Color Menu
+# set the langage that the color menu instructions should be drawn in
 def set_color_lang(selected, value):
     global color_instructions_display
     color_instructions_display = LANG_SETTINGS[value][7]
 
-
+# send the color menu instructions to the menu drawing functions in the new language
 def send_color_instructions():
     append_color_instructions(color_instructions_display)
 
-
-# Font Menu
+# used by the game to set the font of the game for each font size
 def menu_set_font(selected, value):
     global font_index, my_font, my_font_med, my_font_sm, my_font_xsm
-
     font_index = value
     my_font = pygame.font.Font(FONTS[font_index], font_size)
     my_font_med = pygame.font.Font(FONTS[font_index], font_size - 10)
     my_font_sm = pygame.font.Font(FONTS[font_index], font_size - 20)
     my_font_xsm = pygame.font.Font(FONTS[font_index], font_size - 25)
 
-# Set Game Colors
+# sets the color used for the correct letters in the game
 def set_correct_color(value):
     global correct_color
     correct_color = value
 
-
+# sets the color used for the semi correct letters in the game
 def set_semi_color(value):
     global semi_color
     semi_color = value
 
-
+# sets the color used for the wrong letters in the game
 def set_wrong_color(value):
     global wrong_color
     wrong_color = value
 
-
+# sets the colors of the background and game screen features to dark mode
+# if already in dark mode, set back to light mode
 def set_dark_mode():
     global sub_color, main_color, sub_color2
     if main_color == WHITE:
@@ -1125,24 +1133,13 @@ def set_dark_mode():
         sub_color = BLACK
         sub_color2 = LT_GREY
 
-
-# Set Game Font
-def set_font(value):
-    global font_index, my_font, my_font_med, my_font_sm, my_font_xsm
-    font_index = value
-    my_font = pygame.font.Font(FONTS[font_index], font_size)
-    my_font_med = pygame.font.Font(FONTS[font_index], font_size - 10)
-    my_font_sm = pygame.font.Font(FONTS[font_index], font_size - 20)
-    my_font_xsm = pygame.font.Font(FONTS[font_index], font_size - 25)
-
-
-# Change Font Size
+# decrease the font size of game elements- limited so smallest font cannot be < 8
 def decrese_font_size():
     global font_size
-    if font_size - 25 > 5:
-        font_size -= 3
+    if font_size - 25 > 8:
+        font_size -= 2
 
-
+# increase font size of game elements- limited so larget font cannot exceed 47
 def increase_font_size():
     global font_size
     if font_size < 47:

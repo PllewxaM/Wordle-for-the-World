@@ -1,3 +1,5 @@
+# File contains large blocks of text used in about/instruction/color change menu pages in different languages
+# it also contains large sections of text used in the audio portion of the program
 ABOUT_ENGLISH = ["", 
          "Welcome to World-le: the S3N1OR SQU4D’s accessible version of the",
          "popular New York Times’s word-guessing game. This game was developed",

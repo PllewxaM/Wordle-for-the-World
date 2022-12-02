@@ -1,3 +1,5 @@
+# File contains all constants used in the program
+
 import pygame
 from messages import *
 from word_files.englishwords import *
@@ -7,6 +9,7 @@ from word_files.germanwords import *
 from word_files.kidwords import *
 
 #  COLORS
+# all colors used in the game
 DK_RED = "#c70606"
 RED = "#d90000"
 REDORANGE = "#ff6100"
@@ -29,18 +32,23 @@ LT_GREY = "#abadaf"
 WHITE = "#ffffff"
 BLACK = "#000000"
 
+# used in menu screen border
 MENU_COLOR = "#89a3b0"
 
+# high contract mode colors
 HIGH_CONTRAST_1 = "#f803fc"
 HIGH_CONTRAST_2 = "#03f0fc"
 HIGH_CONTRAST_3 = "#fc4503"
 
+# colors used in color menu
 COLORS = [[RED, REDORANGE, ORANGE, ORANGEYELLOW], 
         [YELLOW, YELLOWGREEN, GREEN, GREENBLUE], 
         [BLUE, LT_BLUE, BLUEPURPLE, PURPLE],
         [LT_PURPLE, PURPLEPINK, PINK, REDPINK]]
 
 # GAME BOARD
+
+# game board spacing and square size
 LETTER_X_SPACING = 65
 LETTER_Y_SPACING = 70
 LETTER_SIZE = 60
@@ -53,10 +61,13 @@ BOARD = [[" ", " ", " ", " ", " "],
          [" ", " ", " ", " ", " "]]
 
 # KEYBOARD
+# letters used in game
 ALPHABET = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"]
 
 #LANGUAGE
+# Audio language options - only english currently used
 LANGUAGES = ['en', 'es', 'fr']
+# Used when language is changed by user - contains word lists and menu content in different languages
 LANG_SETTINGS = [["en", EN_WORDS, EN_WORDS, ABOUT_ENGLISH, INSTRUCTIONS1_ENGLISH, INSTRUCTIONS2_ENGLISH, INSTRUCTIONS3_ENGLISH, COLOR_INSTRUCTIONS_ENGLISH], 
                 ["sp", SP_WORDS, SP_WORDS, ABOUT_SPANISH, INSTRUCTIONS1_SPANISH, INSTRUCTIONS2_SPANISH, INSTRUCTIONS3_SPANISH, COLOR_INSTRUCTIONS_SPANISH], 
                 ["ger", GER_WORDS, GER_WORDS, ABOUT_GERMAN, INSTRUCTIONS1_GERMAN, INSTRUCTIONS2_GERMAN, INSTRUCTIONS3_GERMAN, COLOR_INSTRUCTIONS_GERMAN], 
@@ -64,6 +75,7 @@ LANG_SETTINGS = [["en", EN_WORDS, EN_WORDS, ABOUT_ENGLISH, INSTRUCTIONS1_ENGLISH
                 ["kid", KID_WORDS, EN_WORDS, ABOUT_ENGLISH, INSTRUCTIONS1_ENGLISH, INSTRUCTIONS2_ENGLISH, INSTRUCTIONS3_ENGLISH, COLOR_INSTRUCTIONS_ENGLISH]]
 
 # GAME WORDS
+# used to change different game content language when user changes the language
 CHANGE_FONTS = ["Change Font","Cambiar Fuente", "Schriftart Andern," "Changer la Police", "Change Font"]
 DONE = ["DONE", "LISTO", "FERTIG", "Terminé", "DONE"]
 BOLD = ["BOLD", "BOLD", "BOLD", "GRAS", "BOLD"]
@@ -86,6 +98,7 @@ CANCEL = ["CANCEL", "CANCELAR", "ABBRECHEN", "ANNULER", "CANCEL"]
 
 # MUSIC
 
+# list of background music options
 BACKGROUND_MUSIC = ['sound/background_music/traditional.ogg',
                     'sound/background_music/happy_beat_drop.mp3',
                     'sound/background_music/bops.mp3',  # 2
@@ -98,6 +111,7 @@ BACKGROUND_MUSIC = ['sound/background_music/traditional.ogg',
                     'sound/background_music/nature_river.mp3',
                     'sound/background_music/nature_waves.mp3']  # 10
 
+# list of font options
 FONTS = ['assets/fonts/FreeSans.otf', 
         'assets/fonts/ComicSans.ttf',
         'assets/fonts/LilGrotesk.otf',
@@ -107,9 +121,11 @@ FONTS = ['assets/fonts/FreeSans.otf',
         'assets/fonts/FreeSansBold.otf']
 
 # SCREEN SIZE
+# game screen dimensions
 WIDTH, HEIGHT = 850, 750
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
 
+# used to reound the corners of different screen features
 ROUND = 4
 
 # SCREEN AREAS
@@ -207,6 +223,7 @@ COLOR14 = pygame.Rect((WIDTH - (WIDTH * 0.6)) / 2 + 170, (HEIGHT - (HEIGHT * 0.8
 COLOR15 = pygame.Rect((WIDTH - (WIDTH * 0.6)) / 2 + 270, (HEIGHT - (HEIGHT * 0.8)) / 2 + 425, 75, 75)
 COLOR16 = pygame.Rect((WIDTH - (WIDTH * 0.6)) / 2 + 370, (HEIGHT - (HEIGHT * 0.8)) / 2 + 425, 75, 75)
 
+# color areas in a list
 COLOR_AREAS = [[COLOR1, COLOR2, COLOR3, COLOR4],
                 [COLOR5, COLOR6, COLOR7, COLOR8],
                 [COLOR9, COLOR10, COLOR11, COLOR12],
