@@ -343,6 +343,7 @@ def lose_play_again(Stats):
     reset_game = 0
     SCREEN.fill(WHITE)
     pygame.draw.rect(SCREEN, DK_RED, END_GAME_SCREEN_AREA, 0, ROUND)
+    # draw end game message
     draw_text(my_font, f"Sorry, the word was {correct_word}!", WHITE, (WIDTH / 2, 250))
     draw_text(my_font, "Press ENTER to Play Again!", WHITE, (WIDTH / 2, 320))
     # Draw game and player statistics
@@ -350,6 +351,7 @@ def lose_play_again(Stats):
     draw_text(my_font, str(Stats[0]) + won_percent + str(Stats[2]) + "            " + str(Stats[3]), WHITE, (WIDTH/2, 460))
     draw_text(my_font_sm, "Games Played       Games Won %       Current Streak       Max Streak", WHITE, (WIDTH/2, 530))
     pygame.display.update()
+    # while on end game screen listen for enter key to restart game 
     while not reset_game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -368,14 +370,16 @@ def correct_play_again(Stats):
     reset_game = 0
     SCREEN.fill(WHITE)
     pygame.draw.rect(SCREEN, correct_color, END_GAME_SCREEN_AREA, 0, ROUND)
+    # draw end game message
     draw_text(my_font, "Congratulations!", WHITE, (WIDTH / 2, 250))
     draw_text(my_font, f"The word was {correct_word}!", WHITE, (WIDTH / 2, 320))
     draw_text(my_font, "Press ENTER to Play Again!", WHITE, (WIDTH / 2, 390))
-    # Draw game and player statistics
+    # Calculate and draw game and player statistics
     won_percent = "         {:.1f}%         ".format(int(Stats[1]) / int(Stats[0]) * 100)
     draw_text(my_font, str(Stats[0]) + won_percent + str(Stats[2]) + "            " + str(Stats[3]), WHITE, (WIDTH/2, 530))
     draw_text(my_font_sm, "Games Played       Games Won %       Current Streak       Max Streak", WHITE, (WIDTH/2, 600))
     pygame.display.update()
+    # while on end game screen listen for enter key to restart game 
     while not reset_game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -389,6 +393,8 @@ def correct_play_again(Stats):
                     reset()
 
 
+# function handles reading from and writing to stats file 
+# takes in if user won the game or not and returns the updated stats
 def handle_stats(stat):
     if(os.path.exists("stats.txt") == False):
         # create new file if none exsists
