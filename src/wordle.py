@@ -94,6 +94,12 @@ game_result = ""
 
 current_letter_bg_x = WIDTH / 3.25
 
+about_inst = 0
+inst_index = 0
+color_index = 0
+about_loaded = [1,0,0,0,1]
+inst_loaded = [1,0,0,0,1]
+color_loaded = [1,0,0,0,1]
 
 """"MENU CONTROLS"""
 
@@ -570,49 +576,19 @@ def eog_sound(current_game_result):
 # Control for common letter misinterpretations. Called if word returned to 'stash' instead of a char
 # Returns a character if possible, if none found, returns original word. SHOULD IMPLEMENT DIFFERENTLY
 def fix_char(fuzzy_char):
-    if fuzzy_char == "aye":
-        return 'a'
-    elif fuzzy_char == "bee":
-        return 'b'
-    elif fuzzy_char == "see":
-        return 'c'
-    elif fuzzy_char == "gee":
-        return 'g'
-    elif fuzzy_char == "ache":
-        return 'h'
-    elif fuzzy_char == "eye":
-        return 'i'
-    elif fuzzy_char == "jay":
-        return 'j'
-    elif fuzzy_char == "kay":
-        return 'k'
-    elif fuzzy_char == "elle" or fuzzy_char == "el":
-        return 'l'
-    elif fuzzy_char == "oh":
-        return 'o'
-    elif fuzzy_char == "pea" or fuzzy_char == "pee":
-        return 'p'
-    elif fuzzy_char == "queue":
-        return 'q'
-    elif fuzzy_char == "are":
-        return 'r'
-    elif fuzzy_char == "ES":
-        return 's'
-    elif fuzzy_char == "tea" or fuzzy_char == "tee":
-        return 't'
-    elif fuzzy_char == "you":
-        return 'u'
-    elif fuzzy_char == "double you":
-        return 'w'
-    elif fuzzy_char == "ex" or fuzzy_char == "axe":
-        return 'x'
-    elif fuzzy_char == "why":
-        return 'y'
-    else:
-        return fuzzy_char
+    for i in range(len(FUZZY_CHAR)):
+        if fuzzy_char == FUZZY_CHAR[i][0]:
+            return FUZZY_CHAR[i][1]
+    return fuzzy_char
 
 
 def word_to_int(word):
+    print(word)
+    for i in range(len(WORD_TO_INT)):
+        if word == WORD_TO_INT[i][0]:
+            print(WORD_TO_INT[i][1])
+            return WORD_TO_INT[i][1]
+    return word
     if word == 'one' or word == 'won':
         return 1
     elif word == 'two' or word == 'to' or word == 'too':
@@ -643,7 +619,7 @@ def clear_stash():
         delete_letter()
         delete_count -= 1
     time.sleep(0.025)
-    draw()
+    draw(sub_color)
     pygame.display.flip()
 
 
@@ -731,12 +707,12 @@ def handsfree():
 
     waiting_for_command = 1
     while waiting_for_command:
-        draw()
+        draw(sub_color)
         try:
             # time.sleep(0.05)
-            command = listen()
+            # command = listen()
             # Comment above for debugging, allows typing of command; comment below for handsfree use;
-            # command = input("Type a command: ")
+            command = input("Type a command: ")
             command = command.lower()
             command_split = command.split()
             print(command)
@@ -1097,32 +1073,47 @@ def set_language(selected, value):
 
 # set the language that the about page content should be drawn in
 def set_about_lang(selected, value):
-    global about_display
+    global about_display, about_index
+    about_index = value
     about_display = LANG_SETTINGS[value][3]
 
 # send the about page content to the menu drawing functions in the new language
 def send_about():
-    append_about_instructions(about_display)
+    global about_loaded, about_index
+    if about_loaded[about_index] == 0:
+        append_about_instructions(about_display)
+        about_loaded[about_index] = 1
+    about_index = 0
 
 # set the language that the instructions menu should be drawn in
 def set_instructions_lang(selected, value):
-    global instructions1_display, instructions2_display, instructions3_display
+    global instructions1_display, instructions2_display, instructions3_display, inst_index
+    inst_index = value
     instructions1_display = LANG_SETTINGS[value][4]
     instructions2_display = LANG_SETTINGS[value][5]
     instructions3_display = LANG_SETTINGS[value][6]
 
 # send the instructions page content to the menu drawing functions in the new language
 def send_instructions():
-    append_instructions(instructions1_display, instructions2_display, instructions3_display)
+    global inst_loaded, inst_index
+    if inst_loaded[inst_index] == 0:
+        append_instructions(instructions1_display, instructions2_display, instructions3_display)
+        inst_loaded[inst_index] = 1
+    inst_index = 0
 
 # set the langage that the color menu instructions should be drawn in
 def set_color_lang(selected, value):
-    global color_instructions_display
+    global color_instructions_display, color_index
+    color_index = value
     color_instructions_display = LANG_SETTINGS[value][7]
 
 # send the color menu instructions to the menu drawing functions in the new language
 def send_color_instructions():
-    append_color_instructions(color_instructions_display)
+    global color_index, color_loaded
+    if color_loaded[color_index] == 0:
+        append_color_instructions(color_instructions_display)
+    color_loaded[color_index] = 1
+    color_index = 0
 
 # used by the game to set the font of the game for each font size
 def menu_set_font(selected, value):
@@ -1206,8 +1197,7 @@ def game_menu(enter_time):
 
         # DRAW COLOR MENU PAGE
         color_menu.add.label(" ", align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
-        color_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),
-                                ("French", 3), ("Kid Friendly", 4)], 
+        color_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),("French", 3)], 
                                 onchange=set_color_lang, default=lang_index)
         color_menu.add.button("Click to Add Instructions in New Language", send_color_instructions)
         color_menu.add.label("Scroll down to see new instructions", align=pygame_menu.locals.ALIGN_CENTER, font_size=22)
@@ -1219,8 +1209,7 @@ def game_menu(enter_time):
 
 
         # DRAW ABOUT MENU PAGE
-        about_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),
-                                ("French", 3), ("Kid Friendly", 4)], 
+        about_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),("French", 3)], 
                                 onchange=set_about_lang, default=lang_index)
         about_menu.add.button("Click to Add Content in New Language", send_about)
         about_menu.add.label("Scroll down to see new information", align=pygame_menu.locals.ALIGN_CENTER, font_size=22)
@@ -1228,9 +1217,8 @@ def game_menu(enter_time):
 
 
         # DRAW INSTRUCTIONS MENU PAGE
-        inst_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),
-                                ("French", 3), ("Kid Friendly", 4)], 
-                                onchange=set_instructions_lang, default=lang_index)
+        inst_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),("French", 3)], 
+                                onchange=set_instructions_lang, default=0)
         inst_menu.add.button("Click to Add Instructions in New Language", send_instructions)
         inst_menu.add.label("Scroll down to see new instructions", align=pygame_menu.locals.ALIGN_CENTER, font_size=22)
         draw_instructions(instructions1_display, instructions2_display, instructions3_display)

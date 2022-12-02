@@ -228,3 +228,21 @@ COLOR_AREAS = [[COLOR1, COLOR2, COLOR3, COLOR4],
                 [COLOR5, COLOR6, COLOR7, COLOR8],
                 [COLOR9, COLOR10, COLOR11, COLOR12],
                 [COLOR13, COLOR14, COLOR15, COLOR16]]
+
+
+FUZZY_CHAR = [["aye", 'a'],["bee", 'b'],["see", 'c'],
+              ["gee", 'g'],["ache", 'h'],["eye", 'i'],
+              ["jay", 'j'],["kay", 'k'],["elle", 'l'],
+              ["el", 'l'],["oh", 'o'],["pea", 'p'],
+              ["pee", 'p'],["queue", 'q'],["are", 'r'],
+              ["es", 's'],["tea", 't'],["tee", 't'],
+              ["you", 'u'],["double you", 'w'],["ex", 'x'],
+              ["axe", 'x'],["why", 'y']]
+
+WORD_TO_INT = [['one', 1],['won', 1],
+               ['two', 2],['to', 2],['too', 2],
+               ['three', 3],
+               ['four', 4],['for', 4],
+               ['five', 5],['six', 6],
+               ['seven', 7], ['eight', 8],
+               ['nine', 9], ['ten', 10]]

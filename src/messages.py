@@ -237,7 +237,7 @@ INSTRUCTIONS2_SPANISH = ["- Las letras de la palabra, pero en la posición incor
                          "  amarilla, como se muestra a continuación."]
 
 INSTRUCTIONS3_SPANISH = ["- Las letras incorrectas aparecerán en gris, como se muestra arriba.",
-                         "- Tienes seis intentos para adivinar la palabra secreta."]
+                         "- Tienes seis intentos para adivinar la palabra secreta."," "]
 
 INSTRUCTIONS1_GERMAN = ["Wie man mit einer Tastatur spielt:",
                         "- Errate mit der Tastatur deines Computers oder der auf dem Bildschirm ein Wort mit",
@@ -250,7 +250,7 @@ INSTRUCTIONS1_GERMAN = ["Wie man mit einer Tastatur spielt:",
 INSTRUCTIONS2_GERMAN = ["- Buchstaben im Wort, aber an der falschen Position, erscheinen gelb, wie unten gezeigt. "] 
 
 INSTRUCTIONS3_GERMAN = ["- Falsche Buchstaben werden wie oben gezeigt grau angezeigt.", 
-                        "- Sie haben sechs Versuche, das geheime Wort zu erraten."]
+                        "- Sie haben sechs Versuche, das geheime Wort zu erraten.", " "]
 
 INSTRUCTIONS1_FRENCH = ["Comment jouer avec un clavier:",
                         "- À l'aide du clavier de votre ordinateur ou de celui de l'écran, devinez",
@@ -264,7 +264,7 @@ INSTRUCTIONS2_FRENCH = ["- Les lettres du mot, mais dans la position incorrecte,
                         "  indiqué ci-dessous."]
 
 INSTRUCTIONS3_FRENCH = ["- Les lettres incorrectes apparaîtront en gris, comme indiqué ci-dessus.",
-                        "- Vous avez six tentatives pour deviner le mot secret."]
+                        "- Vous avez six tentatives pour deviner le mot secret.", " "]
 
 COLOR_INSTRUCTIONS_ENGLISH = ["On this screen you can input colors using their hexadecimal code.", 
                               "Don't worry if you're not sure how to do this, you can also change the colors from",  
