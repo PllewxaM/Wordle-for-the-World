@@ -3,7 +3,7 @@ from classes import *
 # DRAW GAME BOARD #
 
 
-# Draws the game board gird on the screen
+# Draws the game board gird on the screen - the squares where the letters go
 def draw(sub_color):
     size = 60
     for col in range(0, 5):
@@ -55,6 +55,7 @@ def draw_nav_bar(main_color, sub_color2, my_font):
 
 # DRAW FONT MENU #
 
+# draw the font menu and call functions to draw other font menu elements
 def draw_font_menu(main_color, sub_color, sub_color2, my_font, font_size, lang_index) :
     # draw background and front mini menu screens
     pygame.draw.rect(SCREEN, GREY, SM_MENU_AREA_BACK, 0, ROUND)
@@ -77,6 +78,7 @@ def draw_font_menu(main_color, sub_color, sub_color2, my_font, font_size, lang_i
 # Draws font options on the font menu
 def draw_font_options(sub_color2, font_size, lang_index):
     size = font_size - 10
+    # draw font options
     pygame.draw.rect(SCREEN, LT_GREY, FONT_ONE_AREA, 0, ROUND)
     draw_text(pygame.font.Font(FONTS[0], size), "Free Sans Font", BLACK, (WIDTH / 2, HEIGHT - 570))
 
@@ -90,13 +92,12 @@ def draw_font_options(sub_color2, font_size, lang_index):
     draw_text(pygame.font.Font(FONTS[2], size), "Lil Grotesk", BLACK, (WIDTH / 2, HEIGHT - 390))
 
     pygame.draw.rect(SCREEN, LT_GREY, FONT_FIVE_AREA, 0, ROUND)
-    draw_text(pygame.font.Font(FONTS[5], size), "Wigners Friend", BLACK,
-              (WIDTH / 2, HEIGHT - 330))
+    draw_text(pygame.font.Font(FONTS[5], size), "Wigners Friend", BLACK, (WIDTH /2, HEIGHT - 330))
 
     pygame.draw.rect(SCREEN, LT_GREY, FONT_SIX_AREA, 0, ROUND)
     draw_text(pygame.font.Font(FONTS[4], size), "First Coffee", BLACK, (WIDTH / 2, HEIGHT - 265))
 
-    # draw bold options
+    # draw bold option
     pygame.draw.rect(SCREEN, sub_color2, BOLD_AREA, 0, ROUND)
     draw_text(pygame.font.Font(FONTS[6], size), BOLD[lang_index], WHITE, (WIDTH / 2, HEIGHT - 195))
 
@@ -153,15 +154,22 @@ def draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm
 
 # Draw the color squares on the color menu
 def draw_color_squrs():
+    # size of the color squares
     size = 75
+    # starting position of the first color square
     c_x = ((WIDTH - WIDTH * 0.6) / 2 + 70)
     c_y = (HEIGHT - HEIGHT * 0.8) / 2 + 125
+    # spacing between each square
     shift_amount = 100
 
+    # draw four rows of color squares, colors are the colors in the color list
     for i in range(4):
         for color in COLORS[i]:
+            # draw square
             pygame.draw.rect(SCREEN, color, (c_x, c_y, size, size), 0, ROUND)
+            # next square starting x position
             c_x += shift_amount
+        # next row starting x and y position
         c_x = ((WIDTH - WIDTH * 0.6) / 2 + 70)
         c_y += shift_amount
 
@@ -188,8 +196,7 @@ def draw_color_screen(current, main_color, sub_color, sub_color2, my_font, lang_
     # draw the color squares
     draw_color_squrs()
 
-    COLOR_AREAS[1][1]
-
+    # while on the menu listen for click event on one of the color squares
     while not done:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
@@ -200,12 +207,13 @@ def draw_color_screen(current, main_color, sub_color, sub_color2, my_font, lang_
                                 value = color
                                 draw_color_squrs()
                                 pygame.draw.rect(SCREEN, sub_color, area, 3, ROUND)
+                    # listen for click on done button - exit menu
                     if DONE_AREA.collidepoint(event.pos):
                         done = 1
                     pygame.display.update()
     return value
 
-
+# draw the menu where the user can choose which color they want to change - called when user clicks color icon in nav bar
 def draw_color_select_menu(main_color, sub_color, sub_color2, correct_color, semi_color, wrong_color, my_font, my_font_med, my_font_sm, lang_index) :
     
     # draw background screen and front ground screen
@@ -228,6 +236,7 @@ def draw_color_select_menu(main_color, sub_color, sub_color2, correct_color, sem
     pygame.draw.rect(SCREEN, wrong_color, PICK_THREE_AREA, 0, ROUND)
     draw_text(my_font_med, CHANGE_WRONG_COLOR[lang_index], BLACK, (WIDTH / 2, HEIGHT - 310))
 
+    # draw high contrast button
     pygame.draw.rect(SCREEN, HIGH_CONTRAST_2, PICK_FOUR_AREA, 0, ROUND)
     draw_text(my_font_med, HIGH_CONTRAST[lang_index], BLACK, (WIDTH / 2, HEIGHT - 210))
 
@@ -238,23 +247,28 @@ def draw_color_select_menu(main_color, sub_color, sub_color2, correct_color, sem
 
 # DRAW KEYBOARD #
 
-
+# draw the on screen keyboard
 def draw_keyboard(main_color, sub_color2, my_font, my_font_med, keys):
     # starting keyboard location
     key_x, key_y = 125, 500
 
-    # draw letters On top of keyboard buttons
+    # draw buttons and letters on top of keyboard buttons
     for i in range(3):
+        # make key object and draw key for every letter in the alphabet
         for letter in ALPHABET[i]:
             new_key = KeyButton(key_x, key_y, letter, sub_color2)
             keys.append(new_key)
             new_key.draw(main_color, my_font)
+            # shift x position
             key_x += 60
+        # shift y position
         key_y += 80
+        # depending on keyboard row, shift x position
         if i == 0:
             key_x = 160
         elif i == 1:
             key_x = 210
+    # draw enter and delete buttons
     new_key = BigKeyButton(100, 660, "DEL", 102, 70, sub_color2)
     keys.append(new_key)
     new_key.draw(main_color, my_font_med)
