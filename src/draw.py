@@ -1,4 +1,5 @@
 from classes import *
+import sys
 
 # DRAW GAME BOARD #
 
@@ -199,6 +200,9 @@ def draw_color_screen(current, main_color, sub_color, sub_color2, my_font, lang_
     # while on the menu listen for click event on one of the color squares
     while not done:
         for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     for i in range(4):
@@ -208,7 +212,9 @@ def draw_color_screen(current, main_color, sub_color, sub_color2, my_font, lang_
                                 draw_color_squrs()
                                 pygame.draw.rect(SCREEN, sub_color, area, 3, ROUND)
                     # listen for click on done button - exit menu
-                    if DONE_AREA.collidepoint(event.pos):
+                    if DONE_AREA.collidepoint(event.pos) or EXIT_MENU_AREA1.collidepoint(event.pos) or EXIT_MENU_AREA2.collidepoint(event.pos):
+                        done = 1
+                    if EXIT_MENU_AREA3.collidepoint(event.pos) or EXIT_MENU_AREA4.collidepoint(event.pos):
                         done = 1
                     pygame.display.update()
     return value

@@ -118,6 +118,9 @@ def font_menu_control(current):
     # listens for screen click and handles program actions accordingly
     while not done:
         for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     # if user clicks a font area, the font is changes to the respective font
@@ -160,9 +163,12 @@ def font_menu_control(current):
                         draw_font_size_adjust(my_font)
                         draw_font_options(sub_color2, font_size, lang_index)
                         pygame.draw.rect(SCREEN, BLACK, SUB_AREA, 3, ROUND)
-                    # finish slecting font
-                    if DONE_AREA.collidepoint(event.pos):
+                    # if the done buttons or any areas around the mini menu is clicked, exit the menu
+                    if DONE_AREA.collidepoint(event.pos) or EXIT_MENU_AREA1.collidepoint(event.pos) or EXIT_MENU_AREA2.collidepoint(event.pos):
                         done = 1
+                    if EXIT_MENU_AREA3.collidepoint(event.pos) or EXIT_MENU_AREA4.collidepoint(event.pos):
+                        done = 1
+
         pygame.display.update()
     # return the chosen font - same as current if not changed
     return value
@@ -181,6 +187,9 @@ def color_menu_control():
     # listens for which color the user wants to change - area click corresponds to different colors
     while not done:
         for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     # pick change correct color - will reset screen and call function to select a color
@@ -207,7 +216,10 @@ def color_menu_control():
                         set_semi_color(HIGH_CONTRAST_2)
                         set_wrong_color(HIGH_CONTRAST_3)
                         done = 1
-                    if CANCEL_AREA.collidepoint(event.pos):
+                    # if the done buttons or any areas around the mini menu is clicked, exit the menu
+                    if CANCEL_AREA.collidepoint(event.pos) or EXIT_MENU_AREA1.collidepoint(event.pos) or EXIT_MENU_AREA2.collidepoint(event.pos):
+                        done = 1
+                    if EXIT_MENU_AREA3.collidepoint(event.pos) or EXIT_MENU_AREA4.collidepoint(event.pos):
                         done = 1
 
 

@@ -229,6 +229,12 @@ COLOR_AREAS = [[COLOR1, COLOR2, COLOR3, COLOR4],
                 [COLOR9, COLOR10, COLOR11, COLOR12],
                 [COLOR13, COLOR14, COLOR15, COLOR16]]
 
+# areas around the mini menus (color and font menus)
+EXIT_MENU_AREA1 = pygame.Rect(0, 0, WIDTH, HEIGHT * 0.1)
+EXIT_MENU_AREA2 = pygame.Rect(0, HEIGHT - (HEIGHT * 0.1), WIDTH, HEIGHT * 0.1)
+EXIT_MENU_AREA3 = pygame.Rect(0, HEIGHT * 0.1, WIDTH * 0.2, HEIGHT * 0.8)
+EXIT_MENU_AREA4 = pygame.Rect(WIDTH - (WIDTH * 0.2), HEIGHT * 0.1, WIDTH * 0.2, HEIGHT * 0.8)
+
 
 FUZZY_CHAR = [["aye", 'a'],["bee", 'b'],["see", 'c'],
               ["gee", 'g'],["ache", 'h'],["eye", 'i'],
