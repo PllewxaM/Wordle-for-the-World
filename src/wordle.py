@@ -586,31 +586,8 @@ def word_to_int(word):
     print(word)
     for i in range(len(WORD_TO_INT)):
         if word == WORD_TO_INT[i][0]:
-            print(WORD_TO_INT[i][1])
             return WORD_TO_INT[i][1]
     return word
-    if word == 'one' or word == 'won':
-        return 1
-    elif word == 'two' or word == 'to' or word == 'too':
-        return 2
-    elif word == 'three':
-        return 3
-    elif word == 'four' or word == 'for':
-        return 4
-    elif word == 'five':
-        return 5
-    elif word == 'six':
-        return 6
-    elif word == 'seven':
-        return 7
-    elif word == 'eight':
-        return 8
-    elif word == 'nine':
-        return 9
-    elif word == 'ten':
-        return 10
-    else:
-        return word
 
 
 def clear_stash():
