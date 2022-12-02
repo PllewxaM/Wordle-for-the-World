@@ -340,21 +340,57 @@ def check_guess(guess_to_check):
 
 # display lost game screen and instructions to play again
 def lose_play_again():
+    reset_game = 0
     SCREEN.fill(WHITE)
     pygame.draw.rect(SCREEN, DK_RED, END_GAME_SCREEN_AREA, 0, ROUND)
     draw_text(my_font, "Press ENTER to Play Again!", WHITE, (WIDTH / 2, 320))
     draw_text(my_font, f"Sorry, the word was {correct_word}!", WHITE, (WIDTH / 2, 250))
     pygame.display.update()
+    while not reset_game:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                # if user pressed enter key
+                if event.key == pygame.K_RETURN:
+                    # restart game
+                    reset_game = 1
+                    reset()
 
 
 # display won game screen and instructions for play again
 def correct_play_again():
+    reset_game = 0
     SCREEN.fill(WHITE)
     pygame.draw.rect(SCREEN, correct_color, END_GAME_SCREEN_AREA, 0, ROUND)
     draw_text(my_font, "Congratulations!", WHITE, (WIDTH / 2, 250))
     draw_text(my_font, f"The word was {correct_word}!", WHITE, (WIDTH / 2, 320))
     draw_text(my_font, "Press ENTER to Play Again!", WHITE, (WIDTH / 2, 390))
     pygame.display.update()
+    while not reset_game:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                # if user pressed enter key
+                if event.key == pygame.K_RETURN:
+                    # restart game
+                    reset_game = 1
+                    reset()
+
+
+def handle_stats(stat):
+    if(os.path.exists("stats.txt") == False):
+        f = open("stats.txt", "w+")
+        # games played, games won, current streak, max streak
+        f.write("%d\n%d\n%d\n%d" % (1, stat, stat, stat))
+    else :
+        f = open("stats.txt", "w+")
+        data = f.read()
+        print(data)
+        f.write("Hello")
 
 
 # reset global variables and game screen after previous game ends
@@ -896,9 +932,11 @@ def start_the_game():
             draw(sub_color)
             # load end of game screens depending on result
             if game_result == "L":
+                handle_stats(0)
                 lose_play_again()
                 eog_sound(game_result)
             if game_result == "W":
+                handle_stats(1)
                 correct_play_again()
                 eog_sound(game_result)
             for event in pygame.event.get():
@@ -908,13 +946,9 @@ def start_the_game():
                 if event.type == pygame.KEYDOWN:
                     # if user pressed enter key
                     if event.key == pygame.K_RETURN:
-                        # if game is on end of game screen, restart game
-                        if game_result != "":
-                            reset()
-                        # if game is in progress, try to submit and check guess
-                        else:
-                            if len(current_guess_string) == 5 and current_guess_string.lower() in check_list:
-                                check_guess(current_guess)
+                        # try to submit and check guess
+                        if len(current_guess_string) == 5 and current_guess_string.lower() in check_list:
+                            check_guess(current_guess)
                     # if user presses backspace key, delete letter from guess
                     elif event.key == pygame.K_BACKSPACE:
                         if len(current_guess_string) > 0:
@@ -999,7 +1033,7 @@ def start_the_game():
 
             # audio reads startup instructions to user when game is loaded
             if not game_started:
-                say(STARTUP, LANGUAGES[current_language])
+                say("STARTUP", LANGUAGES[current_language])
                 game_started = 1
 
         # how program should run when audio interface is enabled
