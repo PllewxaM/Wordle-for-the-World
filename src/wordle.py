@@ -339,17 +339,19 @@ def check_guess(guess_to_check):
 
 
 # display lost game screen and instructions to play again
-def lose_play_again(stats):
+def lose_play_again(stats, game_result):
+    eog_sound(game_result)
     reset_game = 0
     SCREEN.fill(WHITE)
     pygame.draw.rect(SCREEN, DK_RED, END_GAME_SCREEN_AREA, 0, ROUND)
     # draw end game message
-    draw_text(my_font, f"Sorry, the word was {correct_word}!", WHITE, (WIDTH / 2, 250))
-    draw_text(my_font, "Press ENTER to Play Again!", WHITE, (WIDTH / 2, 320))
+    draw_text(my_font, f"Sorry, the word was {correct_word}!", WHITE, (WIDTH / 2, 100))
+    draw_text(my_font, "Press ENTER to Play Again!", WHITE, (WIDTH / 2, 170))
     # Draw game and player statistics
     won_percent = "         {:.1f}%         ".format(int(stats[1]) / int(stats[0]) * 100)
-    draw_text(my_font, str(stats[0]) + won_percent + str(stats[2]) + "            " + str(stats[3]), WHITE, (WIDTH / 2, 460))
-    draw_text(my_font_sm, "Games Played       Games Won %       Current Streak       Max Streak", WHITE, (WIDTH/2, 530))
+    draw_text(my_font, str(stats[0]) + won_percent + str(stats[2]) + "            " + str(stats[3]), WHITE, (WIDTH / 2, 280))
+    draw_text(my_font_sm, "Games Played           Won %           Current Streak       Max Streak", WHITE, (WIDTH/2, 335))
+    draw_text(my_font_med, "Guess Distribution", WHITE, (WIDTH/2, 435))
 
     pygame.display.update()
     # while on end game screen listen for enter key to restart game 
@@ -367,20 +369,22 @@ def lose_play_again(stats):
 
 
 # display won game screen and instructions for play again
-def correct_play_again(stats):
+def correct_play_again(stats, game_result):
+    eog_sound(game_result)
     reset_game = 0
     SCREEN.fill(WHITE)
     pygame.draw.rect(SCREEN, correct_color, END_GAME_SCREEN_AREA, 0, ROUND)
     # draw end game message
-    draw_text(my_font, "Congratulations!", WHITE, (WIDTH / 2, 250))
-    draw_text(my_font, f"The word was {correct_word}!", WHITE, (WIDTH / 2, 320))
-    draw_text(my_font, "Press ENTER to Play Again!", WHITE, (WIDTH / 2, 390))
+    draw_text(my_font, "Congratulations!", WHITE, (WIDTH / 2, 100))
+    draw_text(my_font, f"The word was {correct_word}!", WHITE, (WIDTH / 2, 160))
+    draw_text(my_font, "Press ENTER to Play Again!", WHITE, (WIDTH / 2, 220))
     # Calculate and draw game and player statistics
     won_percent = "         {:.1f}%         ".format(int(stats[1]) / int(stats[0]) * 100)
-    draw_text(my_font, str(stats[0]) + won_percent + str(stats[2]) + "            " + str(stats[3]), WHITE, (WIDTH / 2, 530))
-    draw_text(my_font_sm, "Games Played       Games Won %       Current Streak       Max Streak", WHITE, (WIDTH/2, 600))
+    draw_text(my_font, str(stats[0]) + won_percent + str(stats[2]) + "            " + str(stats[3]), WHITE, (WIDTH / 2, 315))
+    draw_text(my_font_sm, "Games Played           Won %           Current Streak       Max Streak", WHITE, (WIDTH/2, 365))
+    draw_text(my_font_med, "Guess Distribution", WHITE, (WIDTH/2, 455))
 
-    draw_histogram(WIDTH/20, WIDTH/20, WIDTH - WIDTH/10, HEIGHT - (3 * (HEIGHT/4)) - (HEIGHT/20))
+    # draw_histogram(WIDTH/20, WIDTH/20, WIDTH - WIDTH/10, HEIGHT - (3 * (HEIGHT/4)) - (HEIGHT/20))
 
     pygame.display.update()
     # while on end game screen listen for enter key to restart game 
@@ -430,26 +434,29 @@ def handle_stats(stat):
 
     f.close()
 
-    num_guesses_taken = int(len(guesses[0]) / 5)
+    # missing a bar
+    if stat == 1:
 
-    if not os.path.exists("hist.txt"):
-        f = open("hist.txt", "w+")
-        f.write("%d\n%d\n%d\n%d\n%d" % (0, 0, 0, 0, 0))
+        num_guesses_taken = int(len(guesses[0]) / 5)
+
+        if not os.path.exists("hist.txt"):
+            f = open("hist.txt", "w+")
+            f.write("%d\n%d\n%d\n%d\n%d\n%d" % (0, 0, 0, 0, 0, 0))
+            f.close()
+
+        f = open("hist.txt", "r")
+        hist_data = f.readlines()
+        str_entry_to_inc = hist_data[num_guesses_taken - 1]
+        int_entry_to_inc = int(str_entry_to_inc)
+        int_entry_to_inc += 1
+        hist_data[num_guesses_taken - 1] = int_entry_to_inc
+
         f.close()
 
-    f = open("hist.txt", "r")
-    hist_data = f.readlines()
-    str_entry_to_inc = hist_data[num_guesses_taken - 1]
-    int_entry_to_inc = int(str_entry_to_inc)
-    int_entry_to_inc += 1
-    hist_data[num_guesses_taken - 1] = int_entry_to_inc
-
-    f.close()
-
-    f = open("hist.txt", "w")
-    f.write("%d\n%d\n%d\n%d\n%d" % (int(hist_data[0]), int(hist_data[1]), int(hist_data[2]), int(hist_data[3]),
-                                    int(hist_data[4])))
-    f.close()
+        f = open("hist.txt", "w")
+        f.write("%d\n%d\n%d\n%d\n%d\n%d" % (int(hist_data[0]), int(hist_data[1]), int(hist_data[2]), int(hist_data[3]),
+                                        int(hist_data[4]), int(hist_data[5])))
+        f.close()
 
     return data
 
@@ -460,26 +467,26 @@ def draw_histogram(x_position, y_position, x_width, y_height):
 
     def draw_hist_bar(bar_number, proportion_of_width):
 
-        bar_offset = (y_height / 5) * bar_number
+        bar_offset = (y_height / 6) * bar_number
 
         bar_height = y_position + bar_offset
 
-        aesthetic_offset = y_height/5 * 0.1
+        aesthetic_offset = y_height/6 * 0.1
 
         pygame.draw.rect(SCREEN, WHITE, pygame.Rect(x_position,
                                                     bar_height + aesthetic_offset,
                                                     x_width * proportion_of_width,
-                                                    y_height / 5 - (2 * aesthetic_offset)))
+                                                    y_height / 6 - (2 * aesthetic_offset)))
 
         draw_text(my_font_sm, str(bar_number + 1), BLACK, (x_position + (WIDTH / 40), bar_height + (y_height / 10)))
 
     # Find highest value in hist.txt
     largest_value = 0
-    for x in range(5):
+    for x in range(6):
         if int(hist_data[x]) > largest_value:
             largest_value = int(hist_data[x])
 
-    for x in range(5):
+    for x in range(6):
         draw_hist_bar(x, int(hist_data[x])/largest_value)
 
     pygame.display.flip()
@@ -1026,12 +1033,10 @@ def start_the_game():
             # load end of game screens depending on result
             if game_result == "L":
                 stats = handle_stats(0)
-                eog_sound(game_result)
-                lose_play_again(stats)
+                lose_play_again(stats, game_result)
             if game_result == "W":
                 stats = handle_stats(1)
-                eog_sound(game_result)
-                correct_play_again(stats)
+                correct_play_again(stats, game_result)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
