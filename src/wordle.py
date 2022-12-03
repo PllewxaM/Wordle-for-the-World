@@ -351,10 +351,11 @@ def lose_play_again(stats, game_result):
     # Draw game and player statistics
     won_percent = "         {:.1f}%         ".format(int(stats[1]) / int(stats[0]) * 100)
     draw_text(my_font, str(stats[0]) + won_percent + str(stats[2]) + "            " + str(stats[3]), WHITE, (WIDTH / 2, 280))
-    draw_text(my_font_sm, "Games Played           Won %           Current Streak       Max Streak", WHITE, (WIDTH/2, 335))
+    draw_text(my_font_sm, "Games Played           Won %            Current Streak       Max Streak", WHITE, (WIDTH/2, 335))
     draw_text(my_font_med, "Guess Distribution", WHITE, (WIDTH/2, 435))
 
     pygame.display.update()
+    time.sleep(.3)
     # while on end game screen listen for enter key to restart game 
     while not reset_game:
         for event in pygame.event.get():
@@ -382,12 +383,13 @@ def correct_play_again(stats, game_result):
     # Calculate and draw game and player statistics
     won_percent = "         {:.1f}%         ".format(int(stats[1]) / int(stats[0]) * 100)
     draw_text(my_font, str(stats[0]) + won_percent + str(stats[2]) + "            " + str(stats[3]), WHITE, (WIDTH / 2, 315))
-    draw_text(my_font_sm, "Games Played           Won %           Current Streak       Max Streak", WHITE, (WIDTH/2, 365))
+    draw_text(my_font_sm, "Games Played           Won %            Current Streak       Max Streak", WHITE, (WIDTH/2, 365))
     draw_text(my_font_med, "Guess Distribution", WHITE, (WIDTH/2, 455))
 
     # draw_histogram(WIDTH/20, WIDTH/20, WIDTH - WIDTH/10, HEIGHT - (3 * (HEIGHT/4)) - (HEIGHT/20))
 
     pygame.display.update()
+    time.sleep(.3)
     # while on end game screen listen for enter key to restart game 
     while not reset_game:
         for event in pygame.event.get():
@@ -1036,6 +1038,7 @@ def start_the_game():
             # load end of game screens depending on result
             if game_result == "L":
                 stats = handle_stats(0)
+                time.sleep(0.25)
                 lose_play_again(stats, game_result)
             if game_result == "W":
                 stats = handle_stats(1)
