@@ -76,23 +76,23 @@ LANG_SETTINGS = [["en", EN_WORDS, EN_WORDS, ABOUT_ENGLISH, INSTRUCTIONS1_ENGLISH
 
 # GAME WORDS
 # used to change different game content language when user changes the language
-CHANGE_FONTS = ["Change Font","Cambiar Fuente", "Schriftart Andern," "Changer la Police", "Change Font"]
+CHANGE_FONTS = ["Change Font","Cambiar Fuente", "Schriftart Andern", "Changer la Police", "Change Font"]
 DONE = ["DONE", "LISTO", "FERTIG", "Terminé", "DONE"]
 BOLD = ["BOLD", "BOLD", "BOLD", "GRAS", "BOLD"]
 COLOR_KEY = ["Color Key", "Clave de Color", "Farbschlüssel", "Clé de Couleur", "Color Key"]
 CORRECT = ["CORRECT", "CORRECTA", "RICHTIG", "CORRECTE", "CORRECT"]
 SEMI = ["SEMI", "SEMI", "HALB", "SEMI-", "SEMI"]
 WRONG = ["WRONG", "INCORRECTA", "FALSCH", "INCORRECTE", "WRONG"]
-RESET_COLOR = ["Reset Colors", "Restablecer Colores", "Farben Zurücksetzen", "Réinitialiser les Couleurs", "Reset Colors"]
-RESET_GAMES = ["Reset Game", "Restablecer Juego", "Spiel Zurücksetzen", "Réinitialiser le Jeu", "Reset Game"]
-CHANGE_COLOR = ["Change Color", "Cambiar el Color", "Farbe Ändern", "Changer de Couleur", "Change Color"]
-SELECT_COLOR = ["SELECT COLOR", "SELECCIONAR COLOR", "WÄHLE SIE DIE ZU", "SÉLECTIONNER LA COULEUR", "SELECT COLOR"]
-TO_CHANGE = ["TO CHANGE", "PARA CAMBIAR", "ÄNDERNDE FARBE AUS", "À CHANGER", "TO CHANGE"]
-CHANGE_CORRECT_COLOR = ["Change Correct Color", "Cambiar Color Correcto", "Richtige Farbe Ändern", "Modifier la Couleur Correcte", "Change Correct Color"]
-CHANGE_SEMI_COLOR = ["Change Semi Correct Color", "Cambiar Color Semicorrecto", "Halbrichtige Farbe Ändern", "Modifier la Couleur Semi-Correcte", \
+RESET_COLOR = ["Reset Colors", "Restaurar Colores", "Originalfarben", "Couleurs de Jeu", "Reset Colors"]
+RESET_GAMES = ["Reset Game", "Restaurar Juego", "Neues Wort", "Nouveau Mot", "Reset Game"]
+CHANGE_COLOR = ["Change Color", "Cambiar el Color", "Farbe Ändern", "Changer les Coleurs", "Change Color"]
+SELECT_COLOR = ["SELECT COLOR", "SELECCIONAR COLOR", "WÄHLE SIE DIE ZU", "CHANGER", "SELECT COLOR"]
+TO_CHANGE = ["TO CHANGE", "PARA CAMBIAR", "ÄNDERNDE FARBE AUS", "LES COULEURS", "TO CHANGE"]
+CHANGE_CORRECT_COLOR = ["Change Correct Color", "Cambiar Color Correcto", "Richtige Farbe Ändern", "La Couleur Correcte", "Change Correct Color"]
+CHANGE_SEMI_COLOR = ["Change Semi Correct Color", "Cambiar Color Semicorrecto", "Halbrichtige Farbe Ändern", "La Couleur Semi-Correcte", \
         "Change Semi Correct Color"]
-CHANGE_WRONG_COLOR = ["Change Wrong Color", "Cambiar Color Incorrecto", "Falsche Farbe Ändern", "Modifier la Mauvaise Couleur", "Change Wrong Color"]
-HIGH_CONTRAST = ["Activate High Contrast Mode", "Activar Modo de Contraste Alto", "Hochkontrastmodus Aktivieren", "Activer le Mode de Contraste Élevé", \
+CHANGE_WRONG_COLOR = ["Change Wrong Color", "Cambiar Color Incorrecto", "Falsche Farbe Ändern", "La Mauvaise Couleur", "Change Wrong Color"]
+HIGH_CONTRAST = ["Activate High Contrast Mode", "Modo de Contraste Alto", "Hochkontrastmodus Aktivieren", "Le Mode de Contraste Élevé", \
         "Activate High Contrast Mode"]
 CANCEL = ["CANCEL", "CANCELAR", "ABBRECHEN", "ANNULER", "CANCEL"]
 
