@@ -466,11 +466,12 @@ def draw_histogram(x_position, y_position, x_width, y_height):
 
         aesthetic_offset = y_height/5 * 0.1
 
-        pygame.draw.rect(SCREEN, WHITE, pygame.Rect(x_position, bar_height + aesthetic_offset,
+        pygame.draw.rect(SCREEN, WHITE, pygame.Rect(x_position,
+                                                    bar_height + aesthetic_offset,
                                                     x_width * proportion_of_width,
                                                     y_height / 5 - (2 * aesthetic_offset)))
 
-        draw_text(my_font_sm, str(bar_number + 1), BLACK, (x_position + (WIDTH / 20), bar_height + (y_height / 10)))
+        draw_text(my_font_sm, str(bar_number + 1), BLACK, (x_position + (WIDTH / 40), bar_height + (y_height / 10)))
 
     # Find highest value in hist.txt
     largest_value = 0
