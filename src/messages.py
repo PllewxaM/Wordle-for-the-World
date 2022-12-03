@@ -194,6 +194,8 @@ ABOUT_FRENCH = ["",
                 "différentes de manière positive. Le mot de cinq lettres préféré de Caroline est",
                 "“pasta.”"]
 
+# ENGLISH INSTRUCTIONS
+
 INSTRUCTIONS1_ENGLISH = ["How to Play Using a Keyboard:",
                          "- Using your computer’s keyboard or the one on the screen, guess a five letter word.",
                          "- Click the DEL button on your screen, or press the Backspace key on your keyboard",
@@ -222,7 +224,9 @@ INSTRUCTIONS3_ENGLISH = ["- Incorrect letters will appear gray, as shown above."
                          "  guessed word. For example, “read guess one” will read out your first guessed word.",
                          "- To hear your semi-correct letters, say “read semi.”",
                          "- To hear your previous wrong guessed words, say “read wrong.”",
-                         "- To play again after finishing a game, say “play again.”"," ", " "]    
+                         "- To play again after finishing a game, say “play again.”"," ", " "]  
+
+# SPANISH INSTRUCTIONS  
 
 INSTRUCTIONS1_SPANISH = ["Cómo jugar usando un teclado:",
                          "- Usando el teclado de su computadora o el que está en la pantalla, adivine una", 
@@ -239,6 +243,8 @@ INSTRUCTIONS2_SPANISH = ["- Las letras de la palabra, pero en la posición incor
 INSTRUCTIONS3_SPANISH = ["- Las letras incorrectas aparecerán en gris, como se muestra arriba.",
                          "- Tienes seis intentos para adivinar la palabra secreta."," "]
 
+# GERMAN INSTRUCTIONS
+
 INSTRUCTIONS1_GERMAN = ["Wie man mit einer Tastatur spielt:",
                         "- Errate mit der Tastatur deines Computers oder der auf dem Bildschirm ein Wort mit",
                         "  fünf Buchstaben.",
@@ -251,6 +257,8 @@ INSTRUCTIONS2_GERMAN = ["- Buchstaben im Wort, aber an der falschen Position, er
 
 INSTRUCTIONS3_GERMAN = ["- Falsche Buchstaben werden wie oben gezeigt grau angezeigt.", 
                         "- Sie haben sechs Versuche, das geheime Wort zu erraten.", " "]
+
+# FRENCH INSTRUCTIONS
 
 INSTRUCTIONS1_FRENCH = ["Comment jouer avec un clavier:",
                         "- À l'aide du clavier de votre ordinateur ou de celui de l'écran, devinez",
@@ -265,6 +273,8 @@ INSTRUCTIONS2_FRENCH = ["- Les lettres du mot, mais dans la position incorrecte,
 
 INSTRUCTIONS3_FRENCH = ["- Les lettres incorrectes apparaîtront en gris, comme indiqué ci-dessus.",
                         "- Vous avez six tentatives pour deviner le mot secret.", " "]
+
+# COLOR INSTRUCTIONS
 
 COLOR_INSTRUCTIONS_ENGLISH = ["On this screen you can input colors using their hexadecimal code.", 
                               "Don't worry if you're not sure how to do this, you can also change the colors from",  

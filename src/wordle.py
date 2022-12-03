@@ -39,7 +39,7 @@ eog_sound_allowed = 1
 # LANGUAGE
 current_language = 0
 
-# default
+# DEFAULT = ENGLISH
 lang = "en"
 word_list = EN_WORDS
 check_list = EN_WORDS
