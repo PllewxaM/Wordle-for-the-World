@@ -339,7 +339,7 @@ def check_guess(guess_to_check):
 
 
 # display lost game screen and instructions to play again
-def lose_play_again(Stats):
+def lose_play_again(stats):
     reset_game = 0
     SCREEN.fill(WHITE)
     pygame.draw.rect(SCREEN, DK_RED, END_GAME_SCREEN_AREA, 0, ROUND)
@@ -347,9 +347,10 @@ def lose_play_again(Stats):
     draw_text(my_font, f"Sorry, the word was {correct_word}!", WHITE, (WIDTH / 2, 250))
     draw_text(my_font, "Press ENTER to Play Again!", WHITE, (WIDTH / 2, 320))
     # Draw game and player statistics
-    won_percent = "         {:.1f}%         ".format(int(Stats[1]) / int(Stats[0]) * 100)
-    draw_text(my_font, str(Stats[0]) + won_percent + str(Stats[2]) + "            " + str(Stats[3]), WHITE, (WIDTH/2, 460))
+    won_percent = "         {:.1f}%         ".format(int(stats[1]) / int(stats[0]) * 100)
+    draw_text(my_font, str(stats[0]) + won_percent + str(stats[2]) + "            " + str(stats[3]), WHITE, (WIDTH / 2, 460))
     draw_text(my_font_sm, "Games Played       Games Won %       Current Streak       Max Streak", WHITE, (WIDTH/2, 530))
+
     pygame.display.update()
     # while on end game screen listen for enter key to restart game 
     while not reset_game:
@@ -366,7 +367,7 @@ def lose_play_again(Stats):
 
 
 # display won game screen and instructions for play again
-def correct_play_again(Stats):
+def correct_play_again(stats):
     reset_game = 0
     SCREEN.fill(WHITE)
     pygame.draw.rect(SCREEN, correct_color, END_GAME_SCREEN_AREA, 0, ROUND)
@@ -375,9 +376,12 @@ def correct_play_again(Stats):
     draw_text(my_font, f"The word was {correct_word}!", WHITE, (WIDTH / 2, 320))
     draw_text(my_font, "Press ENTER to Play Again!", WHITE, (WIDTH / 2, 390))
     # Calculate and draw game and player statistics
-    won_percent = "         {:.1f}%         ".format(int(Stats[1]) / int(Stats[0]) * 100)
-    draw_text(my_font, str(Stats[0]) + won_percent + str(Stats[2]) + "            " + str(Stats[3]), WHITE, (WIDTH/2, 530))
+    won_percent = "         {:.1f}%         ".format(int(stats[1]) / int(stats[0]) * 100)
+    draw_text(my_font, str(stats[0]) + won_percent + str(stats[2]) + "            " + str(stats[3]), WHITE, (WIDTH / 2, 530))
     draw_text(my_font_sm, "Games Played       Games Won %       Current Streak       Max Streak", WHITE, (WIDTH/2, 600))
+
+    draw_histogram(WIDTH/20, WIDTH/20, WIDTH - WIDTH/10, HEIGHT - (3 * (HEIGHT/4)) - (HEIGHT/20))
+
     pygame.display.update()
     # while on end game screen listen for enter key to restart game 
     while not reset_game:
@@ -396,35 +400,88 @@ def correct_play_again(Stats):
 # function handles reading from and writing to stats file 
 # takes in if user won the game or not and returns the updated stats
 def handle_stats(stat):
-    if(os.path.exists("stats.txt") == False):
+    if not os.path.exists("stats.txt"):
         # create new file if none exsists
         f = open("stats.txt", "w+")
         # write stats to file :games played, games won, current streak, max streak
         f.write("%d\n%d\n%d\n%d" % (1, stat, stat, stat))
         # return current stats
-        Data = [1, stat, stat, stat]
-    else :
+        data = [1, stat, stat, stat]
+    else:
         # open file and read stats
         f = open("stats.txt", "r")
-        Data = f.readlines()
+        data = f.readlines()
         # increment games played
-        Data[0] = int(Data[0]) + 1 
+        data[0] = int(data[0]) + 1
         # increament games won
-        Data[1] = int(Data[1]) + stat
+        data[1] = int(data[1]) + stat
         # set current streak value
         if stat == 0:
-            Data[2] = 0
+            data[2] = 0
         else:
-            Data[2] = int(Data[2]) + stat
+            data[2] = int(data[2]) + stat
         # chekc if max streak should be changed
-        if Data[2] > int(Data[3]):
-            Data[3] = Data[2]
+        if data[2] > int(data[3]):
+            data[3] = data[2]
         # write new data to file
         f = open("stats.txt", "w")
         # write to file: games played, games won, current streak, max streak
-        f.write("%d\n%d\n%d\n%d" % (Data[0], Data[1], Data[2], int(Data[3])))
+        f.write("%d\n%d\n%d\n%d" % (data[0], data[1], data[2], int(data[3])))
 
-    return Data
+    f.close()
+
+    num_guesses_taken = int(len(guesses[0]) / 5)
+
+    if not os.path.exists("hist.txt"):
+        f = open("hist.txt", "w+")
+        f.write("%d\n%d\n%d\n%d\n%d" % (0, 0, 0, 0, 0))
+        f.close()
+
+    f = open("hist.txt", "r")
+    hist_data = f.readlines()
+    str_entry_to_inc = hist_data[num_guesses_taken - 1]
+    int_entry_to_inc = int(str_entry_to_inc)
+    int_entry_to_inc += 1
+    hist_data[num_guesses_taken - 1] = int_entry_to_inc
+
+    f.close()
+
+    f = open("hist.txt", "w")
+    f.write("%d\n%d\n%d\n%d\n%d" % (int(hist_data[0]), int(hist_data[1]), int(hist_data[2]), int(hist_data[3]),
+                                    int(hist_data[4])))
+    f.close()
+
+    return data
+
+
+def draw_histogram(x_position, y_position, x_width, y_height):
+    f = open("hist.txt", "r")
+    hist_data = f.readlines()
+
+    def draw_hist_bar(bar_number, proportion_of_width):
+
+        bar_offset = (y_height / 5) * bar_number
+
+        bar_height = y_position + bar_offset
+
+        aesthetic_offset = y_height/5 * 0.1
+
+        pygame.draw.rect(SCREEN, WHITE, pygame.Rect(x_position, bar_height + aesthetic_offset,
+                                                    x_width * proportion_of_width,
+                                                    y_height / 5 - (2 * aesthetic_offset)))
+
+        draw_text(my_font_sm, str(bar_number + 1), BLACK, (x_position + (WIDTH / 20), bar_height + (y_height / 10)))
+
+    # Find highest value in hist.txt
+    largest_value = 0
+    for x in range(5):
+        if int(hist_data[x]) > largest_value:
+            largest_value = int(hist_data[x])
+
+    for x in range(5):
+        draw_hist_bar(x, int(hist_data[x])/largest_value)
+
+    pygame.display.flip()
 
 
 # reset global variables and game screen after previous game ends
@@ -937,6 +994,7 @@ def submit():
 
 """APPLICATION CONTROL"""
 
+
 # This function is the main control loop for the game and is called once the user presses play in the menu
 # This function draws the screen components and loops continuously until the user quits the game
 # The program tracks the current game status, keyboard clicks, mousebutton clicks and 
@@ -1106,6 +1164,7 @@ def start_the_game():
 
 """SETTERS"""
 
+
 # sets the background music value 
 def set_background_music(selected, value):
     global current_background_music
@@ -1115,6 +1174,7 @@ def set_background_music(selected, value):
     mixer.music.pause()
     mixer.music.load(BACKGROUND_MUSIC[current_background_music])
     mixer.music.play(-1)
+
 
 # sets the language and word list that the program uses to get the word and check guesses
 def set_language(selected, value):
@@ -1128,11 +1188,13 @@ def set_language(selected, value):
     # reset game - current word and game screen
     reset()
 
+
 # set the language that the about page content should be drawn in
 def set_about_lang(selected, value):
     global about_display, about_index
     about_index = value
     about_display = LANG_SETTINGS[value][3]
+
 
 # send the about page content to the menu drawing functions in the new language
 def send_about():
@@ -1142,6 +1204,7 @@ def send_about():
         about_loaded[about_index] = 1
     about_index = 0
 
+
 # set the language that the instructions menu should be drawn in
 def set_instructions_lang(selected, value):
     global instructions1_display, instructions2_display, instructions3_display, inst_index
@@ -1149,6 +1212,7 @@ def set_instructions_lang(selected, value):
     instructions1_display = LANG_SETTINGS[value][4]
     instructions2_display = LANG_SETTINGS[value][5]
     instructions3_display = LANG_SETTINGS[value][6]
+
 
 # send the instructions page content to the menu drawing functions in the new language
 def send_instructions():
@@ -1158,11 +1222,13 @@ def send_instructions():
         inst_loaded[inst_index] = 1
     inst_index = 0
 
+
 # set the langage that the color menu instructions should be drawn in
 def set_color_lang(selected, value):
     global color_instructions_display, color_index
     color_index = value
     color_instructions_display = LANG_SETTINGS[value][7]
+
 
 # send the color menu instructions to the menu drawing functions in the new language
 def send_color_instructions():
@@ -1171,6 +1237,7 @@ def send_color_instructions():
         append_color_instructions(color_instructions_display)
     color_loaded[color_index] = 1
     color_index = 0
+
 
 # used by the game to set the font of the game for each font size
 def menu_set_font(selected, value):
@@ -1181,20 +1248,24 @@ def menu_set_font(selected, value):
     my_font_sm = pygame.font.Font(FONTS[font_index], font_size - 20)
     my_font_xsm = pygame.font.Font(FONTS[font_index], font_size - 25)
 
+
 # sets the color used for the correct letters in the game
 def set_correct_color(value):
     global correct_color
     correct_color = value
+
 
 # sets the color used for the semi correct letters in the game
 def set_semi_color(value):
     global semi_color
     semi_color = value
 
+
 # sets the color used for the wrong letters in the game
 def set_wrong_color(value):
     global wrong_color
     wrong_color = value
+
 
 # sets the colors of the background and game screen features to dark mode
 # if already in dark mode, set back to light mode
@@ -1209,11 +1280,13 @@ def set_dark_mode():
         sub_color = BLACK
         sub_color2 = LT_GREY
 
+
 # decrease the font size of game elements- limited so smallest font cannot be < 8
 def decrese_font_size():
     global font_size
     if font_size - 25 > 8:
         font_size -= 2
+
 
 # increase font size of game elements- limited so larget font cannot exceed 47
 def increase_font_size():
@@ -1224,6 +1297,7 @@ def increase_font_size():
 
 """MENUS"""
 
+
 # generates the instruction menu when the user clicks the instruction icon in the nav bar
 def instructions():
     global start_game
@@ -1232,11 +1306,13 @@ def instructions():
     # MENU LOOP
     if not start_game:
         inst_menu.mainloop(SCREEN, background)
-    
+
+
 # the general applicaition background - menu is drawn on top of this
 def background():
     SCREEN.fill(WHITE)
     pygame.draw.rect(SCREEN, MENU_COLOR, END_GAME_SCREEN_AREA, 0)
+
 
 # draws and controls the opening game menu - is also called when user selects menu icon in nav bar
 def game_menu(enter_time):
@@ -1264,14 +1340,12 @@ def game_menu(enter_time):
         color_menu.add.color_input("Wrong Letter Color  ", color_type='hex', onchange=set_wrong_color, default=wrong_color)
         draw_color_menu()
 
-
         # DRAW ABOUT MENU PAGE
         about_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),("French", 3)], 
                                 onchange=set_about_lang, default=lang_index)
         about_menu.add.button("Click to Add Content in New Language", send_about)
         about_menu.add.label("Scroll down to see new information", align=pygame_menu.locals.ALIGN_CENTER, font_size=22)
         draw_about_page(about_display)
-
 
         # DRAW INSTRUCTIONS MENU PAGE
         inst_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),("French", 3)], 
@@ -1281,7 +1355,6 @@ def game_menu(enter_time):
         draw_instructions(instructions1_display, instructions2_display, instructions3_display)
         inst_menu.add.button("Play Game", start_the_game)
         for m in SPACES: inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
-
 
     # DRAW MAIN MENU PAGE
     menu.add.button('Play', start_the_game)
