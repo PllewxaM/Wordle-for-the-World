@@ -80,7 +80,7 @@ key_pressed = ''
 
 # WORD/LETTER CONTROL
 guesses_count = 0
-guesses = [[]] * 6
+guesses = [[],[],[],[],[],[]]
 # when guess checked, full version placed here
 guesses_str = []
 
@@ -438,7 +438,7 @@ def handle_stats(stat):
     # missing a bar
     if stat == 1:
 
-        num_guesses_taken = int(len(guesses[0]) / 5)
+        num_guesses_taken = guesses_count
 
         if not os.path.exists("hist.txt"):
             f = open("hist.txt", "w+")
@@ -525,7 +525,8 @@ def reset():
     draw_nav_bar(main_color, sub_color2, my_font, muted)
 
     # restart background music
-    play_background_music()
+    if not muted:
+        play_background_music()
 
     # For testing purposes
     print(correct_word)
@@ -1023,9 +1024,10 @@ def start_the_game():
     reset_screen()
 
     # load background music
-    mixer.music.pause()
-    mixer.music.load(BACKGROUND_MUSIC[current_background_music])
-    mixer.music.play(-1)
+    if not muted:
+        mixer.music.pause()
+        mixer.music.load(BACKGROUND_MUSIC[current_background_music])
+        mixer.music.play(-1)
 
     while True:
         # how program should run when audio interface is not enabled
