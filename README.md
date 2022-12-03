@@ -83,6 +83,31 @@ You must also download the file libmpg123-0.dll from the following link and plac
 
 This is where you write the instructions :P
 
+Ensure you have pygame by using the command:
+
+     pip install pygame
+
+Install pygame-menu using the command :
+
+     pip install pygame-menu
+
+Install PyObjC using the command :
+
+     pip install PyObjC
+
+For speech recognition install Google’s Speech Recognition package using the command :
+
+     pip install SpeechRecognition  
+
+For speech generation use Google’s gTTS Python package. To install the Python package type: 
+
+     pip install gTTS 
+
+Install playsound using the command :
+
+     pip install playsound
+
+
 </details>
 
 <br>
