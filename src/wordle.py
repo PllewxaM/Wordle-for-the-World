@@ -1025,13 +1025,13 @@ def start_the_game():
             draw(sub_color)
             # load end of game screens depending on result
             if game_result == "L":
-                Stats = handle_stats(0)
-                lose_play_again(Stats)
+                stats = handle_stats(0)
                 eog_sound(game_result)
+                lose_play_again(stats)
             if game_result == "W":
-                Stats = handle_stats(1)
-                correct_play_again(Stats)
+                stats = handle_stats(1)
                 eog_sound(game_result)
+                correct_play_again(stats)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -1138,13 +1138,15 @@ def start_the_game():
                 say("You have run out of guesses. The word was " + correct_word + " say play again to start over with "
                                                                                   "a new word!",
                     LANGUAGES[current_language])
-                lose_play_again()
+                stats = handle_stats(0)
+                lose_play_again(stats)
             # if user wins game
             if game_result == "W":
                 eog_sound(game_result)
                 say("Correct, the word was: " + correct_word + ". say play again to get "
                                                                "a new word.", LANGUAGES[current_language])
-                correct_play_again()
+                stats = handle_stats(1)
+                correct_play_again(stats)
             # go to hands free control function
             if hands_free_rendered:
                 handsfree()
