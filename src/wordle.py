@@ -26,6 +26,7 @@ threshold_initialized = 0
 # MUSIC
 has_warned = 0
 current_background_music = 0
+muted = 0
 
 try:
     mixer.init()
@@ -94,7 +95,7 @@ game_result = ""
 
 current_letter_bg_x = WIDTH / 3.25
 
-about_inst = 0
+about_index = 0
 inst_index = 0
 color_index = 0
 about_loaded = [1,0,0,0,1]
@@ -521,7 +522,7 @@ def reset():
             key.draw(main_color, my_font_med)
 
     draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm, lang_index)
-    draw_nav_bar(main_color, sub_color2, my_font)
+    draw_nav_bar(main_color, sub_color2, my_font, muted)
 
     # restart background music
     play_background_music()
@@ -553,7 +554,7 @@ def reset_screen():
             key.draw(main_color, my_font_med)
 
     draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm, lang_index)
-    draw_nav_bar(main_color, sub_color2, my_font)
+    draw_nav_bar(main_color, sub_color2, my_font, muted)
 
     # redraw current game board state
     for guess in guesses:
@@ -1008,7 +1009,7 @@ def submit():
 # The program tracks the current game status, keyboard clicks, mousebutton clicks and 
 def start_the_game():
     global start_game, audio_interface_enabled, game_started, game_result, activate_audio, current_guess_string, \
-        key_pressed, hands_free_rendered
+        key_pressed, hands_free_rendered, muted
     start_game = 1
 
     SCREEN.fill(main_color)
@@ -1018,7 +1019,7 @@ def start_the_game():
     # draw screen elements - keyboard, nav bar and color key
     draw_keyboard(main_color, sub_color2, my_font, my_font_med, keys)
     draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm, lang_index)
-    draw_nav_bar(main_color, sub_color2, my_font)
+    draw_nav_bar(main_color, sub_color2, my_font, muted)
     reset_screen()
 
     # load background music
@@ -1094,6 +1095,16 @@ def start_the_game():
                             chosen_font = font_menu_control(font_index)
                             menu_set_font(1, chosen_font)
                             reset_screen()
+                        if MUTE_AREA.collidepoint(event.pos):
+                            if not muted:
+                                pause_background_music()
+                                muted = 1
+                                draw_muted(muted, sub_color2)
+                            else:
+                                play_background_music()
+                                muted = 0
+                                draw_muted(muted, sub_color2)
+                                
                         # if color icon in nav bar is clicked, open color menu
                         if COLOR_SEL_AREA.collidepoint(event.pos):
                             color_menu_control()

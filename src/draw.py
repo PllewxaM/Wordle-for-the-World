@@ -30,14 +30,27 @@ def draw_icon(path, size, position):
     SCREEN.blit(icon_image, rec)
 
 
+# draws the mute button on the nav bar depending on the state of sound
+def draw_muted(muted, sub_color2):
+    if muted:
+        pygame.draw.rect(SCREEN, sub_color2, MUTE_AREA, 0)
+        draw_icon('assets/Speaker_Icon.png', (30, 30), ((WIDTH - 190), 25))
+    else:
+        pygame.draw.rect(SCREEN, sub_color2, MUTE_AREA, 0)
+        draw_icon('assets/Mute_Icon.png', (30, 30), ((WIDTH - 190), 25))
+
+
 # Draws the navagation bar at the top of the screen and the contents on the bar
-def draw_nav_bar(main_color, sub_color2, my_font):
+def draw_nav_bar(main_color, sub_color2, my_font, muted):
     # actual nav bar
     pygame.draw.rect(SCREEN, sub_color2, [0, 0, WIDTH, 50], 0)
 
     # hamburger menu
     draw_icon('assets/menu.png', (30, 30), ((WIDTH - 825), 25))
 
+    # instructions icon
+    draw_icon('assets/instructions.png', (30, 30), ((WIDTH - 775), 25))
+    
     # font selector icon
     draw_icon('assets/font-icon.png', (30, 35), ((WIDTH - 40), 25))
 
@@ -47,8 +60,8 @@ def draw_nav_bar(main_color, sub_color2, my_font):
     # dark mode icon 
     draw_icon('assets/dark.png', (30, 30), ((WIDTH - 140), 25))
 
-    # instructions icon
-    draw_icon('assets/instructions.png', (30, 30), ((WIDTH - 190), 25))
+    # mute icon
+    draw_muted(muted, sub_color2)
 
     # Draws title of the application
     draw_text(my_font, "WORLD-LE", main_color, (WIDTH / 2, 25))
