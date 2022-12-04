@@ -3,11 +3,10 @@
 1. [About](#about)
 2. [Our Mission](#mission)
 3. [Installation](#install)
-4. [Accessibility Features](#features)
-5. [Important Links](#links)
+4. [File Organization](#files)
+5. [Accessibility Features](#features)
 6. [Handsfree Instructions](#handsfree)
-7. [File Organization](#files)
-8. [Credits](#credits)
+7. [Credits](#credits)
 
 ## About <div id='about'/>
 Welcome to World-le: the S3N1OR SQU4D’s accessible version of the popular New York Times’s word-guessing game. This game was developed in the Fall of 2022 for our CSC 355: Human Computer Interaction final project.
