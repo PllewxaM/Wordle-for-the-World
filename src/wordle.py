@@ -26,6 +26,7 @@ threshold_initialized = 0
 # MUSIC
 has_warned = 0
 current_background_music = 0
+muted = 0
 
 try:
     mixer.init()
@@ -79,7 +80,7 @@ key_pressed = ''
 
 # WORD/LETTER CONTROL
 guesses_count = 0
-guesses = [[]] * 6
+guesses = [[],[],[],[],[],[]]
 # when guess checked, full version placed here
 guesses_str = []
 
@@ -94,7 +95,7 @@ game_result = ""
 
 current_letter_bg_x = WIDTH / 3.25
 
-about_inst = 0
+about_index = 0
 inst_index = 0
 color_index = 0
 about_loaded = [1,0,0,0,1]
@@ -350,10 +351,11 @@ def lose_play_again(stats, game_result):
     # Draw game and player statistics
     won_percent = "         {:.1f}%         ".format(int(stats[1]) / int(stats[0]) * 100)
     draw_text(my_font, str(stats[0]) + won_percent + str(stats[2]) + "            " + str(stats[3]), WHITE, (WIDTH / 2, 280))
-    draw_text(my_font_sm, "Games Played           Won %           Current Streak       Max Streak", WHITE, (WIDTH/2, 335))
+    draw_text(my_font_sm, "Games Played           Won %            Current Streak       Max Streak", WHITE, (WIDTH/2, 335))
     draw_text(my_font_med, "Guess Distribution", WHITE, (WIDTH/2, 435))
 
     pygame.display.update()
+    time.sleep(.3)
     # while on end game screen listen for enter key to restart game 
     while not reset_game:
         for event in pygame.event.get():
@@ -381,12 +383,13 @@ def correct_play_again(stats, game_result):
     # Calculate and draw game and player statistics
     won_percent = "         {:.1f}%         ".format(int(stats[1]) / int(stats[0]) * 100)
     draw_text(my_font, str(stats[0]) + won_percent + str(stats[2]) + "            " + str(stats[3]), WHITE, (WIDTH / 2, 315))
-    draw_text(my_font_sm, "Games Played           Won %           Current Streak       Max Streak", WHITE, (WIDTH/2, 365))
+    draw_text(my_font_sm, "Games Played           Won %            Current Streak       Max Streak", WHITE, (WIDTH/2, 365))
     draw_text(my_font_med, "Guess Distribution", WHITE, (WIDTH/2, 455))
 
     # draw_histogram(WIDTH/20, WIDTH/20, WIDTH - WIDTH/10, HEIGHT - (3 * (HEIGHT/4)) - (HEIGHT/20))
 
     pygame.display.update()
+    time.sleep(.3)
     # while on end game screen listen for enter key to restart game 
     while not reset_game:
         for event in pygame.event.get():
@@ -437,7 +440,7 @@ def handle_stats(stat):
     # missing a bar
     if stat == 1:
 
-        num_guesses_taken = int(len(guesses[0]) / 5)
+        num_guesses_taken = guesses_count
 
         if not os.path.exists("hist.txt"):
             f = open("hist.txt", "w+")
@@ -521,10 +524,11 @@ def reset():
             key.draw(main_color, my_font_med)
 
     draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm, lang_index)
-    draw_nav_bar(main_color, sub_color2, my_font)
+    draw_nav_bar(main_color, sub_color2, my_font, muted)
 
     # restart background music
-    play_background_music()
+    if not muted:
+        play_background_music()
 
     # For testing purposes
     print(correct_word)
@@ -553,7 +557,7 @@ def reset_screen():
             key.draw(main_color, my_font_med)
 
     draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm, lang_index)
-    draw_nav_bar(main_color, sub_color2, my_font)
+    draw_nav_bar(main_color, sub_color2, my_font, muted)
 
     # redraw current game board state
     for guess in guesses:
@@ -1008,7 +1012,7 @@ def submit():
 # The program tracks the current game status, keyboard clicks, mousebutton clicks and 
 def start_the_game():
     global start_game, audio_interface_enabled, game_started, game_result, activate_audio, current_guess_string, \
-        key_pressed, hands_free_rendered
+        key_pressed, hands_free_rendered, muted
     start_game = 1
 
     SCREEN.fill(main_color)
@@ -1018,13 +1022,14 @@ def start_the_game():
     # draw screen elements - keyboard, nav bar and color key
     draw_keyboard(main_color, sub_color2, my_font, my_font_med, keys)
     draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm, lang_index)
-    draw_nav_bar(main_color, sub_color2, my_font)
+    draw_nav_bar(main_color, sub_color2, my_font, muted)
     reset_screen()
 
     # load background music
-    mixer.music.pause()
-    mixer.music.load(BACKGROUND_MUSIC[current_background_music])
-    mixer.music.play(-1)
+    if not muted:
+        mixer.music.pause()
+        mixer.music.load(BACKGROUND_MUSIC[current_background_music])
+        mixer.music.play(-1)
 
     while True:
         # how program should run when audio interface is not enabled
@@ -1033,6 +1038,7 @@ def start_the_game():
             # load end of game screens depending on result
             if game_result == "L":
                 stats = handle_stats(0)
+                time.sleep(0.25)
                 lose_play_again(stats, game_result)
             if game_result == "W":
                 stats = handle_stats(1)
@@ -1094,6 +1100,16 @@ def start_the_game():
                             chosen_font = font_menu_control(font_index)
                             menu_set_font(1, chosen_font)
                             reset_screen()
+                        if MUTE_AREA.collidepoint(event.pos):
+                            if not muted:
+                                pause_background_music()
+                                muted = 1
+                                draw_muted(muted, sub_color2)
+                            else:
+                                play_background_music()
+                                muted = 0
+                                draw_muted(muted, sub_color2)
+                                
                         # if color icon in nav bar is clicked, open color menu
                         if COLOR_SEL_AREA.collidepoint(event.pos):
                             color_menu_control()
