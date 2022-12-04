@@ -1,7 +1,7 @@
 # File contains all constants used in the program
 
 import pygame
-from messages import *
+from helpers.messages import *
 from word_files.englishwords import *
 from word_files.spanishwords import *
 from word_files.frenchwords import *

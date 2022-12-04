@@ -1,4 +1,4 @@
-from constants import *
+from helpers.constants import *
 
 """Letter Class"""
 

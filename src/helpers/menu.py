@@ -1,6 +1,6 @@
 import pygame_menu
 from pygame_menu import Theme
-from constants import *
+from helpers.constants import *
 
 pygame.init()
 

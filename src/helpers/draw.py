@@ -1,4 +1,4 @@
-from classes import *
+from helpers.classes import *
 import sys
 
 # DRAW GAME BOARD #
@@ -232,6 +232,7 @@ def draw_color_screen(current, main_color, sub_color, sub_color2, my_font, lang_
                     pygame.display.update()
     return value
 
+
 # draw the menu where the user can choose which color they want to change - called when user clicks color icon in nav bar
 def draw_color_select_menu(main_color, sub_color, sub_color2, correct_color, semi_color, wrong_color, my_font, my_font_med, my_font_sm, lang_index) :
     
@@ -256,7 +257,7 @@ def draw_color_select_menu(main_color, sub_color, sub_color2, correct_color, sem
     draw_text(my_font_med, CHANGE_WRONG_COLOR[lang_index], BLACK, (WIDTH / 2, HEIGHT - 310))
 
     # draw high contrast button
-    pygame.draw.rect(SCREEN, HIGH_CONTRAST_2, PICK_FOUR_AREA, 0, ROUND)
+    pygame.draw.rect(SCREEN, HIGH_CONTRAST_1, PICK_FOUR_AREA, 0, ROUND)
     draw_text(my_font_med, HIGH_CONTRAST[lang_index], BLACK, (WIDTH / 2, HEIGHT - 210))
 
     # draw cancel button

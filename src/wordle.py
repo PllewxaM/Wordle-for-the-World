@@ -8,8 +8,8 @@ from pygame import mixer
 from gtts import gTTS
 from playsound import playsound
 
-from draw import *
-from menu import *
+from helpers.draw import *
+from helpers.menu import *
 
 """INITIALIZERS / GLOBAL VARIABLES"""
 
