@@ -111,7 +111,35 @@ Install playsound using the command :
 </details>
 
 
+<br>
+
+<details>
+  <summary> HOW TO RUN</summary>
+<p>
+
+</details>
+
 ***
+<br>
+
+## File Organization <div id='files'/>
+<details>
+  <summary>Click to see all files</summary> 
+<p>
+  
+1. wordle.py - main file that contains game functions:
+   - Audio interface
+   - Text interface
+   - Drawing Elements of the UI
+   - Menu functionality
+2. mpg123.exe - supports the audio interface functionality
+   - Used for windows versions
+3. messages.py - defines the large chunks of text used in the Instructions and Menus
+	@@ -143,4 +147,4 @@ The main file of this program is wordle.py. It houses all of the game functions
+</details>
+
+
+<br><br>
 
 ## Accessibility Features <div id='features'/>
 
@@ -122,11 +150,11 @@ Install playsound using the command :
 * Speech interpreter
 
 
-***
+<br><br>
 
-<div id='handsfree'/>
 
-## Handsfree Game Instructions
+
+## Handsfree Game Instructions <div id='handsfree'/>
 <details>
   <summary>Click to see how to use our Handsfree Wordle Interface </summary> 
 <p>
@@ -202,25 +230,7 @@ To change the background music to find your favorite of the 10 different options
 
 </details>
 
-***
-
-## File Organization <div id='files'/>
-<details>
-  <summary>Click to see all files</summary> 
-<p>
-  
-1. wordle.py - main file that contains game functions:
-   - Audio interface
-   - Text interface
-   - Drawing Elements of the UI
-   - Menu functionality
-2. mpg123.exe - supports the audio interface functionality
-   - Used for windows versions
-3. messages.py - defines the large chunks of text used in the Instructions and Menus
-	@@ -143,4 +147,4 @@ The main file of this program is wordle.py. It houses all of the game functions
-</details>
-
-***
+<br><br>
 
 ## Credits <div id='credits'/>
 
