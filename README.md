@@ -110,7 +110,6 @@ Install playsound using the command :
 
 </details>
 
-<br>
 
 ***
 
@@ -124,7 +123,7 @@ Install playsound using the command :
 
 
 ***
-<br>
+
 <div id='handsfree'/>
 
 ## Handsfree Game Instructions
@@ -203,10 +202,7 @@ To change the background music to find your favorite of the 10 different options
 
 </details>
 
-<br>
-
 ***
-<br>
 
 ## File Organization <div id='files'/>
 <details>
@@ -224,10 +220,7 @@ To change the background music to find your favorite of the 10 different options
 	@@ -143,4 +147,4 @@ The main file of this program is wordle.py. It houses all of the game functions
 </details>
 
-<br>
-
 ***
-<br>
 
 ## Credits <div id='credits'/>
 
