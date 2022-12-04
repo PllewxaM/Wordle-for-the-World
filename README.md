@@ -120,26 +120,39 @@ Install playsound using the command :
 </details>
 
 ***
-<br>
 
 ## File Organization <div id='files'/>
 <details>
   <summary>Click to see all files</summary> 
 <p>
   
-1. wordle.py - main file that contains game functions:
-   - Audio interface
-   - Text interface
-   - Drawing Elements of the UI
-   - Menu functionality
-2. mpg123.exe - supports the audio interface functionality
-   - Used for windows versions
-3. messages.py - defines the large chunks of text used in the Instructions and Menus
-	@@ -143,4 +147,4 @@ The main file of this program is wordle.py. It houses all of the game functions
+1. **wordle.py** - main program file that contains the main game function, the main menu and mini menu controls. It also contains the audio interface functions and the user word guess controls:
+   - Start up menu - the main control for the menu which opens on running the program. This function uses menu helper functions to draw the sub page content and themes
+   - Main game loop - this is the main function of the program which controls how the game functions based on user actions such as input, mouse clicks and button presses
+   - User input controls - controls when the user inputs a new letter or word into the program. Controls the removal of letters, and checking the status of the user's guess
+   - Audio interface - functions which control the audio interface and the user voice input
+   - Mini Menu functionality - controls the mini color menus and the font menu controls
+2. **mpg123.exe** - supports the audio interface functionality
+   - Used for windows versions to access the mpg123 for audio file generation
+3. **helpers** folder - contains additional python program files which contain helper functions used by the main program
+   - **draw.py** - contains functions which help to draw the user interface, mini menus (color and font menus) and the user input onto the game board
+   - **menu.py** - contains functions which aid in the creation of additional menu pages, the menu themes and drawing of the menu pages 
+   - **constants.py** - contains all of the constants which are used accross the different python files in the program. All constants are contained in this file
+   - **messages.py** - defines the large chunks of text used in the Instructions and Menus
+   - **classes.py** - this file contains the classes used to define the keyboard key objects and the letter objects used in the program
+4. **assets** folder - contains program assests such as images used in the UI and the font files used in the program
+   - **.png** / **.jpg** files - these .png and .jpg files are images used in the instruction pages and the navigation bar
+   - **fonts** folder - this is the folder which contains the font files
+     - **.oft** / **.ttf** files - these are the fonts which are used in the program and are used when the user changes the font of the UI contents
+5. **sound** folder - contains the sound files used throughout the program
+   - **background_music** folder - contains all of the background music files
+   - **effects** folder - contains the sounds effects used to indicate correct/semi correct/worng letter placement and other sound effects used throughout the program
+   - **untrimmed** - contains unedited sound effects
+6. **word_files** folder - contains a list of five letter words for each available language
 </details>
 
 
-<br><br>
+<br>
 
 ## Accessibility Features <div id='features'/>
 
@@ -150,9 +163,7 @@ Install playsound using the command :
 * Speech interpreter
 
 
-<br><br>
-
-
+<br>
 
 ## Handsfree Game Instructions <div id='handsfree'/>
 <details>
@@ -230,7 +241,7 @@ To change the background music to find your favorite of the 10 different options
 
 </details>
 
-<br><br>
+<br>
 
 ## Credits <div id='credits'/>
 
