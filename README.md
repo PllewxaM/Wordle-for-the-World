@@ -117,6 +117,20 @@ Install playsound using the command :
   <summary> HOW TO RUN</summary>
 <p>
 
+Choose a folder in which you would like to download the program. In a terminal, navagate to this folder.  
+
+Run the command:
+
+     git clone https://github.com/PllewxaM/Wordle-for-the-World.git
+
+Navagate to the source code folder using the command
+
+     cd .\Wordle-for-the-World\src\
+
+Run the program using the command:
+
+     python wordle.py
+
 </details>
 
 ***
