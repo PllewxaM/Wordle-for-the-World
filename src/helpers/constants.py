@@ -37,7 +37,7 @@ MENU_COLOR = "#89a3b0"
 
 # high contract mode colors
 HIGH_CONTRAST_1 = "#0C7BDC"
-HIGH_CONTRAST_2 = "#FFC20A"
+HIGH_CONTRAST_2 = "#994F00"
 HIGH_CONTRAST_3 = GREY
 
 # colors used in color menu

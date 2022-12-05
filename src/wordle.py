@@ -12,19 +12,17 @@ from playsound import playsound
 
 from helpers.draw import *
 from helpers.menu import *
-import helpers.constants
 
 """INITIALIZERS / GLOBAL VARIABLES"""
 
 pygame.init()
 start_game = 0
 
-# AUDIO INTERFACE
+# AUDIO INTERFACE FLAGS
 hands_free_rendered = 0
 game_started = 0
 activate_audio = 0
 audio_interface_enabled = 0
-threshold_initialized = 0
 
 # MUSIC
 has_warned = 0
@@ -40,11 +38,8 @@ except Exception as e:
 
 eog_sound_allowed = 1
 
-# LANGUAGE
-current_language = 0
-
-# DEFAULT = ENGLISH
-lang = "en"
+# LANGUAGE DEFAULT = ENGLISH
+lang_index = 0
 word_list = EN_WORDS
 check_list = EN_WORDS
 correct_word = word_list[random.randint(0, len(word_list) - 1)]
@@ -53,9 +48,9 @@ instructions1_display = INSTRUCTIONS1_ENGLISH
 instructions2_display = INSTRUCTIONS2_ENGLISH
 instructions3_display = INSTRUCTIONS3_ENGLISH
 color_instructions_display = COLOR_INSTRUCTIONS_ENGLISH
-lang_index = 0
 
-# DEFAULT COLORS
+
+# DEFAULT COLORS - FOR GRAPHICS
 correct_color = GREEN
 semi_color = YELLOW
 wrong_color = GREY
@@ -64,7 +59,7 @@ main_color = WHITE
 sub_color = BLACK
 sub_color2 = LT_GREY
 
-# FONT DEFAULTS
+# FONT DEFAULTS - FOR GRAPHICS
 font_size = 40
 font_index = 0
 my_font = pygame.font.Font(FONTS[font_index], font_size)
@@ -72,7 +67,7 @@ my_font_med = pygame.font.Font(FONTS[font_index], font_size - 10)
 my_font_sm = pygame.font.Font(FONTS[font_index], font_size - 20)
 my_font_xsm = pygame.font.Font(FONTS[font_index], font_size - 25)
 
-# SCREEN
+# SCREEN - FOR GRAPHICS
 pygame.display.set_caption("World-le")
 pygame.display.set_icon(pygame.image.load("assets/Icon.png"))
 pygame.display.update()
@@ -432,7 +427,7 @@ def handle_stats(stat):
         data = [1, stat, stat, stat]
     else:
         # open file and read stats
-        f = open("stats.txt", "r")
+        f = open("stats.txt", "w+")
         data = f.readlines()
         # increment games played
         data[0] = int(data[0]) + 1
@@ -447,7 +442,7 @@ def handle_stats(stat):
         if data[2] > int(data[3]):
             data[3] = data[2]
         # write new data to file
-        f = open("stats.txt", "w")
+        # f = open("stats.txt", "w")
         # write to file: games played, games won, current streak, max streak
         f.write("%d\n%d\n%d\n%d" % (data[0], data[1], data[2], int(data[3])))
 
@@ -534,18 +529,13 @@ def draw_histogram(x_position, y_position, x_width, y_height, w_or_l):
                                                      y_height / 6 - (2 * aesthetic_offset),
                                                      y_height / 6 - (2 * aesthetic_offset)), 2)
 
-    # pygame.draw.rect(SCREEN, DK_RED, pygame.Rect(x_position,
-    #                                              y_position + (bar_height * num_guesses_taken) + aesthetic_offset,
-    #                                              y_height / 6 - (2 * aesthetic_offset),
-    #                                              y_height / 6 - (2 * aesthetic_offset)), 4)
-
     pygame.display.flip()
 
 
 # reset global variables and game screen after previous game ends
 def reset():
     # Resets all global variables to their default states.
-    global guesses_count, correct_word, guesses, current_guess, current_guess_string, game_result, lang, \
+    global guesses_count, correct_word, guesses, current_guess, current_guess_string, game_result, \
         semi_correct_guesses, correct_guesses, incorrect_guesses, eog_sound_allowed
 
     SCREEN.fill(main_color)
@@ -640,7 +630,6 @@ def say(response, language):
 
 # Uses SpeechRecognition to translate a user response to text. Returns text
 def listen():
-    global threshold_initialized
 
     r = sr.Recognizer()
     r.energy_threshold = 600
@@ -703,7 +692,7 @@ def song_switch_handler(command):
         load_new_background_music(int(value) - 1)
     else:
         say("You must say a song number " + str(len(BACKGROUND_MUSIC)) +
-            " or lower", LANGUAGES[current_language])
+            " or lower", LANGUAGES[0])
 
 
 # Loads a song based on an index argument passed in. Pauses current music, plays new song on infinite loop.
@@ -760,7 +749,7 @@ def volume_handler(command):
         if value_to_set <= 10:
             set_background_music_volume(value_to_set / 50)
         else:
-            say("You can only set volume between 0 and 10.", LANGUAGES[current_language])
+            say("You can only set volume between 0 and 10.", LANGUAGES[0])
 
     except Exception as e:
         print(str(e) + "Something went wrong")
@@ -847,7 +836,7 @@ def replace(command):
     # If char_to_replace is a char that is in the stash multiple times
     elif not current_guess_string.count(char_to_replace.upper()) == 1:
         say("there are more than one of the letter to replace in your stash. "
-            "Please specify which one by using stash index feature.", LANGUAGES[current_language])
+            "Please specify which one by using stash index feature.", LANGUAGES[0])
         return
 
     # If char_to_replace is a char that is in the stash only once.
@@ -867,15 +856,15 @@ def replace(command):
         stash("stash " + new_guess_string)
 
     else:
-        say("You must replace one letter in your stashed guess at a time.", LANGUAGES[current_language])
+        say("You must replace one letter in your stashed guess at a time.", LANGUAGES[0])
 
 
 # Reads a previous guess to the user character by character. Confirmed by character.
 def read_guess(guess_number):
     if guess_number > guesses_count:
-        say("You dont have a guess number " + str(guess_number) + " yet.", LANGUAGES[current_language])
+        say("You dont have a guess number " + str(guess_number) + " yet.", LANGUAGES[0])
     else:
-        say_and_confirm_by_char(guesses_str[guess_number - 1], correct_word.upper(), LANGUAGES[current_language])
+        say_and_confirm_by_char(guesses_str[guess_number - 1], correct_word.upper(), LANGUAGES[0])
 
 
 # Identifies whether you are stashing a word or a character, calls the appropriate
@@ -895,7 +884,7 @@ def stash(response):
             else:
                 index += 1
         except Exception as e:
-            say("Remember to say a letter or five letter word after stash command.", LANGUAGES[current_language])
+            say("Remember to say a letter or five letter word after stash command.", LANGUAGES[0])
             print(str(e))
             return
 
@@ -904,14 +893,14 @@ def stash(response):
         stash_char(guess)
     elif len(guess) == 5:
         if len(current_guess_string) != 0:
-            say("your stash is full! submit or delete to guess more letters.", LANGUAGES[current_language])
+            say("your stash is full! submit or delete to guess more letters.", LANGUAGES[0])
             return
         print("Five letter word")
         for each_letter in guess:
             print(each_letter)
             stash_char(each_letter)
     else:
-        say("You can only stash individual letters, or five letter words. Try again!", LANGUAGES[current_language])
+        say("You can only stash individual letters, or five letter words. Try again!", LANGUAGES[0])
 
 
 # Takes stash command as an input and places new letter on the screen. Stash handler helper function.
@@ -922,26 +911,26 @@ def stash_char(char_to_stash):
         if len(current_guess_string) < 5:
             create_new_letter()
         else:
-            say("your stash is full! submit or delete to guess more letters.", LANGUAGES[current_language])
+            say("your stash is full! submit or delete to guess more letters.", LANGUAGES[0])
 
 
 # Delete command handler for handsfree().
 def delete():
     if len(current_guess_string) > 0:
         letter_to_delete = current_guess_string[len(current_guess_string) - 1]
-        say("Deleting " + letter_to_delete, LANGUAGES[current_language])
+        say("Deleting " + letter_to_delete, LANGUAGES[0])
         delete_letter()
     else:
-        say("You dont have any letters to delete!", LANGUAGES[current_language])
+        say("You dont have any letters to delete!", LANGUAGES[0])
 
 
 # Submit command handler for handsfree()
 def submit():
     if len(current_guess_string) == 5 and current_guess_string.lower() in check_list:
-        say_and_confirm_by_char(current_guess_string, correct_word.upper(), LANGUAGES[current_language])
+        say_and_confirm_by_char(current_guess_string, correct_word.upper(), LANGUAGES[0])
         check_guess(current_guess)
     else:
-        say("your stash must contain a real five letter word, try again!", LANGUAGES[current_language])
+        say("your stash must contain a real five letter word, try again!", LANGUAGES[0])
 
 
 # Generic function to return index of keyword in command. Wrapped in try/catch to avoid program crashing
@@ -965,15 +954,15 @@ def submit_tutorial():
     say("When you press submit, I will read each letter in your stash, and after each letter you will hear a sound."
         "if you hear", "en")
 
-    playsound('sound/effects/incorrect_char_trimmed.wav')
+    play_sound('sound/effects/incorrect_char_trimmed.wav')
 
     say("Then the letter you guessed was not in the word. If you hear", "en")
 
-    playsound('sound/effects/semi_correct_char_trimmed.wav')
+    play_sound('sound/effects/semi_correct_char_trimmed.wav')
 
     say("Then the letter you entered was in the word, but not in the right place in the word. If you hear", "en")
 
-    playsound('sound/effects/correct_char_trimmed.mp3')
+    play_sound('sound/effects/correct_char_trimmed.mp3')
 
     say("Then the letter you guessed was in the letter and in the correct place. Here is an example of what "
         "would happen if the correct word was apple, and you stashed and then submitted the word pines", "en")
@@ -989,7 +978,7 @@ def tutorial(command):
     command_split = command.split()
 
     if len(command_split) == 1:
-        say(helpers.constants.tutorial_response, "en")
+        say(tutorial_response, "en")
         return
 
     try:
@@ -1006,7 +995,7 @@ def tutorial(command):
     if key == "submit":
         submit_tutorial()
     else:
-        say(helpers.constants.command_tutorial_dict[key], "en")
+        say(command_tutorial_dict[key], "en")
 
 
 # Listens for user command, validates the command, and calls the correct function to execute user command.
@@ -1029,41 +1018,41 @@ def handsfree():
                 tutorial(command)
                 waiting_for_command = 0
             elif "replace" in command:
-                say("you said: " + command, LANGUAGES[current_language])
+                say("you said: " + command, LANGUAGES[0])
                 replace(command)
                 waiting_for_command = 0
             elif "stash" in command or "dash" in command:  # Places character(s) into current guess
-                say("you said: " + command, LANGUAGES[current_language])
+                say("you said: " + command, LANGUAGES[0])
                 stash(command)
                 waiting_for_command = 0
             elif "delete" in command:  # Deletes all characters from stash
-                say("You said: delete", LANGUAGES[current_language])
+                say("You said: delete", LANGUAGES[0])
                 delete()
                 waiting_for_command = 0
             elif "submit" in command:
-                say("you said: submit", LANGUAGES[current_language])
+                say("you said: submit", LANGUAGES[0])
                 submit()
                 waiting_for_command = 0
             elif "clear" in command:
-                say("you said: " + command, LANGUAGES[current_language])
+                say("you said: " + command, LANGUAGES[0])
                 clear_stash()
                 waiting_for_command = 0
             elif "disable" in command:
-                say("Disabling audio, press space bar twice to re-enable.", LANGUAGES[current_language])
+                say("Disabling audio, press space bar twice to re-enable.", LANGUAGES[0])
                 activate_audio = 0
                 audio_interface_enabled = 0
                 set_background_music_volume(0.2)
                 waiting_for_command = 0
             elif "volume" in command:
                 if has_warned or not audio_interface_enabled:
-                    say("Adjusting volume.", LANGUAGES[current_language])
+                    say("Adjusting volume.", LANGUAGES[0])
                     volume_handler(command)
                 else:
-                    say(VOLUME_WARNING, LANGUAGES[current_language])
+                    say(VOLUME_WARNING, LANGUAGES[0])
                     has_warned = 1
                 waiting_for_command = 0
             elif "song" in command:
-                say("Changing background song", LANGUAGES[current_language])
+                say("Changing background song", LANGUAGES[0])
                 song_switch_handler(command)
                 waiting_for_command = 0
             elif "play again" in command:
@@ -1071,41 +1060,41 @@ def handsfree():
             elif "read" in command:
                 if "guess" in command or "gas" in command or "guest" in command:
                     if "one" in command or "won" in command or "1" in command:
-                        say("read guess one", LANGUAGES[current_language])
+                        say("read guess one", LANGUAGES[0])
                         read_guess(1)
                         waiting_for_command = 0
                     elif "two" in command or "to" in command or "2" in command or "too" in command:
-                        say("read guess two", LANGUAGES[current_language])
+                        say("read guess two", LANGUAGES[0])
                         read_guess(2)
                         waiting_for_command = 0
                     elif "three" in command or "3" in command:
-                        say("read guess three", LANGUAGES[current_language])
+                        say("read guess three", LANGUAGES[0])
                         read_guess(3)
                         waiting_for_command = 0
                     elif "four" in command or "for" in command or "4" in command:
-                        say("read guess four", LANGUAGES[current_language])
+                        say("read guess four", LANGUAGES[0])
                         read_guess(4)
                         waiting_for_command = 0
                     elif "five" in command or "5" in command:
-                        say("read guess five", LANGUAGES[current_language])
+                        say("read guess five", LANGUAGES[0])
                         read_guess(5)
                         waiting_for_command = 0
                     else:
-                        say("read current guess", LANGUAGES[current_language])
-                        say_by_char(current_guess_string, LANGUAGES[current_language])
+                        say("read current guess", LANGUAGES[0])
+                        say_by_char(current_guess_string, LANGUAGES[0])
                         waiting_for_command = 0
                 elif "semi" in command:
-                    say("read semi correct guesses", LANGUAGES[current_language])
-                    say_by_char(semi_correct_guesses, LANGUAGES[current_language])
+                    say("read semi correct guesses", LANGUAGES[0])
+                    say_by_char(semi_correct_guesses, LANGUAGES[0])
                     waiting_for_command = 0
                 elif "wrong" in command:
-                    say("read incorrect guesses", LANGUAGES[current_language])
-                    say_by_char(incorrect_guesses, LANGUAGES[current_language])
+                    say("read incorrect guesses", LANGUAGES[0])
+                    say_by_char(incorrect_guesses, LANGUAGES[0])
                     waiting_for_command = 0
                 else:
-                    say("invalid command", LANGUAGES[current_language])
+                    say("invalid command", LANGUAGES[0])
             else:
-                say("invalid command", LANGUAGES[current_language])
+                say("invalid command", LANGUAGES[0])
 
             pygame.display.flip()
 
@@ -1260,7 +1249,7 @@ def start_the_game():
 
             # audio reads startup instructions to user when game is loaded
             if not game_started:
-                say("STARTUP", LANGUAGES[current_language])
+                say("STARTUP", LANGUAGES[0])
                 game_started = 1
 
         # how program should run when audio interface is enabled
@@ -1271,14 +1260,14 @@ def start_the_game():
                 eog_sound(game_result)
                 say("You have run out of guesses. The word was " + correct_word + " say play again to start over with "
                                                                                   "a new word!",
-                    LANGUAGES[current_language])
+                    LANGUAGES[0])
                 stats = handle_stats(0)
                 lose_play_again(stats)
             # if user wins game
             if game_result == "W":
                 eog_sound(game_result)
                 say("Correct, the word was: " + correct_word + ". say play again to get "
-                                                               "a new word.", LANGUAGES[current_language])
+                                                               "a new word.", LANGUAGES[0])
                 stats = handle_stats(1)
                 correct_play_again(stats)
             # go to hands free control function
@@ -1287,7 +1276,7 @@ def start_the_game():
             # when audio mode is first activated read breif instructions to user
             else:
                 pygame.display.flip()
-                say(ACTIVATED, LANGUAGES[current_language])
+                say(ACTIVATED, LANGUAGES[0])
                 set_background_music_volume(0.025)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -1315,7 +1304,7 @@ def set_background_music(selected, value):
 
 # sets the language and word list that the program uses to get the word and check guesses
 def set_language(selected, value):
-    global lang, correct_word, word_list, check_list, lang_index
+    global correct_word, word_list, check_list, lang_index
 
     lang = LANG_SETTINGS[value][0]
     word_list = LANG_SETTINGS[value][1]
