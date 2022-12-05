@@ -42,11 +42,11 @@ Ensure you have pygame version 2.1.3 by using the command :
 
        python -m pip install pygame --upgrade --pre
 
-Install pygame-menu using the command :
+Install laest version of pygame-menu using the command :
 
      pip install pygame-menu -U
 
-Install PyObjC using the command :
+Install latest version of PyObjC using the command :
 
      pip install PyObjC
 
@@ -80,6 +80,8 @@ You must also download the file libmpg123-0.dll from the following link and plac
 <details>
   <summary> MACOS/LINUX INSTALLATION INSTRUCTIONS </summary>
 <p>
+
+Please install the latest version of all packages.  
 
 Ensure you have pygame by using the command:
 
