@@ -12,6 +12,11 @@ from playsound import playsound
 
 from helpers.draw import *
 from helpers.menu import *
+from helpers.constants import *
+from helpers.messages import *
+from helpers.classes import *
+from word_files.englishwords import *
+
 
 """INITIALIZERS / GLOBAL VARIABLES"""
 
@@ -29,12 +34,12 @@ has_warned = 0
 current_background_music = 0
 muted = 0
 
-try:
-    mixer.init()
-    mixer.music.load('sound/background_music/the_trail_instruments_trimmed.mp3')
-    mixer.music.set_volume(0.2)
-except Exception as e:
-    print(str(e) + "Something went wrong")
+# try:
+#     mixer.init()
+#     mixer.music.load('sound/background_music/the_trail_instruments_trimmed.mp3')
+#     mixer.music.set_volume(0.2)
+# except Exception as e:
+#     print(str(e) + "Something went wrong")
 
 eog_sound_allowed = 1
 
@@ -499,13 +504,13 @@ def draw_histogram(x_position, y_position, x_width, y_height, w_or_l):
                                                     (x_width - (WIDTH / 20)) * proportion_of_width,
                                                     y_height / 6 - (2 * aesthetic_offset)))
 
-        # Draw background square for current guess number identifiers
+        # Draw white background square for current guess number identifier
         pygame.draw.rect(SCREEN, WHITE, pygame.Rect(x_position,
                                                     current_bar_height + aesthetic_offset,
                                                     y_height / 6 - (2 * aesthetic_offset),
                                                     y_height / 6 - (2 * aesthetic_offset)))
 
-        # Draw guess number identifiers
+        # Draw guess number identifier 1-6
         draw_text(my_font_sm, str(bar_number + 1), BLACK, (x_position + (WIDTH / 80),
                                                            current_bar_height + (y_height / 12)))
 
@@ -995,6 +1000,7 @@ def tutorial(command):
     if key == "submit":
         submit_tutorial()
     else:
+        say(command_tutorial_dict[key], "en")
         say(command_tutorial_dict[key], "en")
 
 
@@ -1512,6 +1518,13 @@ def game_menu(enter_time):
 
 # main function calls the menu on startup and starts the backgrouns music
 def main():
+    try:
+        mixer.init()
+        mixer.music.load('sound/background_music/the_trail_instruments_trimmed.mp3')
+        mixer.music.set_volume(0.2)
+    except Exception as e:
+        print(str(e) + "Something went wrong")
+
     play_background_music()
     game_menu(1)
 
