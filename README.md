@@ -1,5 +1,5 @@
 # 🔠 Wordle for the World 🌎
-# Table of Contents
+## Table of Contents
 1. [About](#about)
 2. [Our Mission](#mission)
 3. [Installation](#install)
@@ -26,7 +26,6 @@ With these shortcomings in mind, we set out to make Wordle accessible to the vis
   <summary> WINDOWS INSTALLATION INSTRUCTIONS </summary>
 <p>
 
-***
 Install python (Windows installer (64-bit)) using this link :
 >https://www.python.org/downloads/release/python-3110/
 
@@ -42,11 +41,11 @@ Ensure you have pygame version 2.1.3 by using the command :
 
        python -m pip install pygame --upgrade --pre
 
-Install pygame-menu using the command :
+Install laest version of pygame-menu using the command :
 
      pip install pygame-menu -U
 
-Install PyObjC using the command :
+Install latest version of PyObjC using the command :
 
      pip install PyObjC
 
@@ -80,6 +79,8 @@ You must also download the file libmpg123-0.dll from the following link and plac
 <details>
   <summary> MACOS/LINUX INSTALLATION INSTRUCTIONS </summary>
 <p>
+
+Please install the latest version of all packages.  
 
 Ensure you have pygame by using the command:
 
@@ -115,13 +116,13 @@ Install playsound using the command :
   <summary> HOW TO RUN</summary>
 <p>
 
-Choose a folder in which you would like to download the program. In a terminal, navagate to this folder.  
+Choose a folder in which you would like to download the program. In a terminal, navigate to this folder.  
 
 Run the command:
 
      git clone https://github.com/PllewxaM/Wordle-for-the-World.git
 
-Navagate to the source code folder using the command
+Navigate to the source code folder using the command
 
      cd .\Wordle-for-the-World\src\
 
@@ -136,7 +137,7 @@ Run the program using the command:
 
 ## File Organization <div id='files'/>
 <details>
-  <summary>Click to see all files</summary> 
+  <summary>Click to see file structure and information about all files</summary> 
 <p>
   
 1. **wordle.py** - main program file that contains the main game function, the main menu and mini menu controls. It also contains the audio interface functions and the user word guess controls:
