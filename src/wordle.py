@@ -1108,7 +1108,6 @@ def start_the_game():
     global start_game, audio_interface_enabled, game_started, game_result, activate_audio, current_guess_string, \
         key_pressed, hands_free_rendered, muted
     start_game = 1
-
     SCREEN.fill(main_color)
     # for testing purposes
     print(correct_word)
@@ -1374,7 +1373,7 @@ def menu_set_font(selected, value):
 # sets the color used for the correct letters in the game
 def set_correct_color(value):
     global correct_color
-    if "#" not in value:
+    if value[1] < 0:
         correct_color = GREEN
     else:
         correct_color = value
@@ -1383,7 +1382,7 @@ def set_correct_color(value):
 # sets the color used for the semi correct letters in the game
 def set_semi_color(value):
     global semi_color
-    if "#" not in value:
+    if value[1] < 0:
         semi_color = YELLOW
     else:
         semi_color = value
@@ -1392,7 +1391,7 @@ def set_semi_color(value):
 # sets the color used for the wrong letters in the game
 def set_wrong_color(value):
     global wrong_color
-    if "#" not in value:
+    if value[1] < 0:
         wrong_color = GREY
     else:
         wrong_color = value
