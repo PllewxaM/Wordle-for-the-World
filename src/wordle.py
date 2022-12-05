@@ -29,21 +29,13 @@ game_started = 0
 activate_audio = 0
 audio_interface_enabled = 0
 
-# MUSIC
+# MUSIC FLAGS
 has_warned = 0
 current_background_music = 0
 muted = 0
-
-# try:
-#     mixer.init()
-#     mixer.music.load('sound/background_music/the_trail_instruments_trimmed.mp3')
-#     mixer.music.set_volume(0.2)
-# except Exception as e:
-#     print(str(e) + "Something went wrong")
-
 eog_sound_allowed = 1
 
-# LANGUAGE DEFAULT = ENGLISH
+# LANGUAGE DEFAULT = ENGLISH - FOR GRAPHICS
 lang_index = 0
 word_list = EN_WORDS
 check_list = EN_WORDS
@@ -77,28 +69,31 @@ pygame.display.set_caption("World-le")
 pygame.display.set_icon(pygame.image.load("assets/Icon.png"))
 pygame.display.update()
 
-# KEYBOARD
+# KEYBOARD - FOR GRAPHICS
+# list is all key objects used to draw the on screen keyboard
 keys = []
 key_pressed = ''
 
 # WORD/LETTER CONTROL
 guesses_count = 0
+# holds all guesses as lists of letter objects
 guesses = [[], [], [], [], [], []]
-# when guess checked, full version placed here
+# when guess checked, full version in string format placed here
 guesses_str = []
-num_guesses_taken = 0
-
-correct_guesses = []
-incorrect_guesses = []
-semi_correct_guesses = []
-remaining_guesses = []
-
+# contains letter objects of current/ most recent guess
 current_guess = []
 current_guess_string = ""
 game_result = ""
 
+# all letter objects that have been guessed and are respectively 
+# correct, incorrect and semi correct
+correct_guesses = []
+incorrect_guesses = []
+semi_correct_guesses = []
+
 current_letter_bg_x = WIDTH / 3.25
 
+# MENU FLAGS FOR MENU PAGES
 about_index = 0
 inst_index = 0
 color_index = 0
@@ -454,8 +449,6 @@ def handle_stats(stat):
     f.close()
 
     if stat == 1:
-        num_guesses_taken = guesses_count
-
         if not os.path.exists("hist.txt"):
             f = open("hist.txt", "w+")
             f.write("%d\n%d\n%d\n%d\n%d\n%d" % (0, 0, 0, 0, 0, 0))
@@ -463,10 +456,10 @@ def handle_stats(stat):
 
         f = open("hist.txt", "r")
         hist_data = f.readlines()
-        str_entry_to_inc = hist_data[num_guesses_taken - 1]
+        str_entry_to_inc = hist_data[guesses_count - 1]
         int_entry_to_inc = int(str_entry_to_inc)
         int_entry_to_inc += 1
-        hist_data[num_guesses_taken - 1] = int_entry_to_inc
+        hist_data[guesses_count - 1] = int_entry_to_inc
 
         f.close()
 
@@ -482,8 +475,6 @@ def handle_stats(stat):
 # if "w" -> highlight the current number of guesses it took to win in the histogram.
 # if "l" -> dont highlight anything.
 def draw_histogram(x_position, y_position, x_width, y_height, w_or_l):
-    global num_guesses_taken
-
     f = open("hist.txt", "r")
     hist_data = f.readlines()
 
@@ -530,7 +521,7 @@ def draw_histogram(x_position, y_position, x_width, y_height, w_or_l):
     # If being called from a win, draw highlight square on top of the current guess count.
     if w_or_l == "w":
         pygame.draw.rect(SCREEN, DK_RED, pygame.Rect(x_position,
-                                                     y_position + (bar_height * num_guesses_taken) + aesthetic_offset,
+                                                     y_position + (bar_height * guesses_count) + aesthetic_offset,
                                                      y_height / 6 - (2 * aesthetic_offset),
                                                      y_height / 6 - (2 * aesthetic_offset)), 2)
 
@@ -1000,7 +991,6 @@ def tutorial(command):
     if key == "submit":
         submit_tutorial()
     else:
-        say(command_tutorial_dict[key], "en")
         say(command_tutorial_dict[key], "en")
 
 
@@ -1495,10 +1485,10 @@ def game_menu(enter_time):
     menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),
                                      ("French", 3), ("Kid Friendly", 4)],
                       onchange=set_language, default=lang_index)
-    menu.add.selector('Background Music: ', [("Traditional", 0), ("Happy Beat", 1),
+    menu.add.selector('Background Music: ', [("     Synth    ", 0), ("Happy Beat", 1),
                                              ("     Bop      ", 2), (" Meditation ", 3),
                                              ("Electro Chill", 4), ("    Escape   ", 5),
-                                             ("     Synth    ", 6), (" Nature 1 ", 7),
+                                             (" Traditional ", 6), (" Nature 1 ", 7),
                                              (" Nature 2 ", 8), (" Nature 3 ", 9),
                                              (" Nature 4 ", 10)],
                       onchange=set_background_music,
