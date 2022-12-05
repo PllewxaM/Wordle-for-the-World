@@ -14,7 +14,7 @@ Welcome to World-le: the S3N1OR SQU4D’s accessible version of the popular New 
 ## Our Mission <div id='mission'/>
 At the start of our process, we noticed that a number of Wordle’s qualities were inaccessible. First, while versions of Wordle exist in languages other than English online, the New York Times’s game is only available in English, thereby excluding non-English speakers. Second, the color scheme is inaccessible to the color blind community; the high contrast feature is even insufficient. Additionally, there is no way for members of the Blind community to play. Finally, physical impairments deter those unable to use their hands from playing the game. 
 
-With these shortcomings in mind, we set out to make Wordle accessible to the visually and physically impaired communities, as well as non-English speakers. We have done this by implementing a hands-free option for users to play using only their voice, as well as a language option for players to choose which language they would like play in. In addition to our accessibility features, we also added a color picker to allow users customize their gaming experience. With these implementations, we hope that this version of our World-le can truly be “Wordle for the world.”
+With these shortcomings in mind, we set out to make Wordle accessible to the visually and physically impaired communities, as well as non-English speakers. We have done this by implementing a hands-free option for users to play using only their voice, as well as a language option for players to choose which language they would like play in. In addition to our accessibility features, we also added a color picker to allow users to customize their gaming experience. With these implementations, we hope that this version of our World-le can truly be “Wordle for the World.”
 
 <br>
 
@@ -41,19 +41,19 @@ Ensure you have pygame version 2.1.3 by using the command :
 
        python -m pip install pygame --upgrade --pre
 
-Install laest version of pygame-menu using the command :
+Install the latest version of pygame-menu using the command :
 
      pip install pygame-menu -U
 
-Install latest version of PyObjC using the command :
+Install the latest version of PyObjC using the command :
 
      pip install PyObjC
 
-For speech recognition install Google’s Speech Recognition package using the command :
+For speech recognition, install Google’s Speech Recognition package using the command :
 
      pip install SpeechRecognition  
 
-For speech generation use Google’s gTTS Python package. To install the Python package type: 
+For speech generation, use Google’s gTTS Python package. To install the Python package type: 
 
      pip install gTTS 
 
@@ -61,7 +61,7 @@ Install playsound version 1.2.2 using the command :
 
      pip install playsound==1.2.2
 
-If playsound is already installed use this command first :
+If playsound is already installed, use this command first :
 
      pip uninstall playsound
 
@@ -94,11 +94,11 @@ Install PyObjC using the command :
 
      pip install PyObjC
 
-For speech recognition install Google’s Speech Recognition package using the command :
+For speech recognition, install Google’s Speech Recognition package using the command :
 
      pip install SpeechRecognition  
 
-For speech generation use Google’s gTTS Python package. To install the Python package type: 
+For speech generation, use Google’s gTTS Python package. To install the Python package type: 
 
      pip install gTTS 
 
@@ -122,7 +122,7 @@ Run the command:
 
      git clone https://github.com/PllewxaM/Wordle-for-the-World.git
 
-Navigate to the source code folder using the command
+Navigate to the source code folder using the command:
 
      cd .\Wordle-for-the-World\src\
 
