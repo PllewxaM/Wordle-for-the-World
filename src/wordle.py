@@ -963,7 +963,7 @@ def submit_tutorial():
 
     play_sound('sound/effects/semi_correct_char_trimmed.wav')
 
-    say("Then the letter you entered was in the word, but not in the right place in the word. If you hear", "en")
+    say("That means the letter you entered was in the word, but not in the right place. If you hear", "en")
 
     play_sound('sound/effects/correct_char_trimmed.mp3')
 
@@ -981,7 +981,7 @@ def tutorial(command):
     command_split = command.split()
 
     if len(command_split) == 1:
-        say(tutorial_response, "en")
+        say(TUTORIAL_RESPONSE, "en")
         return
 
     try:
