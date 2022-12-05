@@ -94,11 +94,11 @@ Install PyObjC using the command :
 
      pip install PyObjC
 
-For speech recognition install Google’s Speech Recognition package using the command :
+For speech recognition, install Google’s Speech Recognition package using the command :
 
      pip install SpeechRecognition  
 
-For speech generation use Google’s gTTS Python package. To install the Python package type: 
+For speech generation, use Google’s gTTS Python package. To install the Python package type: 
 
      pip install gTTS 
 
@@ -122,7 +122,7 @@ Run the command:
 
      git clone https://github.com/PllewxaM/Wordle-for-the-World.git
 
-Navigate to the source code folder using the command
+Navigate to the source code folder using the command:
 
      cd .\Wordle-for-the-World\src\
 
