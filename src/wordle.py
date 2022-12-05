@@ -1,5 +1,7 @@
 import sys
 import random
+
+import pygame
 import speech_recognition as sr
 import os
 import time
@@ -80,9 +82,10 @@ key_pressed = ''
 
 # WORD/LETTER CONTROL
 guesses_count = 0
-guesses = [[],[],[],[],[],[]]
+guesses = [[], [], [], [], [], []]
 # when guess checked, full version placed here
 guesses_str = []
+num_guesses_taken = 0
 
 correct_guesses = []
 incorrect_guesses = []
@@ -98,9 +101,9 @@ current_letter_bg_x = WIDTH / 3.25
 about_index = 0
 inst_index = 0
 color_index = 0
-about_loaded = [1,0,0,0,1]
-inst_loaded = [1,0,0,0,1]
-color_loaded = [1,0,0,0,1]
+about_loaded = [1, 0, 0, 0, 1]
+inst_loaded = [1, 0, 0, 0, 1]
+color_loaded = [1, 0, 0, 0, 1]
 
 """"MENU CONTROLS"""
 
@@ -165,7 +168,8 @@ def font_menu_control(current):
                         draw_font_options(sub_color2, font_size, lang_index)
                         pygame.draw.rect(SCREEN, sub_color, SUB_AREA, 3, ROUND)
                     # if the done buttons or any areas around the mini menu is clicked, exit the menu
-                    if DONE_AREA.collidepoint(event.pos) or EXIT_MENU_AREA1.collidepoint(event.pos) or EXIT_MENU_AREA2.collidepoint(event.pos):
+                    if DONE_AREA.collidepoint(event.pos) or EXIT_MENU_AREA1.collidepoint(
+                            event.pos) or EXIT_MENU_AREA2.collidepoint(event.pos):
                         done = 1
                     if EXIT_MENU_AREA3.collidepoint(event.pos) or EXIT_MENU_AREA4.collidepoint(event.pos):
                         done = 1
@@ -181,7 +185,8 @@ def color_menu_control():
     done = 0
 
     # draw the menu to select which color to change
-    draw_color_select_menu(main_color, sub_color, sub_color2, correct_color, semi_color, wrong_color, my_font, my_font_med, my_font_sm, lang_index)
+    draw_color_select_menu(main_color, sub_color, sub_color2, correct_color, semi_color, wrong_color, my_font,
+                           my_font_med, my_font_sm, lang_index)
 
     pygame.display.update()
 
@@ -196,19 +201,22 @@ def color_menu_control():
                     # pick change correct color - will reset screen and call function to select a color
                     if PICK_ONE_AREA.collidepoint(event.pos):
                         reset_screen()
-                        chosen_color = draw_color_screen(correct_color, main_color, sub_color, sub_color2, my_font, lang_index)
+                        chosen_color = draw_color_screen(correct_color, main_color, sub_color, sub_color2, my_font,
+                                                         lang_index)
                         set_correct_color(chosen_color)
                         done = 1
                     # pick change semi correct color - will reset screen and call function to select a color
                     if PICK_TWO_AREA.collidepoint(event.pos):
                         reset_screen()
-                        chosen_color = draw_color_screen(semi_color, main_color, sub_color, sub_color2, my_font, lang_index)
+                        chosen_color = draw_color_screen(semi_color, main_color, sub_color, sub_color2, my_font,
+                                                         lang_index)
                         set_semi_color(chosen_color)
                         done = 1
                     # pick change wrong color - will reset screen and call function to select a color
                     if PICK_THREE_AREA.collidepoint(event.pos):
                         reset_screen()
-                        chosen_color = draw_color_screen(wrong_color, main_color, sub_color, sub_color2, my_font, lang_index)
+                        chosen_color = draw_color_screen(wrong_color, main_color, sub_color, sub_color2, my_font,
+                                                         lang_index)
                         set_wrong_color(chosen_color)
                         done = 1
                     # activate high contrast colors - changes all colors
@@ -218,11 +226,11 @@ def color_menu_control():
                         set_wrong_color(HIGH_CONTRAST_3)
                         done = 1
                     # if the done buttons or any areas around the mini menu is clicked, exit the menu
-                    if CANCEL_AREA.collidepoint(event.pos) or EXIT_MENU_AREA1.collidepoint(event.pos) or EXIT_MENU_AREA2.collidepoint(event.pos):
+                    if CANCEL_AREA.collidepoint(event.pos) or EXIT_MENU_AREA1.collidepoint(
+                            event.pos) or EXIT_MENU_AREA2.collidepoint(event.pos):
                         done = 1
                     if EXIT_MENU_AREA3.collidepoint(event.pos) or EXIT_MENU_AREA4.collidepoint(event.pos):
                         done = 1
-
 
 
 """GENERAL GAME CONTROLS"""
@@ -243,6 +251,7 @@ def add_incorrect(char):
     if char not in incorrect_guesses:
         incorrect_guesses.append(char)
 
+
 # parameter is a character that was correct/ ni word and right position
 # if it was not already in the list, append it to the correct guess list
 def add_correct(char):
@@ -257,7 +266,8 @@ def create_new_letter():
     global current_guess_string, current_letter_bg_x
     current_guess_string += key_pressed
     # create new letter object 
-    new_letter = Letter(key_pressed, (current_letter_bg_x, guesses_count * 70 + LETTER_Y_SPACING), main_color, sub_color, my_font)
+    new_letter = Letter(key_pressed, (current_letter_bg_x, guesses_count * 70 + LETTER_Y_SPACING), main_color,
+                        sub_color, my_font)
     current_letter_bg_x += LETTER_X_SPACING
     guesses[guesses_count].append(new_letter)
     current_guess.append(new_letter)
@@ -354,9 +364,11 @@ def lose_play_again(stats, game_result):
     draw_text(my_font_sm, "Games Played           Won %            Current Streak       Max Streak", WHITE, (WIDTH/2, 335))
     draw_text(my_font_med, "Guess Distribution", WHITE, (WIDTH/2, 435))
 
+    draw_histogram(WIDTH / 20, HEIGHT - (HEIGHT / 3), WIDTH - WIDTH / 10, HEIGHT - (3 * (HEIGHT / 4)), "l")
+
     pygame.display.update()
     time.sleep(.3)
-    # while on end game screen listen for enter key to restart game 
+    # while on end game screen listen for enter key to restart game
     while not reset_game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -387,10 +399,13 @@ def correct_play_again(stats, game_result):
     draw_text(my_font_med, "Guess Distribution", WHITE, (WIDTH/2, 455))
 
     # draw_histogram(WIDTH/20, WIDTH/20, WIDTH - WIDTH/10, HEIGHT - (3 * (HEIGHT/4)) - (HEIGHT/20))
+    # left, top, width, height
+
+    draw_histogram(WIDTH / 20, HEIGHT - (HEIGHT / 3), WIDTH - WIDTH / 10, HEIGHT - (3 * (HEIGHT / 4)), "w")
 
     pygame.display.update()
     time.sleep(.3)
-    # while on end game screen listen for enter key to restart game 
+    # while on end game screen listen for enter key to restart game
     while not reset_game:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -458,39 +473,68 @@ def handle_stats(stat):
 
         f = open("hist.txt", "w")
         f.write("%d\n%d\n%d\n%d\n%d\n%d" % (int(hist_data[0]), int(hist_data[1]), int(hist_data[2]), int(hist_data[3]),
-                                        int(hist_data[4]), int(hist_data[5])))
+                                            int(hist_data[4]), int(hist_data[5])))
         f.close()
 
     return data
 
 
-def draw_histogram(x_position, y_position, x_width, y_height):
+def draw_histogram(x_position, y_position, x_width, y_height, w_or_l):
+    global num_guesses_taken
+
     f = open("hist.txt", "r")
     hist_data = f.readlines()
 
+    aesthetic_offset = y_height / 6 * 0.1
+
+    bar_height = y_height / 6
+
     def draw_hist_bar(bar_number, proportion_of_width):
 
-        bar_offset = (y_height / 6) * bar_number
+        bar_offset = bar_height * bar_number
 
-        bar_height = y_position + bar_offset
+        current_bar_height = y_position + bar_offset
 
-        aesthetic_offset = y_height/6 * 0.1
-
-        pygame.draw.rect(SCREEN, WHITE, pygame.Rect(x_position,
-                                                    bar_height + aesthetic_offset,
-                                                    x_width * proportion_of_width,
+        # Draw current proportion bar
+        pygame.draw.rect(SCREEN, WHITE, pygame.Rect(x_position + (WIDTH / 20),
+                                                    current_bar_height + aesthetic_offset,
+                                                    (x_width - (WIDTH / 20)) * proportion_of_width,
                                                     y_height / 6 - (2 * aesthetic_offset)))
 
-        draw_text(my_font_sm, str(bar_number + 1), BLACK, (x_position + (WIDTH / 40), bar_height + (y_height / 10)))
+        # Draw background square for current guess number identifiers
+        pygame.draw.rect(SCREEN, WHITE, pygame.Rect(x_position,
+                                                    current_bar_height + aesthetic_offset,
+                                                    y_height / 6 - (2 * aesthetic_offset),
+                                                    y_height / 6 - (2 * aesthetic_offset)))
 
-    # Find highest value in hist.txt
+        # Draw guess number identifiers
+        draw_text(my_font_sm, str(bar_number + 1), BLACK, (x_position + (WIDTH / 80),
+                                                           current_bar_height + (y_height / 12)))
+
+        # Draw histogram data onto respective proportions
+        draw_text(my_font_xsm, str(hist_data[x]).strip(), BLACK, (x_position + (WIDTH / 15),
+                                                                  current_bar_height + (y_height / 12)))
+
+    # Find highest value in hist.txt to use for proportion
     largest_value = 0
     for x in range(6):
         if int(hist_data[x]) > largest_value:
             largest_value = int(hist_data[x])
 
     for x in range(6):
-        draw_hist_bar(x, int(hist_data[x])/largest_value)
+        draw_hist_bar(x, int(hist_data[x]) / largest_value)
+
+    # Draw highlight square on top of the current
+    if w_or_l == "w":
+        pygame.draw.rect(SCREEN, DK_RED, pygame.Rect(x_position,
+                                                     y_position + (bar_height * num_guesses_taken) + aesthetic_offset,
+                                                     y_height / 6 - (2 * aesthetic_offset),
+                                                     y_height / 6 - (2 * aesthetic_offset)), 2)
+
+    # pygame.draw.rect(SCREEN, DK_RED, pygame.Rect(x_position,
+    #                                              y_position + (bar_height * num_guesses_taken) + aesthetic_offset,
+    #                                              y_height / 6 - (2 * aesthetic_offset),
+    #                                              y_height / 6 - (2 * aesthetic_offset)), 4)
 
     pygame.display.flip()
 
@@ -518,9 +562,9 @@ def reset():
     # redraw game screen items
     for key in keys:
         key.bg_color = sub_color2
-        if key.width < 60 :
+        if key.width < 60:
             key.draw(main_color, my_font)
-        else :
+        else:
             key.draw(main_color, my_font_med)
 
     draw_color_key(correct_color, semi_color, wrong_color, sub_color, my_font_sm, my_font_xsm, lang_index)
@@ -1109,7 +1153,7 @@ def start_the_game():
                                 play_background_music()
                                 muted = 0
                                 draw_muted(muted, sub_color2)
-                                
+
                         # if color icon in nav bar is clicked, open color menu
                         if COLOR_SEL_AREA.collidepoint(event.pos):
                             color_menu_control()
@@ -1126,17 +1170,20 @@ def start_the_game():
                             reset_screen()
                         # if the correct color in color key is clicked, open color selector page
                         if CORRECT_COLOR_AREA.collidepoint(event.pos):
-                            chosen_color = draw_color_screen(correct_color, main_color, sub_color, sub_color2, my_font, lang_index)
+                            chosen_color = draw_color_screen(correct_color, main_color, sub_color, sub_color2, my_font,
+                                                             lang_index)
                             set_correct_color(chosen_color)
                             reset_screen()
                         # if the semi correct color in color key is clicked, open color selector page
                         if SEMI_COLOR_AREA.collidepoint(event.pos):
-                            chosen_color = draw_color_screen(semi_color, main_color, sub_color, sub_color2, my_font, lang_index)
+                            chosen_color = draw_color_screen(semi_color, main_color, sub_color, sub_color2, my_font,
+                                                             lang_index)
                             set_semi_color(chosen_color)
                             reset_screen()
                         # if the wrong color in color key is clicked, open color selector page
                         if WRONG_COLOR_AREA.collidepoint(event.pos):
-                            chosen_color = draw_color_screen(wrong_color, main_color, sub_color, sub_color2, my_font, lang_index)
+                            chosen_color = draw_color_screen(wrong_color, main_color, sub_color, sub_color2, my_font,
+                                                             lang_index)
                             set_wrong_color(chosen_color)
                             reset_screen()
                         # if reset game button is clicked, reset entire game
@@ -1340,7 +1387,6 @@ def background():
 
 # draws and controls the opening game menu - is also called when user selects menu icon in nav bar
 def game_menu(enter_time):
-
     # main menu object details
     menu = pygame_menu.Menu(
         height=HEIGHT - screen_difference,
@@ -1350,30 +1396,33 @@ def game_menu(enter_time):
     )
 
     # draw sub menu items only on first generation of menu on application load
-    if enter_time == 1:        
+    if enter_time == 1:
 
         # DRAW COLOR MENU PAGE
         color_menu.add.label(" ", align=pygame_menu.locals.ALIGN_CENTER, font_size=18)
-        color_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),("French", 3)], 
+        color_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2), ("French", 3)],
                                 onchange=set_color_lang, default=lang_index)
         color_menu.add.button("Click to Add Instructions in New Language", send_color_instructions)
         color_menu.add.label("Scroll down to see new instructions", align=pygame_menu.locals.ALIGN_CENTER, font_size=22)
         draw_color_instructions(color_instructions_display)
-        color_menu.add.color_input("Correct Letter Color  ", color_type='hex', onchange=set_correct_color, default=correct_color)
-        color_menu.add.color_input("Semi Correct Letter Color  ", color_type='hex', onchange=set_semi_color, default=semi_color)
-        color_menu.add.color_input("Wrong Letter Color  ", color_type='hex', onchange=set_wrong_color, default=wrong_color)
+        color_menu.add.color_input("Correct Letter Color  ", color_type='hex', onchange=set_correct_color,
+                                   default=correct_color)
+        color_menu.add.color_input("Semi Correct Letter Color  ", color_type='hex', onchange=set_semi_color,
+                                   default=semi_color)
+        color_menu.add.color_input("Wrong Letter Color  ", color_type='hex', onchange=set_wrong_color,
+                                   default=wrong_color)
         draw_color_menu()
 
         # DRAW ABOUT MENU PAGE
-        about_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),("French", 3)], 
+        about_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2), ("French", 3)],
                                 onchange=set_about_lang, default=lang_index)
         about_menu.add.button("Click to Add Content in New Language", send_about)
         about_menu.add.label("Scroll down to see new information", align=pygame_menu.locals.ALIGN_CENTER, font_size=22)
         draw_about_page(about_display)
 
         # DRAW INSTRUCTIONS MENU PAGE
-        inst_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),("French", 3)], 
-                                onchange=set_instructions_lang, default=0)
+        inst_menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2), ("French", 3)],
+                               onchange=set_instructions_lang, default=0)
         inst_menu.add.button("Click to Add Instructions in New Language", send_instructions)
         inst_menu.add.label("Scroll down to see new instructions", align=pygame_menu.locals.ALIGN_CENTER, font_size=22)
         draw_instructions(instructions1_display, instructions2_display, instructions3_display)
@@ -1383,19 +1432,19 @@ def game_menu(enter_time):
     # DRAW MAIN MENU PAGE
     menu.add.button('Play', start_the_game)
     menu.add.selector('Language: ', [("English", 0), ("Spanish", 1), ("German", 2),
-                                    ("French", 3), ("Kid Friendly", 4)], 
-                                    onchange=set_language, default=lang_index)
+                                     ("French", 3), ("Kid Friendly", 4)],
+                      onchange=set_language, default=lang_index)
     menu.add.selector('Background Music: ', [("Traditional", 0), ("Happy Beat", 1),
-                                            ("     Bop      ", 2), (" Meditation ", 3),
-                                            ("Electro Chill", 4), ("    Escape   ", 5),
-                                            ("     Synth    ", 6), (" Nature 1 ", 7),
-                                            (" Nature 2 ", 8), (" Nature 3 ", 9),
-                                            (" Nature 4 ", 10)], 
-                                            onchange=set_background_music, 
-                                            default=current_background_music)
-    menu.add.selector('Change Font: ', [("Free Sans", 0), ("Comic Sans", 1), ("Lil Grotesk", 2), 
+                                             ("     Bop      ", 2), (" Meditation ", 3),
+                                             ("Electro Chill", 4), ("    Escape   ", 5),
+                                             ("     Synth    ", 6), (" Nature 1 ", 7),
+                                             (" Nature 2 ", 8), (" Nature 3 ", 9),
+                                             (" Nature 4 ", 10)],
+                      onchange=set_background_music,
+                      default=current_background_music)
+    menu.add.selector('Change Font: ', [("Free Sans", 0), ("Comic Sans", 1), ("Lil Grotesk", 2),
                                         ("GFS Didot Bold", 3), ("First Coffee", 4), ("Wigners Friend", 5)],
-                                        onchange=menu_set_font, default=font_index)
+                      onchange=menu_set_font, default=font_index)
     menu.add.button('Set Colors', color_menu)
     menu.add.button('Instructions', inst_menu)
     menu.add.button('About', about_menu)
