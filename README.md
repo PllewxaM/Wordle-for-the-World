@@ -26,7 +26,6 @@ With these shortcomings in mind, we set out to make Wordle accessible to the vis
   <summary> WINDOWS INSTALLATION INSTRUCTIONS </summary>
 <p>
 
-***
 Install python (Windows installer (64-bit)) using this link :
 >https://www.python.org/downloads/release/python-3110/
 
