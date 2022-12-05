@@ -1245,7 +1245,7 @@ def start_the_game():
 
             # audio reads startup instructions to user when game is loaded
             if not game_started:
-                say("STARTUP", LANGUAGES[0])
+                say(STARTUP, LANGUAGES[0])
                 game_started = 1
 
         # how program should run when audio interface is enabled
@@ -1374,19 +1374,28 @@ def menu_set_font(selected, value):
 # sets the color used for the correct letters in the game
 def set_correct_color(value):
     global correct_color
-    correct_color = value
+    if "#" not in value:
+        correct_color = GREEN
+    else:
+        correct_color = value
 
 
 # sets the color used for the semi correct letters in the game
 def set_semi_color(value):
     global semi_color
-    semi_color = value
+    if "#" not in value:
+        semi_color = YELLOW
+    else:
+        semi_color = value
 
 
 # sets the color used for the wrong letters in the game
 def set_wrong_color(value):
     global wrong_color
-    wrong_color = value
+    if "#" not in value:
+        wrong_color = GREY
+    else:
+        wrong_color = value
 
 
 # sets the colors of the background and game screen features to dark mode
