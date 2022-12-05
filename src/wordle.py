@@ -291,7 +291,7 @@ def check_guess(guess_to_check):
                 guess_to_check[i].bg_color = correct_color
                 if not audio_interface_enabled:
                     time.sleep(0.25)
-                    playsound("sound/effects/correct_char_trimmed.mp3")
+                    play_sound("sound/effects/correct_char_trimmed.mp3")                    
                 add_correct(lowercase_letter)
                 for key in keys:
                     if key.text == lowercase_letter.upper():
@@ -304,7 +304,7 @@ def check_guess(guess_to_check):
                 guess_to_check[i].bg_color = semi_color
                 if not audio_interface_enabled:
                     time.sleep(0.25)
-                    playsound("sound/effects/semi_correct_char_trimmed.wav")
+                    play_sound("sound/effects/semi_correct_char_trimmed.wav")
                 add_semi(lowercase_letter)
                 for key in keys:
                     if key.text == lowercase_letter.upper():
@@ -317,7 +317,7 @@ def check_guess(guess_to_check):
             guess_to_check[i].bg_color = wrong_color
             if not audio_interface_enabled:
                 time.sleep(0.25)
-                playsound("sound/effects/incorrect_char_trimmed.wav")
+                play_sound("sound/effects/incorrect_char_trimmed.wav")
                 time.sleep(0.25)
             add_incorrect(lowercase_letter)
             for key in keys:
@@ -613,6 +613,12 @@ def say_by_char(response, language):
         say(c, language)
         time.sleep(0.025)
 
+def play_sound(sound):
+    try:
+        playsound(sound)
+    except Exception as e:
+        print(str(e) + "Something went wrong")
+
 
 # This function takes in a guess, the correct answer, and a language. It then says each character in the guess
 # and compares it to the correct answer. If the guess is correct, it plays a bell sound effect. If the guess is
@@ -627,11 +633,11 @@ def say_and_confirm_by_char(guess, correct, language):
         time.sleep(0.025)
         try:
             if c == correct[correct_index]:
-                playsound('sound/effects/correct_char_trimmed.mp3')
+                play_sound('sound/effects/correct_char_trimmed.mp3')
             elif c in correct:
-                playsound('sound/effects/semi_correct_char_trimmed.wav')
+                play_sound('sound/effects/semi_correct_char_trimmed.wav')
             else:
-                playsound('sound/effects/incorrect_char_trimmed.wav')
+                play_sound('sound/effects/incorrect_char_trimmed.wav')
         except Exception as e:
             print(str(e) + "Something went wrong")
         correct_index = correct_index + 1
@@ -710,17 +716,11 @@ def eog_sound(current_game_result):
     if eog_sound_allowed:
         if current_game_result == "W":
             pause_background_music()
-            try:
-                playsound('sound/effects/correct_word_trimmed.mp3')
-            except Exception as e:
-                print(str(e) + "Something went wrong")
+            play_sound('sound/effects/correct_word_trimmed.mp3')
             eog_sound_allowed = 0
         elif current_game_result == "L":
             pause_background_music()
-            try:
-                playsound('sound/effects/no_more_guesses_trimmed.wav')
-            except Exception as e:
-                print(str(e) + "Something went wrong")
+            play_sound('sound/effects/no_more_guesses_trimmed.wav')
             eog_sound_allowed = 0
 
 
