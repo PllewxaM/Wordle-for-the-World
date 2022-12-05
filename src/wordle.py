@@ -12,6 +12,7 @@ from playsound import playsound
 
 from helpers.draw import *
 from helpers.menu import *
+import helpers.constants
 
 """INITIALIZERS / GLOBAL VARIABLES"""
 
@@ -419,8 +420,8 @@ def correct_play_again(stats, game_result):
                     reset()
 
 
-# function handles reading from and writing to stats file 
-# takes in if user won the game or not and returns the updated stats
+# function handles reading from and writing to stats.txt and hist.txt file
+# takes in if user won the game or not and returns the updated stats.
 def handle_stats(stat):
     if not os.path.exists("stats.txt"):
         # create new file if none exsists
@@ -452,9 +453,7 @@ def handle_stats(stat):
 
     f.close()
 
-    # missing a bar
     if stat == 1:
-
         num_guesses_taken = guesses_count
 
         if not os.path.exists("hist.txt"):
@@ -479,6 +478,9 @@ def handle_stats(stat):
     return data
 
 
+# Draws histogram at location (x_position, y_position), and size x_width x y_height, based on the data in "hist.txt".
+# if "w" -> highlight the current number of guesses it took to win in the histogram.
+# if "l" -> dont highlight anything.
 def draw_histogram(x_position, y_position, x_width, y_height, w_or_l):
     global num_guesses_taken
 
@@ -489,6 +491,7 @@ def draw_histogram(x_position, y_position, x_width, y_height, w_or_l):
 
     bar_height = y_height / 6
 
+    # Draw individual histogram bar based on the proportion of width and y offset.
     def draw_hist_bar(bar_number, proportion_of_width):
 
         bar_offset = bar_height * bar_number
@@ -515,7 +518,7 @@ def draw_histogram(x_position, y_position, x_width, y_height, w_or_l):
         draw_text(my_font_xsm, str(hist_data[x]).strip(), BLACK, (x_position + (WIDTH / 15),
                                                                   current_bar_height + (y_height / 12)))
 
-    # Find highest value in hist.txt to use for proportion
+    # Find largest value in hist.txt to use for proportion.
     largest_value = 0
     for x in range(6):
         if int(hist_data[x]) > largest_value:
@@ -524,7 +527,7 @@ def draw_histogram(x_position, y_position, x_width, y_height, w_or_l):
     for x in range(6):
         draw_hist_bar(x, int(hist_data[x]) / largest_value)
 
-    # Draw highlight square on top of the current
+    # If being called from a win, draw highlight square on top of the current guess count.
     if w_or_l == "w":
         pygame.draw.rect(SCREEN, DK_RED, pygame.Rect(x_position,
                                                      y_position + (bar_height * num_guesses_taken) + aesthetic_offset,
@@ -657,6 +660,8 @@ def say_by_char(response, language):
         say(c, language)
         time.sleep(0.025)
 
+
+# Wraps playsound in try-catch for windows integration
 def play_sound(sound):
     try:
         playsound(sound)
@@ -687,6 +692,8 @@ def say_and_confirm_by_char(guess, correct, language):
         correct_index = correct_index + 1
 
 
+# Finds keyword "song" in command, then takes the next value in the command string as an argument.
+# Calls load_new_background_music with the value found above passed as an argument
 def song_switch_handler(command):
     command_split = command.split()
     keyword_index = return_keyword_index("song", command)
@@ -699,6 +706,7 @@ def song_switch_handler(command):
             " or lower", LANGUAGES[current_language])
 
 
+# Loads a song based on an index argument passed in. Pauses current music, plays new song on infinite loop.
 def load_new_background_music(music_index):
     global current_background_music
     try:
@@ -710,6 +718,7 @@ def load_new_background_music(music_index):
         print(str(e) + "Something went wrong")
 
 
+# Mixer call wrapped in try-catch for windows.
 def play_background_music():
     try:
         mixer.music.play(-1)
@@ -717,6 +726,7 @@ def play_background_music():
         print(str(e) + "Something went wrong")
 
 
+# Pause call wrapped in try-catch for windows.
 def pause_background_music():
     try:
         mixer.music.pause()
@@ -724,6 +734,7 @@ def pause_background_music():
         print(str(e) + "Music never started, cannot pause")
 
 
+# Set volume call wrapped in try-catch for windows.
 def set_background_music_volume(level):
     try:
         mixer.music.set_volume(level)
@@ -731,6 +742,8 @@ def set_background_music_volume(level):
         print(str(e) + "Music not playing, cannot adjust volume")
 
 
+# Finds keyword "volume" and passes the next value in the command string to set_background_music_volume.
+# Wrapped in try-catch for windows.
 def volume_handler(command):
     command_split = command.split()
     value_to_set = 0
@@ -769,7 +782,7 @@ def eog_sound(current_game_result):
 
 
 # Control for common letter misinterpretations. Called if word returned to 'stash' instead of a char
-# Returns a character if possible, if none found, returns original word. SHOULD IMPLEMENT DIFFERENTLY
+# Returns a character if possible, if none found, returns original word.
 def fix_char(fuzzy_char):
     for i in range(len(FUZZY_CHAR)):
         if fuzzy_char == FUZZY_CHAR[i][0]:
@@ -777,6 +790,7 @@ def fix_char(fuzzy_char):
     return fuzzy_char
 
 
+# Converts strings that represent integers into their respective integer.
 def word_to_int(word):
     print(word)
     for i in range(len(WORD_TO_INT)):
@@ -785,6 +799,7 @@ def word_to_int(word):
     return word
 
 
+# For all letters in stash, call delete_letter()
 def clear_stash():
     delete_count = len(current_guess_string)
     while delete_count > 0:
@@ -819,6 +834,7 @@ def replace(command):
     replacement = fix_char(replacement)
     char_to_replace = fix_char(char_to_replace)
 
+    # If char_to_replace is an index
     index_list = ['1', '2', '3', '4', '5', 'one', 'two', 'to', 'too', 'three', 'four', 'for', 'five']
     if char_to_replace in index_list:
         # replace letter at index char_to_replace, with replacement
@@ -828,11 +844,13 @@ def replace(command):
         stash("stash " + new_guess_string)
         return
 
+    # If char_to_replace is a char that is in the stash multiple times
     elif not current_guess_string.count(char_to_replace.upper()) == 1:
         say("there are more than one of the letter to replace in your stash. "
             "Please specify which one by using stash index feature.", LANGUAGES[current_language])
         return
 
+    # If char_to_replace is a char that is in the stash only once.
     elif len(char_to_replace) == 1:
         # find index in current_guess_string that holds char_to_replace
         index_to_replace = 0
@@ -852,6 +870,7 @@ def replace(command):
         say("You must replace one letter in your stashed guess at a time.", LANGUAGES[current_language])
 
 
+# Reads a previous guess to the user character by character. Confirmed by character.
 def read_guess(guess_number):
     if guess_number > guesses_count:
         say("You dont have a guess number " + str(guess_number) + " yet.", LANGUAGES[current_language])
@@ -859,6 +878,74 @@ def read_guess(guess_number):
         say_and_confirm_by_char(guesses_str[guess_number - 1], correct_word.upper(), LANGUAGES[current_language])
 
 
+# Identifies whether you are stashing a word or a character, calls the appropriate
+# function or tells the user the input is invalid. Stash command handler for handsfree().
+def stash(response):
+    print("stash called")
+    response_split = response.split(' ')
+
+    guess = ""
+    found = 0
+    index = 0
+    while not found:
+        try:
+            if response_split[index] == "stash" or response_split[index] == "dash":
+                guess = fix_char(response_split[index + 1])
+                found = 1
+            else:
+                index += 1
+        except Exception as e:
+            say("Remember to say a letter or five letter word after stash command.", LANGUAGES[current_language])
+            print(str(e))
+            return
+
+    if len(guess) == 1:
+        print("single letter")
+        stash_char(guess)
+    elif len(guess) == 5:
+        if len(current_guess_string) != 0:
+            say("your stash is full! submit or delete to guess more letters.", LANGUAGES[current_language])
+            return
+        print("Five letter word")
+        for each_letter in guess:
+            print(each_letter)
+            stash_char(each_letter)
+    else:
+        say("You can only stash individual letters, or five letter words. Try again!", LANGUAGES[current_language])
+
+
+# Takes stash command as an input and places new letter on the screen. Stash handler helper function.
+def stash_char(char_to_stash):
+    global key_pressed
+    key_pressed = char_to_stash.upper()
+    if key_pressed in "QWERTYUIOPASDFGHJKLZXCVBNM":
+        if len(current_guess_string) < 5:
+            create_new_letter()
+        else:
+            say("your stash is full! submit or delete to guess more letters.", LANGUAGES[current_language])
+
+
+# Delete command handler for handsfree().
+def delete():
+    if len(current_guess_string) > 0:
+        letter_to_delete = current_guess_string[len(current_guess_string) - 1]
+        say("Deleting " + letter_to_delete, LANGUAGES[current_language])
+        delete_letter()
+    else:
+        say("You dont have any letters to delete!", LANGUAGES[current_language])
+
+
+# Submit command handler for handsfree()
+def submit():
+    if len(current_guess_string) == 5 and current_guess_string.lower() in check_list:
+        say_and_confirm_by_char(current_guess_string, correct_word.upper(), LANGUAGES[current_language])
+        check_guess(current_guess)
+    else:
+        say("your stash must contain a real five letter word, try again!", LANGUAGES[current_language])
+
+
+# Generic function to return index of keyword in command. Wrapped in try/catch to avoid program crashing
+# if command.split() only has one element
 def return_keyword_index(keyword, command):
     index = 0
     found = 0
@@ -871,6 +958,55 @@ def return_keyword_index(keyword, command):
             index += 1
     except Exception as e:
         print(str(e))
+
+
+# Tutorial for submit function.
+def submit_tutorial():
+    say("When you press submit, I will read each letter in your stash, and after each letter you will hear a sound."
+        "if you hear", "en")
+
+    playsound('sound/effects/incorrect_char_trimmed.wav')
+
+    say("Then the letter you guessed was not in the word. If you hear", "en")
+
+    playsound('sound/effects/semi_correct_char_trimmed.wav')
+
+    say("Then the letter you entered was in the word, but not in the right place in the word. If you hear", "en")
+
+    playsound('sound/effects/correct_char_trimmed.mp3')
+
+    say("Then the letter you guessed was in the letter and in the correct place. Here is an example of what "
+        "would happen if the correct word was apple, and you stashed and then submitted the word pines", "en")
+
+    say_and_confirm_by_char("pines", "apple", "en")
+
+
+# Tutorial command handler for handsfree(). Reads correct tutorial based on command.
+def tutorial(command):
+    found = 0
+    index = 0
+
+    command_split = command.split()
+
+    if len(command_split) == 1:
+        say(helpers.constants.tutorial_response, "en")
+        return
+
+    try:
+        while not found:
+            if command_split[index] == "tutorial":
+                key = command_split[index - 1]
+                found = 1
+
+            index += 1
+
+    except Exception as e:
+        print("value before tutorial was not a valid key")
+
+    if key == "submit":
+        submit_tutorial()
+    else:
+        say(helpers.constants.command_tutorial_dict[key], "en")
 
 
 # Listens for user command, validates the command, and calls the correct function to execute user command.
@@ -890,12 +1026,7 @@ def handsfree():
             print(command)
 
             if "tutorial" in command:  # Starts tutorial
-                say("say word for wordle tutorial, say free for handsfree tutorial", LANGUAGES[current_language])
-                response = listen()
-                if "word" in response:
-                    say(WORDLE_TUTORIAL, LANGUAGES[current_language])
-                elif "free" in response:
-                    say(HANDSFREE_TUTORIAL, LANGUAGES[current_language])
+                tutorial(command)
                 waiting_for_command = 0
             elif "replace" in command:
                 say("you said: " + command, LANGUAGES[current_language])
@@ -980,72 +1111,6 @@ def handsfree():
 
         except Exception as e:
             print("Exception: " + str(e))
-
-
-# Identifies whether you are stashing a word or a character, calls the appropriate
-# function or tells the user the input is invalid. Stash command handler for handsfree().
-def stash(response):
-    print("stash called")
-    response_split = response.split(' ')
-
-    guess = ""
-    found = 0
-    index = 0
-    while not found:
-        try:
-            if response_split[index] == "stash" or response_split[index] == "dash":
-                guess = fix_char(response_split[index + 1])
-                found = 1
-            else:
-                index += 1
-        except Exception as e:
-            say("Remember to say a letter or five letter word after stash command.", LANGUAGES[current_language])
-            print(str(e))
-            return
-
-    if len(guess) == 1:
-        print("single letter")
-        stash_char(guess)
-    elif len(guess) == 5:
-        if len(current_guess_string) != 0:
-            say("your stash is full! submit or delete to guess more letters.", LANGUAGES[current_language])
-            return
-        print("Five letter word")
-        for each_letter in guess:
-            print(each_letter)
-            stash_char(each_letter)
-    else:
-        say("You can only stash individual letters, or five letter words. Try again!", LANGUAGES[current_language])
-
-
-# Takes stash command as an input and places new letter on the screen. Stash handler helper function.
-def stash_char(char_to_stash):
-    global key_pressed
-    key_pressed = char_to_stash.upper()
-    if key_pressed in "QWERTYUIOPASDFGHJKLZXCVBNM":
-        if len(current_guess_string) < 5:
-            create_new_letter()
-        else:
-            say("your stash is full! submit or delete to guess more letters.", LANGUAGES[current_language])
-
-
-# Delete command handler for handsfree().
-def delete():
-    if len(current_guess_string) > 0:
-        letter_to_delete = current_guess_string[len(current_guess_string) - 1]
-        say("Deleting " + letter_to_delete, LANGUAGES[current_language])
-        delete_letter()
-    else:
-        say("You dont have any letters to delete!", LANGUAGES[current_language])
-
-
-# Submit command handler for handsfree()
-def submit():
-    if len(current_guess_string) == 5 and current_guess_string.lower() in check_list:
-        say_and_confirm_by_char(current_guess_string, correct_word.upper(), LANGUAGES[current_language])
-        check_guess(current_guess)
-    else:
-        say("your stash must contain a real five letter word, try again!", LANGUAGES[current_language])
 
 
 """APPLICATION CONTROL"""
