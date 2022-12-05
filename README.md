@@ -81,8 +81,6 @@ You must also download the file libmpg123-0.dll from the following link and plac
   <summary> MACOS/LINUX INSTALLATION INSTRUCTIONS </summary>
 <p>
 
-This is where you write the instructions :P
-
 Ensure you have pygame by using the command:
 
      pip install pygame
