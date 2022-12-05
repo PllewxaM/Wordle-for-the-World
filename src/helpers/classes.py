@@ -9,6 +9,7 @@ class Letter:
         # Initializes all the variables, including text, color, position, size, etc.
         self.bg_color = main_color
         self.text_color = sub_color
+        self.correct_place = 0
         self.bg_position = bg_position
         self.bg_x = bg_position[0]
         self.bg_y = bg_position[1]

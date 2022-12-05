@@ -295,6 +295,7 @@ def check_guess(guess_to_check):
         if lowercase_letter in correct_word:
             if lowercase_letter == correct_word[i]:
                 guess_to_check[i].bg_color = correct_color
+                guess_to_check[i].correct_place = 1
                 if not audio_interface_enabled:
                     time.sleep(0.25)
                     play_sound("sound/effects/correct_char_trimmed.mp3")                    
@@ -308,19 +309,22 @@ def check_guess(guess_to_check):
                     game_result = "W"
             else:
                 guess_to_check[i].bg_color = semi_color
+                guess_to_check[i].correct_place = 0
                 if not audio_interface_enabled:
                     time.sleep(0.25)
                     play_sound("sound/effects/semi_correct_char_trimmed.wav")
                 add_semi(lowercase_letter)
                 for key in keys:
                     if key.text == lowercase_letter.upper():
-                        key.bg_color = semi_color
-                        key.draw(main_color, my_font)
+                        if key.bg_color != correct_color:
+                            key.bg_color = semi_color
+                            key.draw(main_color, my_font)
                 guess_to_check[i].text_color = main_color
                 game_result = ""
                 game_decided = True
         else:
             guess_to_check[i].bg_color = wrong_color
+            guess_to_check[i].correct_place = 0
             if not audio_interface_enabled:
                 time.sleep(0.25)
                 play_sound("sound/effects/incorrect_char_trimmed.wav")
@@ -580,7 +584,8 @@ def reset_screen():
                 key.bg_color = correct_color
         for l in semi_correct_guesses:
             if key.text == l.upper():
-                key.bg_color = semi_color
+                if key.bg_color != correct_color:
+                    key.bg_color = semi_color
         for l in incorrect_guesses:
             if key.text == l.upper():
                 key.bg_color = wrong_color
@@ -597,10 +602,12 @@ def reset_screen():
         for letter in guess:
             for l in correct_guesses:
                 if letter.text == l.upper():
-                    letter.bg_color = correct_color
+                    if letter.correct_place != 0:
+                        letter.bg_color = correct_color
             for l in semi_correct_guesses:
                 if letter.text == l.upper():
-                    letter.bg_color = semi_color
+                    if letter.correct_place != 1:
+                        letter.bg_color = semi_color
             for l in incorrect_guesses:
                 if letter.text == l.upper():
                     letter.bg_color = wrong_color
@@ -1373,27 +1380,36 @@ def menu_set_font(selected, value):
 # sets the color used for the correct letters in the game
 def set_correct_color(value):
     global correct_color
-    if value[1] < 0:
-        correct_color = GREEN
-    else:
+    try:
+        if value[1] < 0:
+            correct_color = GREEN
+        else:
+            correct_color = value
+    except Exception as e:
         correct_color = value
 
 
 # sets the color used for the semi correct letters in the game
 def set_semi_color(value):
     global semi_color
-    if value[1] < 0:
-        semi_color = YELLOW
-    else:
+    try:
+        if value[1] < 0:
+            semi_color = YELLOW
+        else:
+            semi_color = value
+    except Exception as e:
         semi_color = value
 
 
 # sets the color used for the wrong letters in the game
 def set_wrong_color(value):
     global wrong_color
-    if value[1] < 0:
-        wrong_color = GREY
-    else:
+    try:
+        if value[1] < 0:
+            wrong_color = GREY
+        else:
+            wrong_color = value
+    except Exception as e:
         wrong_color = value
 
 
