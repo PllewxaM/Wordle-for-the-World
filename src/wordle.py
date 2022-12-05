@@ -128,42 +128,42 @@ def font_menu_control(current):
                     if FONT_ONE_AREA.collidepoint(event.pos):
                         value = 0
                         draw_font_options(sub_color2, font_size, lang_index)
-                        pygame.draw.rect(SCREEN, BLACK, FONT_ONE_AREA, 3, ROUND)
+                        pygame.draw.rect(SCREEN, sub_color, FONT_ONE_AREA, 3, ROUND)
                     if FONT_TWO_AREA.collidepoint(event.pos):
                         value = 1
                         draw_font_options(sub_color2, font_size, lang_index)
-                        pygame.draw.rect(SCREEN, BLACK, FONT_TWO_AREA, 3, ROUND)
+                        pygame.draw.rect(SCREEN, sub_color, FONT_TWO_AREA, 3, ROUND)
                     if FONT_THREE_AREA.collidepoint(event.pos):
                         value = 3
                         draw_font_options(sub_color2, font_size, lang_index)
-                        pygame.draw.rect(SCREEN, BLACK, FONT_THREE_AREA, 3, ROUND)
+                        pygame.draw.rect(SCREEN, sub_color, FONT_THREE_AREA, 3, ROUND)
                     if FONT_FOUR_AREA.collidepoint(event.pos):
                         value = 2
                         draw_font_options(sub_color2, font_size, lang_index)
-                        pygame.draw.rect(SCREEN, BLACK, FONT_FOUR_AREA, 3, ROUND)
+                        pygame.draw.rect(SCREEN, sub_color, FONT_FOUR_AREA, 3, ROUND)
                     if FONT_FIVE_AREA.collidepoint(event.pos):
                         value = 5
                         draw_font_options(sub_color2, font_size, lang_index)
-                        pygame.draw.rect(SCREEN, BLACK, FONT_FIVE_AREA, 3, ROUND)
+                        pygame.draw.rect(SCREEN, sub_color, FONT_FIVE_AREA, 3, ROUND)
                     if FONT_SIX_AREA.collidepoint(event.pos):
                         value = 4
                         draw_font_options(sub_color2, font_size, lang_index)
-                        pygame.draw.rect(SCREEN, BLACK, FONT_SIX_AREA, 3, ROUND)
+                        pygame.draw.rect(SCREEN, sub_color, FONT_SIX_AREA, 3, ROUND)
                     if BOLD_AREA.collidepoint(event.pos):
                         value = 6
                         draw_font_options(sub_color2, font_size, lang_index)
-                        pygame.draw.rect(SCREEN, BLACK, BOLD_AREA, 3, ROUND)
+                        pygame.draw.rect(SCREEN, sub_color, BOLD_AREA, 3, ROUND)
                     # increase and decrease font depending on which area is clicked
                     if PLUS_AREA.collidepoint(event.pos):
                         increase_font_size()
                         draw_font_size_adjust(my_font)
                         draw_font_options(sub_color2, font_size, lang_index)
-                        pygame.draw.rect(SCREEN, BLACK, PLUS_AREA, 3, ROUND)
+                        pygame.draw.rect(SCREEN, sub_color, PLUS_AREA, 3, ROUND)
                     if SUB_AREA.collidepoint(event.pos):
                         decrese_font_size()
                         draw_font_size_adjust(my_font)
                         draw_font_options(sub_color2, font_size, lang_index)
-                        pygame.draw.rect(SCREEN, BLACK, SUB_AREA, 3, ROUND)
+                        pygame.draw.rect(SCREEN, sub_color, SUB_AREA, 3, ROUND)
                     # if the done buttons or any areas around the mini menu is clicked, exit the menu
                     if DONE_AREA.collidepoint(event.pos) or EXIT_MENU_AREA1.collidepoint(event.pos) or EXIT_MENU_AREA2.collidepoint(event.pos):
                         done = 1
