@@ -1,5 +1,5 @@
 # 🔠 Wordle for the World 🌎
-# Table of Contents
+## Table of Contents
 1. [About](#about)
 2. [Our Mission](#mission)
 3. [Installation](#install)
@@ -116,13 +116,13 @@ Install playsound using the command :
   <summary> HOW TO RUN</summary>
 <p>
 
-Choose a folder in which you would like to download the program. In a terminal, navagate to this folder.  
+Choose a folder in which you would like to download the program. In a terminal, navigate to this folder.  
 
 Run the command:
 
      git clone https://github.com/PllewxaM/Wordle-for-the-World.git
 
-Navagate to the source code folder using the command
+Navigate to the source code folder using the command
 
      cd .\Wordle-for-the-World\src\
 
@@ -137,7 +137,7 @@ Run the program using the command:
 
 ## File Organization <div id='files'/>
 <details>
-  <summary>Click to see all files</summary> 
+  <summary>Click to see file structure and information about all files</summary> 
 <p>
   
 1. **wordle.py** - main program file that contains the main game function, the main menu and mini menu controls. It also contains the audio interface functions and the user word guess controls:
