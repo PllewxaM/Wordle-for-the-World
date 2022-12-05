@@ -1504,7 +1504,7 @@ def game_menu(enter_time):
                                              ("Electro Chill", 4), ("    Escape   ", 5),
                                              ("     Synth    ", 6), (" Nature 1 ", 7),
                                              (" Nature 2 ", 8), (" Nature 3 ", 9),
-                                             (" Nature 4 ", 10)],
+                                             (" Jeopardy ", 10)],
                       onchange=set_background_music,
                       default=current_background_music)
     menu.add.selector('Change Font: ', [("Free Sans", 0), ("Comic Sans", 1), ("Lil Grotesk", 2),

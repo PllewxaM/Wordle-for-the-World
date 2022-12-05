@@ -109,7 +109,7 @@ BACKGROUND_MUSIC = ['sound/background_music/traditional.ogg',
                     'sound/background_music/nature_drizzle.mp3',
                     'sound/background_music/nature_fire.mp3',  # 8
                     'sound/background_music/nature_river.mp3',
-                    'sound/background_music/nature_waves.mp3']  # 10
+                    'sound/background_music/jeopardy_theme.mp3']  # 10
 
 # list of font options
 FONTS = ['assets/fonts/FreeSans.otf', 
