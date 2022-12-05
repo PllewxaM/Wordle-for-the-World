@@ -253,38 +253,3 @@ WORD_TO_INT = [['one', 1],['won', 1],
                ['five', 5],['six', 6],
                ['seven', 7], ['eight', 8],
                ['nine', 9], ['ten', 10]]
-
-tutorial_response = "To learn how to play wordle, say game tutorial. " \
-                    "to learn about all of the voice commands say handsfree tutorial. " \
-                    "to learn each command in the handsfree tutorial individually, say " \
-                    "the command followed by the word tutorial."
-wordle_tutorial = "game tutorial"
-handsfree_tutorial = "To create your five letter guess word, use stash. " \
-                     "To hear your current or previous guesses, use read guess. " \
-                     "To exchange a letter in your guess for another, use replace. " \
-                     "To delete your latest entered letter, use delete. " \
-                     "To clear your entire stashed guess, use clear. " \
-                     "To submit your stashed guess and compare it to the correct word, use submit. " \
-                     "To hear each character you have guessed incorrectly, use read wrong. " \
-                     "To hear each character you have guessed that is in the correct word but in the " \
-                     "incorrect spot, use read semi. " \
-                     "To change background music, use song. " \
-                     "To adjust background music volume, use volume. " \
-                     "To disable handsfree, use disable. "
-
-command_tutorial_dict = {
-    "stash": "stash tutorial",
-    "replace": "replace tutorial",
-    "delete": "delete tutorial",
-    "submit": "submit tutorial",
-    "clear": "clear tutorial",
-    "disable": "disable tutorial",
-    "volume": "volume tutorial",
-    "song": "song tutorial",
-    "guess": "read guess tutorial",
-    "semi": "read semi tutorial",
-    "wrong": "read wrong tutorial",
-    "free": handsfree_tutorial,
-    "handsfree": handsfree_tutorial,
-    "game": wordle_tutorial
-}

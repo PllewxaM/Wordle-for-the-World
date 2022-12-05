@@ -318,14 +318,58 @@ STARTUP = "Welcome to wordle for the world, to activate the hands free version o
           "the space bar twice"
 ACTIVATED = "Audio interface activated, if you need help with playing the game, say: tutorial. " \
             "To disable audio mode say disable."
-WORDLE_TUTORIAL = "Insert wordle tutorial here"
-HANDSFREE_TUTORIAL = "Insert handsfree tutorial here"
-STASH_TUTORIAL = "Insert stash tutorial/example here"
-CLEAR_TUTORIAL = "The command clear will delete all the letters in your current guess stash"
-READ_TUTORIAL = "Insert read tutorial/example here"
-REPLACE_TUTORIAL = "Insert replace tutorial/example here"
-SUBMIT_TUTORIAL = "Insert submit tutorial/example here"
+WORDLE_TUTORIAL = " "
+STASH_TUTORIAL = "To spell a word, either stash five individual letters, or stash a five-letter word. " \
+                 "Below are two ways to stash the word start. stash s, stash t, stash a, stash r, stash t. " \
+                 "or, stash start."
+CLEAR_TUTORIAL = "The clear command will remove all letters from your stash. Say"
+READ_GUESS_TUTORIAL = "To hear the letters in your current stash, say read guess"
+READ_SEMI_TUTORIAL = "To hear all your previous guessed letters that were in the correct word but in the " \
+                     "wrong position, say read semi"
+READ_WRONG_TUTORIAL = "To hear all your previous guesses that were not in the correct word, say read wrong"
+REPLACE_TUTORIAL = "The replace command allows you to exchange one letter in the word for another. " \
+                   "For example, the command Replace P with T would turn the word pails to tails. " \
+                   "You can also replace a letter at a certain location in your current guess. For example, " \
+                   "the command Replace 2 with M would turn apple to ample."
+DELETE_TUTORIAL = "To delete your most recently stashed character, say delete"
+VOLUME_TUTORIAL = "To change the volume of the background music, say volume followed by a number from 1 to 10. "
+SONG_TUTORIAL = "To change the background music to find your favorite of the 10 options, say song followed by " \
+                "a number from 1 to 10. "
+
 
 VOLUME_WARNING = "handsfree mode hears best with low background noise. If you're wearing headphones, repeat " \
-                 "your volume command to confirm."
+                 "your volume command to confirm. "
 
+
+TUTORIAL_RESPONSE = "To learn how to play wordle, say game tutorial. " \
+                    "to learn about all of the voice commands say handsfree tutorial. " \
+                    "to learn each command in the handsfree tutorial individually, say " \
+                    "the command followed by the word tutorial."
+HANDSFREE_TUTORIAL = "To create your five letter guess word, use stash. " \
+                     "To hear your current or previous guesses, use read guess. " \
+                     "To exchange a letter in your guess for another, use replace. " \
+                     "To delete your latest entered letter, use delete. " \
+                     "To clear your entire stashed guess, use clear. " \
+                     "To submit your stashed guess and compare it to the correct word, use submit. " \
+                     "To hear each character you have guessed incorrectly, use read wrong. " \
+                     "To hear each character you have guessed that is in the correct word but in the " \
+                     "incorrect spot, use read semi. " \
+                     "To change background music, use song. " \
+                     "To adjust background music volume, use volume. " \
+                     "To disable handsfree, use disable. "
+
+
+command_tutorial_dict = {
+    "stash": STASH_TUTORIAL,
+    "replace": REPLACE_TUTORIAL,
+    "delete": DELETE_TUTORIAL,
+    "clear": CLEAR_TUTORIAL,
+    "volume": VOLUME_TUTORIAL,
+    "song": SONG_TUTORIAL,
+    "guess": READ_GUESS_TUTORIAL,
+    "semi": READ_SEMI_TUTORIAL,
+    "wrong": READ_WRONG_TUTORIAL,
+    "free": HANDSFREE_TUTORIAL,
+    "handsfree": HANDSFREE_TUTORIAL,
+    "game": WORDLE_TUTORIAL
+}
