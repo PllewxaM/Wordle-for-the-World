@@ -41,19 +41,19 @@ Ensure you have pygame version 2.1.3 by using the command :
 
        python -m pip install pygame --upgrade --pre
 
-Install laest version of pygame-menu using the command :
+Install the latest version of pygame-menu using the command :
 
      pip install pygame-menu -U
 
-Install latest version of PyObjC using the command :
+Install the latest version of PyObjC using the command :
 
      pip install PyObjC
 
-For speech recognition install Google’s Speech Recognition package using the command :
+For speech recognition, install Google’s Speech Recognition package using the command :
 
      pip install SpeechRecognition  
 
-For speech generation use Google’s gTTS Python package. To install the Python package type: 
+For speech generation, use Google’s gTTS Python package. To install the Python package type: 
 
      pip install gTTS 
 
@@ -61,7 +61,7 @@ Install playsound version 1.2.2 using the command :
 
      pip install playsound==1.2.2
 
-If playsound is already installed use this command first :
+If playsound is already installed, use this command first :
 
      pip uninstall playsound
 
