@@ -38,7 +38,7 @@ eog_sound_allowed = 1
 # LANGUAGE DEFAULT = ENGLISH - FOR GRAPHICS
 lang_index = 0
 word_list = EN_WORDS
-check_list = EN_WORDS
+check_list = CHECK_WORDS
 correct_word = word_list[random.randint(0, len(word_list) - 1)]
 about_display = ABOUT_ENGLISH
 instructions1_display = INSTRUCTIONS1_ENGLISH
@@ -367,7 +367,6 @@ def lose_play_again(stats, game_result):
     draw_histogram(WIDTH / 20, HEIGHT - (HEIGHT / 3), WIDTH - WIDTH / 10, HEIGHT - (3 * (HEIGHT / 4)), "l")
 
     pygame.display.update()
-    time.sleep(.3)
     # while on end game screen listen for enter key to restart game
     while not reset_game:
         for event in pygame.event.get():
@@ -398,13 +397,10 @@ def correct_play_again(stats, game_result):
     draw_text(my_font_sm, "Games Played           Won %            Current Streak       Max Streak", WHITE, (WIDTH/2, 365))
     draw_text(my_font_med, "Guess Distribution", WHITE, (WIDTH/2, 455))
 
-    # draw_histogram(WIDTH/20, WIDTH/20, WIDTH - WIDTH/10, HEIGHT - (3 * (HEIGHT/4)) - (HEIGHT/20))
     # left, top, width, height
-
     draw_histogram(WIDTH / 20, HEIGHT - (HEIGHT / 3), WIDTH - WIDTH / 10, HEIGHT - (3 * (HEIGHT / 4)), "w")
 
     pygame.display.update()
-    time.sleep(.3)
     # while on end game screen listen for enter key to restart game
     while not reset_game:
         for event in pygame.event.get():
