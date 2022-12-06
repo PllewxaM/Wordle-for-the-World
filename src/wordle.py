@@ -522,7 +522,7 @@ def draw_histogram(x_position, y_position, x_width, y_height, w_or_l):
     # If being called from a win, draw highlight square on top of the current guess count.
     if w_or_l == "w":
         pygame.draw.rect(SCREEN, DK_RED, pygame.Rect(x_position,
-                                                     y_position + (bar_height * guesses_count) + aesthetic_offset,
+                                                     y_position + (bar_height * (guesses_count - 1)) + aesthetic_offset,
                                                      y_height / 6 - (2 * aesthetic_offset),
                                                      y_height / 6 - (2 * aesthetic_offset)), 2)
 
