@@ -32,7 +32,7 @@ def draw_icon(path, size, position):
 
 # draws the mute button on the nav bar depending on the state of sound
 def draw_muted(muted, sub_color2):
-    if muted:
+    if not muted:
         pygame.draw.rect(SCREEN, sub_color2, MUTE_AREA, 0)
         draw_icon('assets/Speaker_Icon.png', (30, 30), ((WIDTH - 190), 25))
     else:

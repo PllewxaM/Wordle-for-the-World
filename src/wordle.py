@@ -261,6 +261,7 @@ def create_new_letter():
     # Creates a new letter and adds it to the guess.
     global current_guess_string, current_letter_bg_x
     current_guess_string += key_pressed
+
     # create new letter object 
     new_letter = Letter(key_pressed, (current_letter_bg_x, guesses_count * 70 + LETTER_Y_SPACING), main_color,
                         sub_color, my_font)
@@ -338,7 +339,6 @@ def check_guess(guess_to_check):
             game_result = ""
             game_decided = True
         guess_to_check[i].draw(main_color, my_font)
-        time.sleep(0.2)
         pygame.display.update()
 
     guesses_count += 1
@@ -534,7 +534,7 @@ def draw_histogram(x_position, y_position, x_width, y_height, w_or_l):
 def reset():
     # Resets all global variables to their default states.
     global guesses_count, correct_word, guesses, current_guess, current_guess_string, game_result, \
-        semi_correct_guesses, correct_guesses, incorrect_guesses, eog_sound_allowed
+        semi_correct_guesses, correct_guesses, incorrect_guesses, eog_sound_allowed, current_letter_bg_x
 
     SCREEN.fill(main_color)
 
@@ -547,6 +547,7 @@ def reset():
     correct_guesses = []
     semi_correct_guesses = []
     eog_sound_allowed = 1
+    current_letter_bg_x = WIDTH / 3.25
 
     correct_word = word_list[random.randint(0, len(word_list) - 1)]
 
@@ -565,7 +566,6 @@ def reset():
     if not muted:
         play_background_music()
 
-    # For testing purposes
     print(correct_word)
 
     pygame.display.update()
@@ -782,7 +782,6 @@ def fix_char(fuzzy_char):
 
 # Converts strings that represent integers into their respective integer.
 def word_to_int(word):
-    print(word)
     for i in range(len(WORD_TO_INT)):
         if word == WORD_TO_INT[i][0]:
             return WORD_TO_INT[i][1]
@@ -1114,7 +1113,7 @@ def start_the_game():
         key_pressed, hands_free_rendered, muted
     start_game = 1
     SCREEN.fill(main_color)
-    # for testing purposes
+
     print(correct_word)
 
     # draw screen elements - keyboard, nav bar and color key

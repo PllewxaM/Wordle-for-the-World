@@ -9,6 +9,7 @@ SP_WORDS = [
 "acojo",
 "acres",
 "actas",
+"adios",
 "adobe",
 "aduce",
 "agote",
