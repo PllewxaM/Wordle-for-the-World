@@ -318,7 +318,9 @@ STARTUP = "Welcome to wordle for the world, to activate the hands free version o
           "the space bar twice"
 ACTIVATED = "Audio interface activated, if you need help with playing the game, say: tutorial. " \
             "To disable audio mode say disable."
-WORDLE_TUTORIAL = "insert wordle tutorial"
+WORDLE_TUTORIAL = "Game tutorial. you have 6 tries to guess a five letter word, after each try you will be given some " \
+                  "information about the correct word by receiving feedback on every letter you guessed. say handsfree " \
+                  "tutorial to learn about how to use your voice to play the game."
 STASH_TUTORIAL = "stash tutorial. To spell a word, either stash five individual letters, or stash a " \
                  "five-letter word. Here are two ways to stash the word start. stash s, stash t, stash a, " \
                  "stash r, stash t, or you can say, stash start."
@@ -359,7 +361,8 @@ HANDSFREE_TUTORIAL = "Handsfree tutorial. " \
                      "incorrect spot, use read semi. " \
                      "To change background music, use song. " \
                      "To adjust background music volume, use volume. " \
-                     "To disable handsfree, use disable. "
+                     "To disable handsfree, use disable. " \
+                     "To hear more about any of these commands, say the command followed by the word tutorial. "
 
 
 command_tutorial_dict = {
