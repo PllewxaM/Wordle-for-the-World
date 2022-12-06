@@ -291,9 +291,12 @@ def check_guess(guess_to_check):
     global current_guess, current_guess_string, guesses_count, current_letter_bg_x, game_result, audio_interface_enabled
     game_decided = False
     guesses_str.append(current_guess_string)
+    
     for i in range(5):
         lowercase_letter = guess_to_check[i].text.lower()
+        # if letter is in word
         if lowercase_letter in correct_word:
+            # check if letter is in the correct spot in the word
             if lowercase_letter == correct_word[i]:
                 guess_to_check[i].bg_color = correct_color
                 guess_to_check[i].correct_place = 1
@@ -308,6 +311,7 @@ def check_guess(guess_to_check):
                 guess_to_check[i].text_color = main_color
                 if not game_decided:
                     game_result = "W"
+            # if not in correct spot mark as semi correct
             else:
                 guess_to_check[i].bg_color = semi_color
                 guess_to_check[i].correct_place = 0
@@ -323,6 +327,7 @@ def check_guess(guess_to_check):
                 guess_to_check[i].text_color = main_color
                 game_result = ""
                 game_decided = True
+        # if not in word mark as wrong
         else:
             guess_to_check[i].bg_color = wrong_color
             guess_to_check[i].correct_place = 0
@@ -341,6 +346,7 @@ def check_guess(guess_to_check):
         guess_to_check[i].draw(main_color, my_font)
         pygame.display.update()
 
+    # reset guess variables
     guesses_count += 1
     current_guess = []
     current_guess_string = ""
@@ -440,7 +446,7 @@ def handle_stats(stat):
             data[2] = 0
         else:
             data[2] = int(data[2]) + stat
-        # chekc if max streak should be changed
+        # check if max streak should be changed
         if data[2] > int(data[3]):
             data[3] = data[2]
         # write new data to file
@@ -450,6 +456,7 @@ def handle_stats(stat):
 
     f.close()
 
+    # read old histogram data and write new data to the file
     if stat == 1:
         if not os.path.exists("hist.txt"):
             f = open("hist.txt", "w+")
