@@ -1007,10 +1007,10 @@ def handsfree():
     while waiting_for_command:
         draw(sub_color)
         try:
-            # time.sleep(0.05)
-            # command = listen()
+            time.sleep(0.05)
+            command = listen()
             # Comment above for debugging, allows typing of command; comment below for handsfree use;
-            command = input("Type a command: ")
+            # command = input("Type a command: ")
             command = command.lower()
             command_split = command.split()
             print(command)
