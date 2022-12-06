@@ -431,8 +431,9 @@ def handle_stats(stat):
         data = [1, stat, stat, stat]
     else:
         # open file and read stats
-        f = open("stats.txt", "w+")
+        f = open("stats.txt", "r")
         data = f.readlines()
+        f.close()
         # increment games played
         data[0] = int(data[0]) + 1
         # increament games won
@@ -446,7 +447,7 @@ def handle_stats(stat):
         if data[2] > int(data[3]):
             data[3] = data[2]
         # write new data to file
-        # f = open("stats.txt", "w")
+        f = open("stats.txt", "w")
         # write to file: games played, games won, current streak, max streak
         f.write("%d\n%d\n%d\n%d" % (data[0], data[1], data[2], int(data[3])))
 
