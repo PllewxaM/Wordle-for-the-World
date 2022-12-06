@@ -439,7 +439,7 @@ def handle_stats(stat):
         f.close()
         # increment games played
         data[0] = int(data[0]) + 1
-        # increament games won
+        # increment games won
         data[1] = int(data[1]) + stat
         # set current streak value
         if stat == 0:
@@ -996,13 +996,14 @@ def tutorial(command):
 
             index += 1
 
+        if key == "submit":
+            submit_tutorial()
+        else:
+            say(command_tutorial_dict[key], "en")
+
     except Exception as e:
         print("value before tutorial was not a valid key")
-
-    if key == "submit":
-        submit_tutorial()
-    else:
-        say(command_tutorial_dict[key], "en")
+        say(TUTORIAL_RESPONSE, "en")
 
 
 # Listens for user command, validates the command, and calls the correct function to execute user command.
@@ -1504,7 +1505,8 @@ def game_menu(enter_time):
         inst_menu.add.label("Scroll down to see new instructions", align=pygame_menu.locals.ALIGN_CENTER, font_size=22)
         draw_instructions(instructions1_display, instructions2_display, instructions3_display)
         inst_menu.add.button("Play Game", start_the_game)
-        for m in SPACES: inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
+        for m in SPACES:
+            inst_menu.add.label(m, align=pygame_menu.locals.ALIGN_LEFT, font_size=18)
 
     # DRAW MAIN MENU PAGE
     menu.add.button('Play', start_the_game)
@@ -1532,7 +1534,7 @@ def game_menu(enter_time):
         menu.mainloop(SCREEN, background)
 
 
-# main function calls the menu on startup and starts the backgrouns music
+# main function calls the menu on startup and starts the background music
 def main():
     try:
         mixer.init()

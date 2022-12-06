@@ -251,6 +251,11 @@ To change the volume of the background music, say "volume", followed by a number
 To change the background music to find your favorite of the 10 different options, use the following command:
 >"**Song** (1-10)"
 
+***
+### Audio-Based Tutorial
+To learn about how to play the game through audio interface only, use the following command:
+>"**Tutorial**"
+
 </details>
 
 <br>
