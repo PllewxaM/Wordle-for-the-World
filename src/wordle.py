@@ -1135,11 +1135,9 @@ def start_the_game():
             # load end of game screens depending on result
             if game_result == "L":
                 stats = handle_stats(0)
-                time.sleep(0.2)
                 lose_play_again(stats, game_result)
             if game_result == "W":
                 stats = handle_stats(1)
-                time.sleep(0.2)
                 correct_play_again(stats, game_result)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
