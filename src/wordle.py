@@ -338,6 +338,7 @@ def check_guess(guess_to_check):
             game_result = ""
             game_decided = True
         guess_to_check[i].draw(main_color, my_font)
+        time.sleep(0.2)
         pygame.display.update()
 
     guesses_count += 1
